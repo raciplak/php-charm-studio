@@ -413,8 +413,8 @@ if(count($category_banners) > 0):
 
 .category-banner-card {
     position: relative;
-    width: 400px;
-    height: 225px;
+    width: 320px;
+    height: 180px;
     cursor: pointer;
     overflow: hidden;
     flex-shrink: 0;
