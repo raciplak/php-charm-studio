@@ -25,12 +25,228 @@ foreach ($result as $row)
     $home_featured_product_on_off = $row['home_featured_product_on_off'];
     $home_latest_product_on_off = $row['home_latest_product_on_off'];
     $home_popular_product_on_off = $row['home_popular_product_on_off'];
-
+    $slider_display_mode = isset($row['slider_display_mode']) ? $row['slider_display_mode'] : 'slider';
 }
-
-
 ?>
 
+<?php if($slider_display_mode == 'cube'): ?>
+<!-- Flipping Cubes Mode -->
+<style>
+.cube-slider-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 450px;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.flip-cube {
+    width: 280px;
+    height: 320px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flip-cube-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+    animation: cubeFloat 3s ease-in-out infinite;
+}
+
+.flip-cube:nth-child(1) .flip-cube-inner { animation-delay: 0s; }
+.flip-cube:nth-child(2) .flip-cube-inner { animation-delay: 0.5s; }
+.flip-cube:nth-child(3) .flip-cube-inner { animation-delay: 1s; }
+.flip-cube:nth-child(4) .flip-cube-inner { animation-delay: 1.5s; }
+
+@keyframes cubeFloat {
+    0%, 100% { transform: translateY(0) rotateY(0deg); }
+    25% { transform: translateY(-10px) rotateY(5deg); }
+    50% { transform: translateY(0) rotateY(0deg); }
+    75% { transform: translateY(-5px) rotateY(-5deg); }
+}
+
+.flip-cube:hover .flip-cube-inner {
+    animation: cubeFlip 1.5s ease-in-out infinite;
+}
+
+@keyframes cubeFlip {
+    0% { transform: rotateY(0deg) rotateX(0deg); }
+    25% { transform: rotateY(180deg) rotateX(10deg); }
+    50% { transform: rotateY(360deg) rotateX(0deg); }
+    75% { transform: rotateY(540deg) rotateX(-10deg); }
+    100% { transform: rotateY(720deg) rotateX(0deg); }
+}
+
+.flip-cube-front, .flip-cube-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.flip-cube-front {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.flip-cube-front::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+}
+
+.flip-cube-content {
+    position: relative;
+    z-index: 2;
+    padding: 25px;
+    color: white;
+    text-align: center;
+}
+
+.flip-cube-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.flip-cube-content p {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.flip-cube-content .cube-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+}
+
+.flip-cube-content .cube-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+}
+
+.flip-cube-back {
+    background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.flip-cube-back-content {
+    text-align: center;
+    color: white;
+}
+
+.flip-cube-back-content i {
+    font-size: 50px;
+    margin-bottom: 15px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.flip-cube-back-content h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.flip-cube-back-content p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Sparkle effect */
+.flip-cube::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    animation: sparkle 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .cube-slider-container {
+        padding: 30px 15px;
+    }
+    .flip-cube {
+        width: 260px;
+        height: 300px;
+    }
+}
+</style>
+
+<div class="cube-slider-container">
+    <?php
+    $statement = $pdo->prepare("SELECT * FROM tbl_slider");
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+    foreach ($result as $row) {            
+    ?>
+    <div class="flip-cube">
+        <div class="flip-cube-inner">
+            <div class="flip-cube-front" style="background-image:url(assets/uploads/<?php echo $row['photo']; ?>);">
+                <div class="flip-cube-content">
+                    <h3><?php echo $row['heading']; ?></h3>
+                    <p><?php echo substr($row['content'], 0, 80); ?>...</p>
+                    <a href="<?php echo $row['button_url']; ?>" class="cube-btn"><?php echo $row['button_text']; ?></a>
+                </div>
+            </div>
+            <div class="flip-cube-back">
+                <div class="flip-cube-back-content">
+                    <i class="fa fa-hand-pointer-o"></i>
+                    <h4>Explore More</h4>
+                    <p>Click to discover amazing deals!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+</div>
+
+<?php else: ?>
+<!-- Normal Slider Mode -->
 <div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="false" >
 
     <!-- Indicators -->
@@ -90,6 +306,7 @@ foreach ($result as $row)
     </a>
 
 </div>
+<?php endif; ?>
 
 
 <?php if($home_service_on_off == 1): ?>
