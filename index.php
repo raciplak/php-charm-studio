@@ -39,8 +39,7 @@ foreach ($result as $row)
     padding: 40px 20px;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     min-height: 450px;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
     overflow: hidden;
 }
 
