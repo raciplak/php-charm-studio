@@ -57,31 +57,23 @@ foreach ($result as $row)
     height: 100%;
     transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-style: preserve-3d;
-    animation: cubeFloat 3s ease-in-out infinite;
+    animation: cubeFlip 8s ease-in-out infinite;
 }
 
 .flip-cube:nth-child(1) .flip-cube-inner { animation-delay: 0s; }
-.flip-cube:nth-child(2) .flip-cube-inner { animation-delay: 0.5s; }
-.flip-cube:nth-child(3) .flip-cube-inner { animation-delay: 1s; }
-.flip-cube:nth-child(4) .flip-cube-inner { animation-delay: 1.5s; }
-
-@keyframes cubeFloat {
-    0%, 100% { transform: translateY(0) rotateY(0deg); }
-    25% { transform: translateY(-10px) rotateY(5deg); }
-    50% { transform: translateY(0) rotateY(0deg); }
-    75% { transform: translateY(-5px) rotateY(-5deg); }
-}
-
-.flip-cube:hover .flip-cube-inner {
-    animation: cubeFlip 1.5s ease-in-out infinite;
-}
+.flip-cube:nth-child(2) .flip-cube-inner { animation-delay: 2s; }
+.flip-cube:nth-child(3) .flip-cube-inner { animation-delay: 4s; }
+.flip-cube:nth-child(4) .flip-cube-inner { animation-delay: 6s; }
 
 @keyframes cubeFlip {
-    0% { transform: rotateY(0deg) rotateX(0deg); }
-    25% { transform: rotateY(180deg) rotateX(10deg); }
-    50% { transform: rotateY(360deg) rotateX(0deg); }
-    75% { transform: rotateY(540deg) rotateX(-10deg); }
-    100% { transform: rotateY(720deg) rotateX(0deg); }
+    0%, 45% { transform: rotateY(0deg); }
+    50%, 95% { transform: rotateY(180deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+/* Pause animation on hover */
+.flip-cube:hover .flip-cube-inner {
+    animation-play-state: paused;
 }
 
 .flip-cube-front, .flip-cube-back {
@@ -89,7 +81,7 @@ foreach ($result as $row)
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 15px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.2);
 }
@@ -140,7 +132,7 @@ foreach ($result as $row)
     background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
     color: white;
     text-decoration: none;
-    border-radius: 25px;
+    border-radius: 0;
     font-size: 13px;
     font-weight: 600;
     transition: all 0.3s ease;
