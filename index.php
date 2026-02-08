@@ -111,11 +111,12 @@ foreach ($result as $row)
     text-align: center;
 }
 
-.flip-cube-content h3 {
+.flip-cube-content h2.cube-title {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 1.3;
 }
 
 .flip-cube-content p {
@@ -220,81 +221,106 @@ foreach ($result as $row)
 }
 </style>
 
-<div class="cube-slider-container">
-    <?php
-    $statement = $pdo->prepare("SELECT * FROM tbl_slider");
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
-    foreach ($result as $row) {            
-    ?>
-    <div class="flip-cube">
-        <div class="flip-cube-inner">
-            <div class="flip-cube-front" style="background-image:url(assets/uploads/<?php echo $row['photo']; ?>);">
-                <div class="flip-cube-content">
-                    <h3><?php echo $row['heading']; ?></h3>
-                    <p><?php echo substr($row['content'], 0, 80); ?>...</p>
-                    <a href="<?php echo $row['button_url']; ?>" class="cube-btn"><?php echo $row['button_text']; ?></a>
-                </div>
-            </div>
-            <div class="flip-cube-back">
-                <div class="flip-cube-back-content">
-                    <i class="fa fa-hand-pointer-o"></i>
-                    <h4>Explore More</h4>
-                    <p>Click to discover amazing deals!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php } ?>
-</div>
-
-<?php else: ?>
-<!-- Normal Slider Mode -->
-<div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="false" >
-
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
+<!-- SEO: Hero Section with Semantic Structure -->
+<section class="cube-slider-section" aria-label="Featured Promotions" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="Featured Promotions and Deals">
+    <meta itemprop="description" content="Discover our latest promotions, special offers, and featured products">
+    <div class="cube-slider-container" role="region" aria-label="Interactive product showcase">
         <?php
-        $i=0;
-        $statement = $pdo->prepare("SELECT * FROM tbl_slider");
+        $cube_position = 0;
+        $statement = $pdo->prepare("SELECT * FROM tbl_slider WHERE is_active = 1 ORDER BY position ASC");
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
-        foreach ($result as $row) {            
-            ?>
-            <li data-target="#bootstrap-touch-slider" data-slide-to="<?php echo $i; ?>" <?php if($i==0) {echo 'class="active"';} ?>></li>
-            <?php
-            $i++;
-        }
+        foreach ($result as $row) {
+            $cube_position++;
+            $slider_title = htmlspecialchars($row['heading'], ENT_QUOTES, 'UTF-8');
+            $slider_desc = htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8');
+            $slider_image = 'assets/uploads/' . $row['photo'];
         ?>
-    </ol>
-
-    <!-- Wrapper For Slides -->
-    <div class="carousel-inner" role="listbox">
-
-        <?php
-        $i=0;
-        $statement = $pdo->prepare("SELECT * FROM tbl_slider");
-        $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
-        foreach ($result as $row) {            
-            ?>
-            <div class="item <?php if($i==0) {echo 'active';} ?>" style="background-image:url(assets/uploads/<?php echo $row['photo']; ?>);">
-                <div class="bs-slider-overlay"></div>
-                <div class="container">
-                    <div class="row">
-                        <div class="slide-text <?php if($row['position'] == 'Left') {echo 'slide_style_left';} elseif($row['position'] == 'Center') {echo 'slide_style_center';} elseif($row['position'] == 'Right') {echo 'slide_style_right';} ?>">
-                            <h1 data-animation="animated <?php if($row['position'] == 'Left') {echo 'zoomInLeft';} elseif($row['position'] == 'Center') {echo 'flipInX';} elseif($row['position'] == 'Right') {echo 'zoomInRight';} ?>"><?php echo $row['heading']; ?></h1>
-                            <p data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo nl2br($row['content']); ?></p>
-                            <a href="<?php echo $row['button_url']; ?>" target="_blank"  class="btn btn-primary" data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo $row['button_text']; ?></a>
-                        </div>
+        <article class="flip-cube" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-label="<?php echo $slider_title; ?>">
+            <meta itemprop="position" content="<?php echo $cube_position; ?>">
+            <div class="flip-cube-inner">
+                <div class="flip-cube-front" style="background-image:url(<?php echo $slider_image; ?>);" role="img" aria-label="<?php echo $slider_title; ?> - promotional image">
+                    <img src="<?php echo $slider_image; ?>" alt="<?php echo $slider_title; ?> - <?php echo substr($slider_desc, 0, 100); ?>" loading="lazy" style="display:none;" itemprop="image">
+                    <div class="flip-cube-content">
+                        <h2 itemprop="name" class="cube-title"><?php echo $slider_title; ?></h2>
+                        <p itemprop="description"><?php echo substr($slider_desc, 0, 80); ?>...</p>
+                        <a href="<?php echo htmlspecialchars($row['button_url'], ENT_QUOTES, 'UTF-8'); ?>" class="cube-btn" itemprop="url" title="<?php echo htmlspecialchars($row['button_text'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo $slider_title; ?>"><?php echo htmlspecialchars($row['button_text'], ENT_QUOTES, 'UTF-8'); ?></a>
+                    </div>
+                </div>
+                <div class="flip-cube-back" aria-hidden="true">
+                    <div class="flip-cube-back-content">
+                        <i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                        <h3>Explore More</h3>
+                        <p>Click to discover amazing deals!</p>
                     </div>
                 </div>
             </div>
-            <?php
-            $i++;
-        }
-        ?>
+        </article>
+        <?php } ?>
     </div>
+</section>
+
+<?php else: ?>
+<!-- Normal Slider Mode - SEO Optimized -->
+<section class="hero-slider-section" aria-label="Featured Promotions" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="Featured Promotions and Special Offers">
+    <meta itemprop="description" content="Browse our latest promotions, special deals, and featured products">
+    
+    <div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line" data-ride="carousel" data-pause="hover" data-interval="5000" role="region" aria-roledescription="carousel" aria-label="Hero promotions slider">
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators" role="tablist">
+            <?php
+            $i=0;
+            $statement = $pdo->prepare("SELECT * FROM tbl_slider WHERE is_active = 1 ORDER BY position ASC");
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+            foreach ($result as $row) {            
+                ?>
+                <li data-target="#bootstrap-touch-slider" data-slide-to="<?php echo $i; ?>" <?php if($i==0) {echo 'class="active"';} ?> role="tab" aria-label="Slide <?php echo ($i+1); ?>: <?php echo htmlspecialchars($row['heading'], ENT_QUOTES, 'UTF-8'); ?>"></li>
+                <?php
+                $i++;
+            }
+            ?>
+        </ol>
+
+        <!-- Wrapper For Slides -->
+        <div class="carousel-inner" role="group" aria-live="polite">
+
+            <?php
+            $i=0;
+            $slide_position = 0;
+            $statement = $pdo->prepare("SELECT * FROM tbl_slider WHERE is_active = 1 ORDER BY position ASC");
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+            foreach ($result as $row) {
+                $slide_position++;
+                $slide_title = htmlspecialchars($row['heading'], ENT_QUOTES, 'UTF-8');
+                $slide_desc = htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8');
+                $slide_image = 'assets/uploads/' . $row['photo'];
+                $slide_btn_text = htmlspecialchars($row['button_text'], ENT_QUOTES, 'UTF-8');
+                $slide_btn_url = htmlspecialchars($row['button_url'], ENT_QUOTES, 'UTF-8');
+                ?>
+                <article class="item <?php if($i==0) {echo 'active';} ?>" style="background-image:url(<?php echo $slide_image; ?>);" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" role="tabpanel" aria-label="<?php echo $slide_title; ?>">
+                    <meta itemprop="position" content="<?php echo $slide_position; ?>">
+                    <img src="<?php echo $slide_image; ?>" alt="<?php echo $slide_title; ?> - <?php echo substr($slide_desc, 0, 100); ?>" loading="<?php echo ($i==0) ? 'eager' : 'lazy'; ?>" style="display:none;" itemprop="image">
+                    <div class="bs-slider-overlay"></div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="slide-text <?php if($row['position'] == 'Left') {echo 'slide_style_left';} elseif($row['position'] == 'Center') {echo 'slide_style_center';} elseif($row['position'] == 'Right') {echo 'slide_style_right';} ?>">
+                                <h2 itemprop="name" data-animation="animated <?php if($row['position'] == 'Left') {echo 'zoomInLeft';} elseif($row['position'] == 'Center') {echo 'flipInX';} elseif($row['position'] == 'Right') {echo 'zoomInRight';} ?>"><?php echo $slide_title; ?></h2>
+                                <p itemprop="description" data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo nl2br($slide_desc); ?></p>
+                                <a href="<?php echo $slide_btn_url; ?>" itemprop="url" title="<?php echo $slide_btn_text; ?> - <?php echo $slide_title; ?>" class="btn btn-primary" data-animation="animated <?php if($row['position'] == 'Left') {echo 'fadeInLeft';} elseif($row['position'] == 'Center') {echo 'fadeInDown';} elseif($row['position'] == 'Right') {echo 'fadeInRight';} ?>"><?php echo $slide_btn_text; ?></a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <?php
+                $i++;
+            }
+            ?>
+        </div>
 
     <!-- Slider Left Control -->
     <a class="left carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="prev">
@@ -304,11 +330,12 @@ foreach ($result as $row)
 
     <!-- Slider Right Control -->
     <a class="right carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="next">
-        <span class="fa fa-angle-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
+            <span class="fa fa-angle-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
 
-</div>
+    </div>
+</section>
 <?php endif; ?>
 
 
