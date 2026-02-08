@@ -1,8 +1,10 @@
 <?php
+ob_start();
+session_start();
 require_once('inc/config.php');
 require_once('inc/functions.php');
 
-if(!isset($_SESSION['admin'])) {
+if(!isset($_SESSION['user'])) {
     header('location: login.php');
     exit;
 }
