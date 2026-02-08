@@ -82,9 +82,9 @@
 	    $(".select2").select2();
 
 	    //Datemask dd/mm/yyyy
-	    $("#datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
+	    $("#datemask").inputmask("dd-mm-yyyy", {"placeholder": "gg-aa-yyyy"});
 	    //Datemask2 mm/dd/yyyy
-	    $("#datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
+	    $("#datemask2").inputmask("mm-dd-yyyy", {"placeholder": "aa-gg-yyyy"});
 	    //Money Euro
 	    $("[data-mask]").inputmask();
 
@@ -119,14 +119,21 @@
 
 
 
-	    $("#example1").DataTable();
+	    $("#example1").DataTable({
+	    	"language": {
+	    		"url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Turkish.json"
+	    	}
+	    });
 	    $('#example2').DataTable({
 	      "paging": true,
 	      "lengthChange": false,
 	      "searching": false,
 	      "ordering": true,
 	      "info": true,
-	      "autoWidth": false
+	      "autoWidth": false,
+	      "language": {
+	      	"url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Turkish.json"
+	      }
 	    });
 
 	    $('#confirm-delete').on('show.bs.modal', function(e) {
@@ -141,15 +148,15 @@
 
 		function confirmDelete()
 	    {
-	        return confirm("Are you sure want to delete this data?");
+	        return confirm("Bu veriyi silmek istediğinizden emin misiniz?");
 	    }
 	    function confirmActive()
 	    {
-	        return confirm("Are you sure want to Active?");
+	        return confirm("Aktif etmek istediğinizden emin misiniz?");
 	    }
 	    function confirmInactive()
 	    {
-	        return confirm("Are you sure want to Inactive?");
+	        return confirm("Pasif etmek istediğinizden emin misiniz?");
 	    }
 
 	</script>
@@ -172,7 +179,7 @@
 		   	}
 		}
 		function showContentInputArea(elem){
-		   if(elem.value == 'Full Width Page Layout') {
+		   if(elem.value == 'Tam Genişlik Sayfa Düzeni') {
 		      	document.getElementById('showPageContent').style.display = "block";
 		   } else {
 		   		document.getElementById('showPageContent').style.display = "none";
@@ -251,13 +258,13 @@
 
 		function funcTab1(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[1].style.display = 'block';
 		       	items[2].style.display = 'block';
 		       	items[3].style.display = 'block';
 		       	items[4].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[1].style.display = 'none';
 		       	items[2].style.display = 'none';
 		       	items[3].style.display = 'none';
@@ -267,13 +274,13 @@
 
 		function funcTab2(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[5].style.display = 'block';
 		       	items[6].style.display = 'block';
 		       	items[7].style.display = 'block';
 		       	items[8].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[5].style.display = 'none';
 		       	items[6].style.display = 'none';
 		       	items[7].style.display = 'none';
@@ -283,13 +290,13 @@
 
 		function funcTab3(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[9].style.display = 'block';
 		       	items[10].style.display = 'block';
 		       	items[11].style.display = 'block';
 		       	items[12].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[9].style.display = 'none';
 		       	items[10].style.display = 'none';
 		       	items[11].style.display = 'none';
@@ -299,13 +306,13 @@
 
 		function funcTab4(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[13].style.display = 'block';
 		       	items[14].style.display = 'block';
 		       	items[15].style.display = 'block';
 		       	items[16].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[13].style.display = 'none';
 		       	items[14].style.display = 'none';
 		       	items[15].style.display = 'none';
@@ -315,13 +322,13 @@
 
 		function funcTab5(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[17].style.display = 'block';
 		       	items[18].style.display = 'block';
 		       	items[19].style.display = 'block';
 		       	items[20].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[17].style.display = 'none';
 		       	items[18].style.display = 'none';
 		       	items[19].style.display = 'none';
@@ -331,20 +338,19 @@
 
 		function funcTab6(elem) {
 			var txt = elem.value;
-			if(txt == 'Image Advertisement') {
+			if(txt == 'Resim Reklamı') {
 				items[21].style.display = 'block';
 		       	items[22].style.display = 'block';
 		       	items[23].style.display = 'block';
 		       	items[24].style.display = 'none';
 			} 
-			if(txt == 'Adsense Code') {
+			if(txt == 'Adsense Kodu') {
 				items[21].style.display = 'none';
 		       	items[22].style.display = 'none';
 		       	items[23].style.display = 'none';
 		       	items[24].style.display = 'block';
 			}
 		};
-
 
 
         

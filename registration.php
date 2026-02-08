@@ -154,10 +154,10 @@ if (isset($_POST['form1'])) {
         // Send email for confirmation of the account
         $to = $_POST['cust_email'];
 
-        $subject = LANG_VALUE_150;
+        $subject = 'Hesap Doğrulama';
         $verify_link = BASE_URL.'verify.php?email='.$to.'&token='.$token;
         $message = '
-'.LANG_VALUE_151.'<br><br>
+Hesabınızı doğrulamak için lütfen aşağıdaki bağlantıya tıklayın:<br><br>
 
 <a href="'.$verify_link.'">'.$verify_link.'</a>';
 
@@ -165,7 +165,7 @@ if (isset($_POST['form1'])) {
                    "Reply-To: noreply@" . BASE_URL . "\r\n" .
                    "X-Mailer: PHP/" . phpversion() . "\r\n" .
                    "MIME-Version: 1.0\r\n" .
-                   "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                   "Content-Type: text/html; charset=UTF-8\r\n";
 
         // Sending Email
         mail($to, $subject, $message, $headers);
@@ -218,7 +218,7 @@ if (isset($_POST['form1'])) {
                                     <input type="text" class="form-control" name="cust_name" value="<?php if(isset($_POST['cust_name'])){echo $_POST['cust_name'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_103; ?></label>
+                                    <label for="">Şirket Adı</label>
                                     <input type="text" class="form-control" name="cust_cname" value="<?php if(isset($_POST['cust_cname'])){echo $_POST['cust_cname'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
@@ -226,17 +226,17 @@ if (isset($_POST['form1'])) {
                                     <input type="email" class="form-control" name="cust_email" value="<?php if(isset($_POST['cust_email'])){echo $_POST['cust_email'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_104; ?> *</label>
+                                    <label for="">Telefon *</label>
                                     <input type="text" class="form-control" name="cust_phone" value="<?php if(isset($_POST['cust_phone'])){echo $_POST['cust_phone'];} ?>">
                                 </div>
                                 <div class="col-md-12 form-group">
-                                    <label for=""><?php echo LANG_VALUE_105; ?> *</label>
+                                    <label for="">Adres *</label>
                                     <textarea name="cust_address" class="form-control" cols="30" rows="10" style="height:70px;"><?php if(isset($_POST['cust_address'])){echo $_POST['cust_address'];} ?></textarea>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_106; ?> *</label>
+                                    <label for="">Ülke *</label>
                                     <select name="cust_country" class="form-control select2">
-                                        <option value="">Select country</option>
+                                        <option value="">Ülke seçin</option>
                                     <?php
                                     $statement = $pdo->prepare("SELECT * FROM tbl_country ORDER BY country_name ASC");
                                     $statement->execute();
@@ -251,15 +251,15 @@ if (isset($_POST['form1'])) {
                                 </div>
 
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_107; ?> *</label>
+                                    <label for="">Şehir *</label>
                                     <input type="text" class="form-control" name="cust_city" value="<?php if(isset($_POST['cust_city'])){echo $_POST['cust_city'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_108; ?> *</label>
+                                    <label for="">İlçe *</label>
                                     <input type="text" class="form-control" name="cust_state" value="<?php if(isset($_POST['cust_state'])){echo $_POST['cust_state'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_109; ?> *</label>
+                                    <label for="">Posta Kodu *</label>
                                     <input type="text" class="form-control" name="cust_zip" value="<?php if(isset($_POST['cust_zip'])){echo $_POST['cust_zip'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
@@ -267,7 +267,7 @@ if (isset($_POST['form1'])) {
                                     <input type="password" class="form-control" name="cust_password">
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label for=""><?php echo LANG_VALUE_98; ?> *</label>
+                                    <label for="">Şifre Tekrar *</label>
                                     <input type="password" class="form-control" name="cust_re_password">
                                 </div>
                                 <div class="col-md-6 form-group">

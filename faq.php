@@ -32,12 +32,12 @@ foreach ($result as $row) {
                         <div class="panel panel-default">
                             <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question<?php echo $row['faq_id']; ?>">
                                 <h4 class="panel-title">
-                                    Q: <?php echo $row['faq_title']; ?>
+                                    S: <?php echo $row['faq_title']; ?>
                                 </h4>
                             </div>
                             <div id="question<?php echo $row['faq_id']; ?>" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
-                                    <h5><span class="label label-primary">Answer</span></h5>
+                                    <h5><span class="label label-primary">Cevap</span></h5>
                                     <p>
                                         <?php echo $row['faq_content']; ?>
                                     </p>

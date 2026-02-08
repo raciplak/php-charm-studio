@@ -18,11 +18,11 @@ if(!isset($_SESSION['user'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Admin Panel</title>
+	<title>Yönetim Paneli</title>
 
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -49,31 +49,31 @@ if(!isset($_SESSION['user'])) {
 		<header class="main-header">
 
 			<a href="index.php" class="logo">
-				<span class="logo-lg">eCommerce PHP</span>
+				<span class="logo-lg">E-Ticaret</span>
 			</a>
 
 			<nav class="navbar navbar-static-top">
 				
 				<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-					<span class="sr-only">Toggle navigation</span>
+					<span class="sr-only">Menüyü aç/kapat</span>
 				</a>
 
-				<span style="float:left;line-height:50px;color:#fff;padding-left:15px;font-size:18px;">Admin Panel</span>
+				<span style="float:left;line-height:50px;color:#fff;padding-left:15px;font-size:18px;">Yönetim Paneli</span>
     <!-- Top Bar ... User Inforamtion .. Login/Log out Area -->
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<img src="../assets/uploads/<?php echo $_SESSION['user']['photo']; ?>" class="user-image" alt="User Image">
+								<img src="../assets/uploads/<?php echo $_SESSION['user']['photo']; ?>" class="user-image" alt="Kullanıcı Resmi">
 								<span class="hidden-xs"><?php echo $_SESSION['user']['full_name']; ?></span>
 							</a>
 							<ul class="dropdown-menu">
 								<li class="user-footer">
 									<div>
-										<a href="profile-edit.php" class="btn btn-default btn-flat">Edit Profile</a>
+										<a href="profile-edit.php" class="btn btn-default btn-flat">Profili Düzenle</a>
 									</div>
 									<div>
-										<a href="logout.php" class="btn btn-default btn-flat">Log out</a>
+										<a href="logout.php" class="btn btn-default btn-flat">Çıkış Yap</a>
 									</div>
 								</li>
 							</ul>
@@ -93,96 +93,96 @@ if(!isset($_SESSION['user'])) {
 
 			        <li class="treeview <?php if($cur_page == 'index.php') {echo 'active';} ?>">
 			          <a href="index.php">
-			            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+			            <i class="fa fa-dashboard"></i> <span>Kontrol Paneli</span>
 			          </a>
 			        </li>
 
 					
 			        <li class="treeview <?php if( ($cur_page == 'settings.php') ) {echo 'active';} ?>">
 			          <a href="settings.php">
-			            <i class="fa fa-sliders"></i> <span>Website Settings</span>
+			            <i class="fa fa-sliders"></i> <span>Site Ayarları</span>
 			          </a>
 			        </li>
 
                     <li class="treeview <?php if( ($cur_page == 'size.php') || ($cur_page == 'size-add.php') || ($cur_page == 'size-edit.php') || ($cur_page == 'color.php') || ($cur_page == 'color-add.php') || ($cur_page == 'color-edit.php') || ($cur_page == 'country.php') || ($cur_page == 'country-add.php') || ($cur_page == 'country-edit.php') || ($cur_page == 'shipping-cost.php') || ($cur_page == 'shipping-cost-edit.php') || ($cur_page == 'top-category.php') || ($cur_page == 'top-category-add.php') || ($cur_page == 'top-category-edit.php') || ($cur_page == 'mid-category.php') || ($cur_page == 'mid-category-add.php') || ($cur_page == 'mid-category-edit.php') || ($cur_page == 'end-category.php') || ($cur_page == 'end-category-add.php') || ($cur_page == 'end-category-edit.php') ) {echo 'active';} ?>">
                         <a href="#">
                             <i class="fa fa-cogs"></i>
-                            <span>Shop Settings</span>
+                            <span>Mağaza Ayarları</span>
                             <span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
 							</span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="size.php"><i class="fa fa-circle-o"></i> Size</a></li>
-                            <li><a href="color.php"><i class="fa fa-circle-o"></i> Color</a></li>
-                            <li><a href="country.php"><i class="fa fa-circle-o"></i> Country</a></li>
-                            <li><a href="shipping-cost.php"><i class="fa fa-circle-o"></i> Shipping Cost</a></li>
-                            <li><a href="top-category.php"><i class="fa fa-circle-o"></i> Top Level Category</a></li>
-                            <li><a href="mid-category.php"><i class="fa fa-circle-o"></i> Mid Level Category</a></li>
-                            <li><a href="end-category.php"><i class="fa fa-circle-o"></i> End Level Category</a></li>
+                            <li><a href="size.php"><i class="fa fa-circle-o"></i> Beden</a></li>
+                            <li><a href="color.php"><i class="fa fa-circle-o"></i> Renk</a></li>
+                            <li><a href="country.php"><i class="fa fa-circle-o"></i> Ülke</a></li>
+                            <li><a href="shipping-cost.php"><i class="fa fa-circle-o"></i> Kargo Ücreti</a></li>
+                            <li><a href="top-category.php"><i class="fa fa-circle-o"></i> Üst Kategori</a></li>
+                            <li><a href="mid-category.php"><i class="fa fa-circle-o"></i> Orta Kategori</a></li>
+                            <li><a href="end-category.php"><i class="fa fa-circle-o"></i> Alt Kategori</a></li>
                         </ul>
                     </li>
 
 
                     <li class="treeview <?php if( ($cur_page == 'product.php') || ($cur_page == 'product-add.php') || ($cur_page == 'product-edit.php') ) {echo 'active';} ?>">
                         <a href="product.php">
-                            <i class="fa fa-shopping-bag"></i> <span>Product Management</span>
+                            <i class="fa fa-shopping-bag"></i> <span>Ürün Yönetimi</span>
                         </a>
                     </li>
 
 
                     <li class="treeview <?php if( ($cur_page == 'order.php') ) {echo 'active';} ?>">
                         <a href="order.php">
-                            <i class="fa fa-sticky-note"></i> <span>Order Management</span>
+                            <i class="fa fa-sticky-note"></i> <span>Sipariş Yönetimi</span>
                         </a>
                     </li>
 
 
                      <li class="treeview <?php if( ($cur_page == 'slider.php') ) {echo 'active';} ?>">
 			          <a href="slider.php">
-			            <i class="fa fa-picture-o"></i> <span>Manage Sliders</span>
+			            <i class="fa fa-picture-o"></i> <span>Slider Yönetimi</span>
 			          </a>
 			        </li>
                     <!-- Icons to be displayed on Shop -->
 			        <li class="treeview <?php if( ($cur_page == 'service.php') ) {echo 'active';} ?>">
 			          <a href="service.php">
-			            <i class="fa fa-list-ol"></i> <span>Services</span>
+			            <i class="fa fa-list-ol"></i> <span>Hizmetler</span>
 			          </a>
 			        </li>
 
 			        <li class="treeview <?php if( ($cur_page == 'category-banner.php') || ($cur_page == 'category-banner-add.php') || ($cur_page == 'category-banner-edit.php') ) {echo 'active';} ?>">
 			          <a href="category-banner.php">
-			            <i class="fa fa-th-large"></i> <span>Category Banners</span>
+			            <i class="fa fa-th-large"></i> <span>Kategori Bannerları</span>
 			          </a>
 			        </li>
 
 			      			        <li class="treeview <?php if( ($cur_page == 'faq.php') ) {echo 'active';} ?>">
 			          <a href="faq.php">
-			            <i class="fa fa-question-circle"></i> <span>FAQ</span>
+			            <i class="fa fa-question-circle"></i> <span>SSS</span>
 			          </a>
 			        </li>
 
 						<li class="treeview <?php if( ($cur_page == 'customer.php') || ($cur_page == 'customer-add.php') || ($cur_page == 'customer-edit.php') ) {echo 'active';} ?>">
 			          <a href="customer.php">
-			            <i class="fa fa-user-plus"></i> <span>Registered Customer</span>
+			            <i class="fa fa-user-plus"></i> <span>Kayıtlı Müşteriler</span>
 			          </a>
 			        </li>
 
 			        <li class="treeview <?php if( ($cur_page == 'page.php') ) {echo 'active';} ?>">
 			          <a href="page.php">
-			            <i class="fa fa-tasks"></i> <span>Page Settings</span>
+			            <i class="fa fa-tasks"></i> <span>Sayfa Ayarları</span>
 			          </a>
 			        </li>
 
 			        <li class="treeview <?php if( ($cur_page == 'social-media.php') ) {echo 'active';} ?>">
 			          <a href="social-media.php">
-			            <i class="fa fa-globe"></i> <span>Social Media</span>
+			            <i class="fa fa-globe"></i> <span>Sosyal Medya</span>
 			          </a>
 			        </li>
 
 			        <li class="treeview <?php if( ($cur_page == 'subscriber.php')||($cur_page == 'subscriber.php') ) {echo 'active';} ?>">
 			          <a href="subscriber.php">
-			            <i class="fa fa-hand-o-right"></i> <span>Subscriber</span>
+			            <i class="fa fa-hand-o-right"></i> <span>Aboneler</span>
 			          </a>
 			        </li>
 

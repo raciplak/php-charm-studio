@@ -6,7 +6,7 @@ if(isset($_POST['form1'])) {
 
     if(empty($_POST['size_name'])) {
         $valid = 0;
-        $error_message .= "Size Name can not be empty<br>";
+        $error_message .= "Beden Adı boş olamaz<br>";
     } else {
     	// Duplicate Category checking
     	$statement = $pdo->prepare("SELECT * FROM tbl_size WHERE size_name=?");
@@ -15,7 +15,7 @@ if(isset($_POST['form1'])) {
     	if($total)
     	{
     		$valid = 0;
-        	$error_message .= "Size Name already exists<br>";
+        	$error_message .= "Beden Adı zaten mevcut<br>";
     	}
     }
 
@@ -25,17 +25,17 @@ if(isset($_POST['form1'])) {
 		$statement = $pdo->prepare("INSERT INTO tbl_size (size_name) VALUES (?)");
 		$statement->execute(array($_POST['size_name']));
 	
-    	$success_message = 'Size is added successfully.';
+    	$success_message = 'Beden başarıyla eklendi.';
     }
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Size</h1>
+		<h1>Beden Ekle</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="size.php" class="btn btn-primary btn-sm">View All</a>
+		<a href="size.php" class="btn btn-primary btn-sm">Tümünü Görüntüle</a>
 	</div>
 </section>
 
@@ -66,7 +66,7 @@ if(isset($_POST['form1'])) {
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Size Name <span>*</span></label>
+							<label for="" class="col-sm-2 control-label">Beden Adı <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="size_name">
 							</div>
@@ -74,7 +74,7 @@ if(isset($_POST['form1'])) {
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+								<button type="submit" class="btn btn-success pull-left" name="form1">Kaydet</button>
 							</div>
 						</div>
 					</div>

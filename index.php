@@ -251,8 +251,8 @@ foreach ($result as $row)
                 <div class="flip-cube-back" aria-hidden="true">
                     <div class="flip-cube-back-content">
                         <i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                        <h3>Explore More</h3>
-                        <p>Click to discover amazing deals!</p>
+                        <h3>Daha Fazla Keşfet</h3>
+                        <p>Harika fırsatları keşfetmek için tıklayın!</p>
                     </div>
                 </div>
             </div>
@@ -525,7 +525,7 @@ if(count($category_banners) > 0):
     <meta itemprop="description" content="Explore our product categories and find exactly what you're looking for">
     
     <div class="section-header">
-        <h2>Category Banners</h2>
+        <h2>Kategori Bannerları</h2>
     </div>
     
     <div class="category-banner-grid" role="region" aria-label="Category showcase">
@@ -665,11 +665,11 @@ if(count($category_banners) > 0):
                                 <?php if($row['p_qty'] == 0): ?>
                                     <div class="out-of-stock">
                                         <div class="inner">
-                                            Out Of Stock
+                                            Stokta Yok
                                         </div>
                                     </div>
                                 <?php else: ?>
-                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Sepete Ekle</a></p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -793,11 +793,11 @@ if(count($category_banners) > 0):
                                 <?php if($row['p_qty'] == 0): ?>
                                     <div class="out-of-stock">
                                         <div class="inner">
-                                            Out Of Stock
+                                            Stokta Yok
                                         </div>
                                     </div>
                                 <?php else: ?>
-                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Sepete Ekle</a></p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -924,11 +924,11 @@ if(count($category_banners) > 0):
                                 <?php if($row['p_qty'] == 0): ?>
                                     <div class="out-of-stock">
                                         <div class="inner">
-                                            Out Of Stock
+                                            Stokta Yok
                                         </div>
                                     </div>
                                 <?php else: ?>
-                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Add to Cart</a></p>
+                                    <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> Sepete Ekle</a></p>
                                 <?php endif; ?>
                             </div>
                         </div>
