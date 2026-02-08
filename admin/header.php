@@ -150,6 +150,12 @@ if(!isset($_SESSION['user'])) {
 			          </a>
 			        </li>
 
+			        <li class="treeview <?php if( ($cur_page == 'category-banner.php') || ($cur_page == 'category-banner-add.php') || ($cur_page == 'category-banner-edit.php') ) {echo 'active';} ?>">
+			          <a href="category-banner.php">
+			            <i class="fa fa-th-large"></i> <span>Category Banners</span>
+			          </a>
+			        </li>
+
 			      			        <li class="treeview <?php if( ($cur_page == 'faq.php') ) {echo 'active';} ?>">
 			          <a href="faq.php">
 			            <i class="fa fa-question-circle"></i> <span>FAQ</span>
