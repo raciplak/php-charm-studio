@@ -33,19 +33,19 @@ foreach ($result as $row)
 <!-- Flipping Cubes Mode -->
 <style>
 .cube-slider-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding: 40px 20px;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     min-height: 450px;
-    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
     overflow: hidden;
 }
 
 .flip-cube {
-    width: 280px;
+    width: 100%;
     height: 320px;
     perspective: 1000px;
     cursor: pointer;
@@ -198,12 +198,24 @@ foreach ($result as $row)
     100% { transform: rotate(360deg); }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .cube-slider-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .cube-slider-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cube-slider-container {
+        grid-template-columns: 1fr;
         padding: 30px 15px;
     }
     .flip-cube {
-        width: 260px;
         height: 300px;
     }
 }
