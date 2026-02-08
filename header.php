@@ -76,7 +76,7 @@ foreach ($result as $row) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 
 	<!-- Meta Tags -->
@@ -175,35 +175,35 @@ foreach ($result as $row) {
 
 	if($cur_page == 'dashboard.php') {
 		?>
-		<title>Dashboard - <?php echo $meta_title_home; ?></title>
+		<title>Kontrol Paneli - <?php echo $meta_title_home; ?></title>
 		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
 		<meta name="description" content="<?php echo $meta_description_home; ?>">
 		<?php
 	}
 	if($cur_page == 'customer-profile-update.php') {
 		?>
-		<title>Update Profile - <?php echo $meta_title_home; ?></title>
+		<title>Profil Güncelle - <?php echo $meta_title_home; ?></title>
 		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
 		<meta name="description" content="<?php echo $meta_description_home; ?>">
 		<?php
 	}
 	if($cur_page == 'customer-billing-shipping-update.php') {
 		?>
-		<title>Update Billing and Shipping Info - <?php echo $meta_title_home; ?></title>
+		<title>Fatura ve Teslimat Bilgilerini Güncelle - <?php echo $meta_title_home; ?></title>
 		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
 		<meta name="description" content="<?php echo $meta_description_home; ?>">
 		<?php
 	}
 	if($cur_page == 'customer-password-update.php') {
 		?>
-		<title>Update Password - <?php echo $meta_title_home; ?></title>
+		<title>Şifre Güncelle - <?php echo $meta_title_home; ?></title>
 		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
 		<meta name="description" content="<?php echo $meta_description_home; ?>">
 		<?php
 	}
 	if($cur_page == 'customer-order.php') {
 		?>
-		<title>Orders - <?php echo $meta_title_home; ?></title>
+		<title>Siparişler - <?php echo $meta_title_home; ?></title>
 		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
 		<meta name="description" content="<?php echo $meta_description_home; ?>">
 		<?php
@@ -345,7 +345,7 @@ foreach ($result as $row) {
 				<div class="menu-container">
 					<div class="menu">
 						<ul>
-							<li><a href="index.php">Home</a></li>
+							<li><a href="index.php">Ana Sayfa</a></li>
 							
 							<?php
 							$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");

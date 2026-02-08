@@ -49,18 +49,18 @@ if(isset($_POST['form1'])) {
         }
         if($table_quantity[$temp_index] < $arr2[$i]) {
         	$allow_update = 0;
-            $error_message .= '"'.$arr2[$i].'" items are not available for "'.$arr3[$i].'"\n';
+            $error_message .= '"'.$arr3[$i].'" için "'.$arr2[$i].'" adet stokta mevcut değil\n';
         } else {
             $_SESSION['cart_p_qty'][$i] = $arr2[$i];
         }
     }
-    $error_message .= '\nOther items quantity are updated successfully!';
+    $error_message .= '\nDiğer ürünlerin miktarları başarıyla güncellendi!';
     ?>
     
     <?php if($allow_update == 0): ?>
     	<script>alert('<?php echo $error_message; ?>');</script>
 	<?php else: ?>
-		<script>alert('All Items Quantity Update is Successful!');</script>
+		<script>alert('Tüm Ürün Miktarları Başarıyla Güncellendi!');</script>
 	<?php endif; ?>
     <?php
 
@@ -80,8 +80,8 @@ if(isset($_POST['form1'])) {
 			<div class="col-md-12">
 
                 <?php if(!isset($_SESSION['cart_p_id'])): ?>
-                    <?php echo '<h2 class="text-center">Cart is Empty!!</h2></br>'; ?>
-                    <?php echo '<h4 class="text-center">Add products to the cart in order to view it here.</h4>'; ?>
+                    <?php echo '<h2 class="text-center">Sepetiniz Boş!!</h2></br>'; ?>
+                    <?php echo '<h4 class="text-center">Sepetinizi burada görüntülemek için ürün ekleyin.</h4>'; ?>
                 <?php else: ?>
                 <form action="" method="post">
                     <?php $csrf->echoInputField(); ?>
@@ -91,12 +91,12 @@ if(isset($_POST['form1'])) {
                             <th><?php echo '#' ?></th>
                             <th><?php echo LANG_VALUE_8; ?></th>
                             <th><?php echo LANG_VALUE_47; ?></th>
-                            <th><?php echo LANG_VALUE_157; ?></th>
-                            <th><?php echo LANG_VALUE_158; ?></th>
-                            <th><?php echo LANG_VALUE_159; ?></th>
-                            <th><?php echo LANG_VALUE_55; ?></th>
-                            <th class="text-right"><?php echo LANG_VALUE_82; ?></th>
-                            <th class="text-center" style="width: 100px;"><?php echo LANG_VALUE_83; ?></th>
+                            <th>Beden</th>
+                            <th>Renk</th>
+                            <th>Birim Fiyat</th>
+                            <th>Adet</th>
+                            <th class="text-right">Toplam</th>
+                            <th class="text-center" style="width: 100px;">İşlem</th>
                         </tr>
                         <?php
                         $table_total_price = 0;
@@ -177,7 +177,7 @@ if(isset($_POST['form1'])) {
                             <td>
                                 <input type="hidden" name="product_id[]" value="<?php echo $arr_cart_p_id[$i]; ?>">
                                 <input type="hidden" name="product_name[]" value="<?php echo $arr_cart_p_name[$i]; ?>">
-                                <input type="number" class="input-text qty text" step="1" min="1" max="" name="quantity[]" value="<?php echo $arr_cart_p_qty[$i]; ?>" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric">
+                                <input type="number" class="input-text qty text" step="1" min="1" max="" name="quantity[]" value="<?php echo $arr_cart_p_qty[$i]; ?>" title="Adet" size="4" pattern="[0-9]*" inputmode="numeric">
                             </td>
                             <td class="text-right">
                                 <?php
@@ -192,7 +192,7 @@ if(isset($_POST['form1'])) {
                         </tr>
                         <?php endfor; ?>
                         <tr>
-                            <th colspan="7" class="total-text">Total</th>
+                            <th colspan="7" class="total-text">Genel Toplam</th>
                             <th class="total-amount"><?php echo LANG_VALUE_1; ?><?php echo $table_total_price; ?></th>
                             <th></th>
                         </tr>
@@ -201,9 +201,9 @@ if(isset($_POST['form1'])) {
 
                 <div class="cart-buttons">
                     <ul>
-                        <li><input type="submit" value="<?php echo LANG_VALUE_20; ?>" class="btn btn-primary" name="form1"></li>
-                        <li><a href="index.php" class="btn btn-primary"><?php echo LANG_VALUE_85; ?></a></li>
-                        <li><a href="checkout.php" class="btn btn-primary"><?php echo LANG_VALUE_23; ?></a></li>
+                        <li><input type="submit" value="Sepeti Güncelle" class="btn btn-primary" name="form1"></li>
+                        <li><a href="index.php" class="btn btn-primary">Alışverişe Devam Et</a></li>
+                        <li><a href="checkout.php" class="btn btn-primary">Ödemeye Geç</a></li>
                     </ul>
                 </div>
                 </form>

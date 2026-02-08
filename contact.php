@@ -29,7 +29,7 @@ foreach ($result as $row) {
     <div class="container">
         <div class="row">            
             <div class="col-md-12">
-                <h3>Contact Form</h3>
+                <h3>İletişim Formu</h3>
                 <div class="row cform">
                     <div class="col-md-8">
                         <div class="well well-sm">
@@ -55,20 +55,20 @@ if(isset($_POST['form_contact']))
     if(empty($_POST['visitor_name']))
     {
         $valid = 0;
-        $error_message .= 'Please enter your name.\n';
+        $error_message .= 'Lütfen adınızı girin.\n';
     }
 
     if(empty($_POST['visitor_phone']))
     {
         $valid = 0;
-        $error_message .= 'Please enter your phone number.\n';
+        $error_message .= 'Lütfen telefon numaranızı girin.\n';
     }
 
 
     if(empty($_POST['visitor_email']))
     {
         $valid = 0;
-        $error_message .= 'Please enter your email address.\n';
+        $error_message .= 'Lütfen e-posta adresinizi girin.\n';
     }
     else
     {
@@ -76,14 +76,14 @@ if(isset($_POST['form_contact']))
         if(!filter_var($_POST['visitor_email'], FILTER_VALIDATE_EMAIL))
         {
             $valid = 0;
-            $error_message .= 'Please enter a valid email address.\n';
+            $error_message .= 'Lütfen geçerli bir e-posta adresi girin.\n';
         }
     }
 
     if(empty($_POST['visitor_message']))
     {
         $valid = 0;
-        $error_message .= 'Please enter your message.\n';
+        $error_message .= 'Lütfen mesajınızı girin.\n';
     }
 
     if($valid == 1)
@@ -101,19 +101,19 @@ if(isset($_POST['form_contact']))
 <html><body>
 <table>
 <tr>
-<td>Name</td>
+<td>Ad Soyad</td>
 <td>'.$visitor_name.'</td>
 </tr>
 <tr>
-<td>Email</td>
+<td>E-posta</td>
 <td>'.$visitor_email.'</td>
 </tr>
 <tr>
-<td>Phone</td>
+<td>Telefon</td>
 <td>'.$visitor_phone.'</td>
 </tr>
 <tr>
-<td>Comment</td>
+<td>Mesaj</td>
 <td>'.nl2br($visitor_message).'</td>
 </tr>
 </table>
@@ -123,7 +123,7 @@ if(isset($_POST['form_contact']))
                    'Reply-To: ' . $visitor_email . "\r\n" .
                    'X-Mailer: PHP/' . phpversion() . "\r\n" . 
                    "MIME-Version: 1.0\r\n" . 
-                   "Content-Type: text/html; charset=ISO-8859-1\r\n";
+                   "Content-Type: text/html; charset=UTF-8\r\n";
 
         // Sending email to admin                  
         mail($to_admin, $subject, $message, $headers); 
@@ -149,48 +149,48 @@ if(isset($_POST['form_contact']))
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" name="visitor_name" placeholder="Enter name">
+                                        <label for="name">Ad Soyad</label>
+                                        <input type="text" class="form-control" name="visitor_name" placeholder="Adınızı girin">
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" class="form-control" name="visitor_email" placeholder="Enter email address">
+                                        <label for="email">E-posta Adresi</label>
+                                        <input type="email" class="form-control" name="visitor_email" placeholder="E-posta adresinizi girin">
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">Phone Number</label>
-                                        <input type="text" class="form-control" name="visitor_phone" placeholder="Enter phone number">
+                                        <label for="email">Telefon Numarası</label>
+                                        <input type="text" class="form-control" name="visitor_phone" placeholder="Telefon numaranızı girin">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="name">Message</label>
-                                        <textarea name="visitor_message" class="form-control" rows="9" cols="25" placeholder="Enter message"></textarea>
+                                        <label for="name">Mesaj</label>
+                                        <textarea name="visitor_message" class="form-control" rows="9" cols="25" placeholder="Mesajınızı girin"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="submit" value="Send Message" class="btn btn-primary pull-right" name="form_contact">
+                                    <input type="submit" value="Mesaj Gönder" class="btn btn-primary pull-right" name="form_contact">
                                 </div>
                             </div>
                             </form>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <legend><span class="glyphicon glyphicon-globe"></span> Our office</legend>
+                        <legend><span class="glyphicon glyphicon-globe"></span> Ofisimiz</legend>
                         <address>
                             <?php echo nl2br($contact_address); ?>
                         </address>
                         <address>
-                            <strong>Phone:</strong><br>
+                            <strong>Telefon:</strong><br>
                             <span><?php echo $contact_phone; ?></span>
                         </address>
                         <address>
-                            <strong>Email:</strong><br>
+                            <strong>E-posta:</strong><br>
                             <a href="mailto:<?php echo $contact_email; ?>"><span><?php echo $contact_email; ?></span></a>
                         </address>
                     </div>
                 </div>
 
-                <h3>Find Us On Map</h3>
+                <h3>Haritada Bizi Bulun</h3>
                 <?php echo $contact_map_iframe; ?>
                 
             </div>

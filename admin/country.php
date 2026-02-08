@@ -2,10 +2,10 @@
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>View Countries</h1>
+		<h1>Ülkeleri Görüntüle</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="country-add.php" class="btn btn-primary btn-sm">Add New</a>
+		<a href="country-add.php" class="btn btn-primary btn-sm">Yeni Ekle</a>
 	</div>
 </section>
 
@@ -23,8 +23,8 @@
 			<thead>
 			    <tr>
 			        <th>#</th>
-			        <th>Country Name</th>
-			        <th>Action</th>
+			        <th>Ülke Adı</th>
+			        <th>İşlem</th>
 			    </tr>
 			</thead>
             <tbody>
@@ -40,8 +40,8 @@
 	                    <td><?php echo $i; ?></td>
 	                    <td><?php echo $row['country_name']; ?></td>
 	                    <td>
-	                        <a href="country-edit.php?id=<?php echo $row['country_id']; ?>" class="btn btn-primary btn-xs">Edit</a>
-	                        <a href="#" class="btn btn-danger btn-xs" data-href="country-delete.php?id=<?php echo $row['country_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+	                        <a href="country-edit.php?id=<?php echo $row['country_id']; ?>" class="btn btn-primary btn-xs">Düzenle</a>
+	                        <a href="#" class="btn btn-danger btn-xs" data-href="country-delete.php?id=<?php echo $row['country_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Sil</a>
 	                    </td>
 	                </tr>
             		<?php
@@ -61,14 +61,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
             </div>
             <div class="modal-body">
-                Are you sure want to delete this item?
+                Bu öğeyi silmek istediğinizden emin misiniz?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">İptal</button>
+                <a class="btn btn-danger btn-ok">Sil</a>
             </div>
         </div>
     </div>

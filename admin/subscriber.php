@@ -2,11 +2,11 @@
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Subscriber</h1>
+		<h1>Aboneler</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="subscriber-remove.php" class="btn btn-primary btn-sm">Remove Pending Subscribers</a>
-		<a href="subscriber-csv.php" class="btn btn-primary btn-sm">Export as CSV</a>
+		<a href="subscriber-remove.php" class="btn btn-primary btn-sm">Bekleyen Aboneleri Kaldır</a>
+		<a href="subscriber-csv.php" class="btn btn-primary btn-sm">CSV Olarak Dışa Aktar</a>
 	</div>
 </section>
 
@@ -20,8 +20,8 @@
 			<thead>
 			    <tr>
 			        <th>#</th>
-			        <th>Subscriber Email</th>
-			        <th>Action</th>
+			        <th>Abone E-postası</th>
+			        <th>İşlem</th>
 			    </tr>
 			</thead>
             <tbody>
@@ -36,7 +36,7 @@
 					<tr>
 	                    <td><?php echo $i; ?></td>
 	                    <td><?php echo $row['subs_email']; ?></td>
-	                    <td><a href="#" class="btn btn-danger btn-xs" data-href="subscriber-delete.php?id=<?php echo $row['subs_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
+	                    <td><a href="#" class="btn btn-danger btn-xs" data-href="subscriber-delete.php?id=<?php echo $row['subs_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Sil</a></td>
 	                </tr>
             		<?php
             	}
@@ -55,14 +55,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
             </div>
             <div class="modal-body">
-                Are you sure want to delete this item?
+                Bu öğeyi silmek istediğinizden emin misiniz?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">İptal</button>
+                <a class="btn btn-danger btn-ok">Sil</a>
             </div>
         </div>
     </div>

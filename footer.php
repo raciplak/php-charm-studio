@@ -67,23 +67,23 @@ foreach ($result as $row)
 
 				    		// Sending Confirmation Email
 				    		$to = $_POST['email_subscribe'];
-							$subject = 'Subscriber Email Confirmation';
+							$subject = 'Bülten Aboneliği E-posta Onayı';
 							
 							// Getting the url of the verification link
 							$verification_url = BASE_URL.'verify.php?email='.$to.'&key='.$key;
 
 							$message = '
-Thanks for your interest to subscribe our newsletter!<br><br>
-Please click this link to confirm your subscription:
+Bültenimize abone olmak istediğiniz için teşekkür ederiz!<br><br>
+Aboneliğinizi onaylamak için lütfen bu bağlantıya tıklayın:
 					'.$verification_url.'<br><br>
-This link will be active only for 24 hours.
+Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 					';
 
 							$headers = 'From: ' . $contact_email . "\r\n" .
 								   'Reply-To: ' . $contact_email . "\r\n" .
 								   'X-Mailer: PHP/' . phpversion() . "\r\n" . 
 								   "MIME-Version: 1.0\r\n" . 
-								   "Content-Type: text/html; charset=ISO-8859-1\r\n";
+								   "Content-Type: text/html; charset=UTF-8\r\n";
 
 							// Sending the email
 							mail($to, $subject, $message, $headers);
@@ -161,7 +161,7 @@ foreach ($result as $row) {
 <script>
 	function confirmDelete()
 	{
-	    return confirm("Sure you want to delete this data?");
+	    return confirm("Bu veriyi silmek istediğinizden emin misiniz?");
 	}
 	$(document).ready(function () {
 		advFieldsStatus = $('#advFieldsStatus').val();
@@ -184,7 +184,7 @@ foreach ($result as $row) {
                	$('#paypal_form').hide();
 				$('#stripe_form').show();
 				$('#bank_form').hide();
-            } else if ( advFieldsStatus == 'Bank Deposit' ) {
+            } else if ( advFieldsStatus == 'Banka Havalesi' ) {
             	$('#paypal_form').hide();
 				$('#stripe_form').hide();
 				$('#bank_form').show();
@@ -210,7 +210,7 @@ foreach ($result as $row) {
     function stripeResponseHandler(status, response) {
         if (response.error) {
             $('#submit-button').prop("disabled", false);
-            $("#msg-container").html('<div style="color: red;border: 1px solid;margin: 10px 0px;padding: 5px;"><strong>Error:</strong> ' + response.error.message + '</div>');
+            $("#msg-container").html('<div style="color: red;border: 1px solid;margin: 10px 0px;padding: 5px;"><strong>Hata:</strong> ' + response.error.message + '</div>');
             $("#msg-container").show();
         } else {
             var form$ = $("#stripe_form");

@@ -6,7 +6,7 @@ if(isset($_POST['form1'])) {
 
     if(empty($_POST['country_name'])) {
         $valid = 0;
-        $error_message .= "Country Name can not be empty<br>";
+        $error_message .= "Ülke Adı boş olamaz<br>";
     } else {
     	// Duplicate Category checking
     	$statement = $pdo->prepare("SELECT * FROM tbl_country WHERE country_name=?");
@@ -15,7 +15,7 @@ if(isset($_POST['form1'])) {
     	if($total)
     	{
     		$valid = 0;
-        	$error_message .= "Country Name already exists<br>";
+        	$error_message .= "Ülke Adı zaten mevcut<br>";
     	}
     }
 
@@ -25,17 +25,17 @@ if(isset($_POST['form1'])) {
 		$statement = $pdo->prepare("INSERT INTO tbl_country (country_name) VALUES (?)");
 		$statement->execute(array($_POST['country_name']));
 	
-    	$success_message = 'Country is added successfully.';
+    	$success_message = 'Ülke başarıyla eklendi.';
     }
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Country</h1>
+		<h1>Ülke Ekle</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="country.php" class="btn btn-primary btn-sm">View All</a>
+		<a href="country.php" class="btn btn-primary btn-sm">Tümünü Görüntüle</a>
 	</div>
 </section>
 
@@ -66,7 +66,7 @@ if(isset($_POST['form1'])) {
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Country Name <span>*</span></label>
+							<label for="" class="col-sm-2 control-label">Ülke Adı <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="country_name">
 							</div>
@@ -74,7 +74,7 @@ if(isset($_POST['form1'])) {
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+								<button type="submit" class="btn btn-success pull-left" name="form1">Kaydet</button>
 							</div>
 						</div>
 					</div>
