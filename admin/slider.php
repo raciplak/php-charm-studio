@@ -62,6 +62,13 @@ $current_display_mode = isset($settings_row['slider_display_mode']) ? $settings_
     color: #3c8dbc;
     font-size: 13px;
 }
+.inactive-row {
+    background-color: #f9f9f9 !important;
+    opacity: 0.7;
+}
+.inactive-row td {
+    color: #999;
+}
 </style>
 
 <section class="content-header">
@@ -112,6 +119,7 @@ $current_display_mode = isset($settings_row['slider_display_mode']) ? $settings_
 								<th>Button Text</th>
 								<th>Button URL</th>
 								<th>Position</th>
+								<th>Status</th>
 								<th width="140">Action</th>
 							</tr>
 						</thead>
@@ -119,31 +127,41 @@ $current_display_mode = isset($settings_row['slider_display_mode']) ? $settings_
 							<?php
 							$i=0;
 							$statement = $pdo->prepare("SELECT
-														
 														id,
 														photo,
 														heading,
 														content,
 														button_text,
 														button_url,
-														position
-
+														position,
+														is_active
 							                           	FROM tbl_slider
-							                           	
 							                           	");
 							$statement->execute();
 							$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 							foreach ($result as $row) {
 								$i++;
+								$is_active = isset($row['is_active']) ? $row['is_active'] : 1;
 								?>
-								<tr>
+								<tr class="<?php echo ($is_active == 0) ? 'inactive-row' : ''; ?>">
 									<td><?php echo $i; ?></td>
-									<td style="width:150px;"><img src="../assets/uploads/<?php echo $row['photo']; ?>" alt="<?php echo $row['heading']; ?>" style="width:140px;"></td>
+									<td style="width:150px;"><img src="../assets/uploads/<?php echo $row['photo']; ?>" alt="<?php echo $row['heading']; ?>" style="width:140px; <?php echo ($is_active == 0) ? 'opacity:0.5;' : ''; ?>"></td>
 									<td><?php echo $row['heading']; ?></td>
 									<td><?php echo $row['content']; ?></td>
 									<td><?php echo $row['button_text']; ?></td>
 									<td><?php echo $row['button_url']; ?></td>
 									<td><?php echo $row['position']; ?></td>
+									<td>
+										<?php if($is_active == 1): ?>
+											<a href="slider-change-status.php?id=<?php echo $row['id']; ?>" class="btn btn-success btn-xs" title="Click to deactivate">
+												<i class="fa fa-check"></i> Active
+											</a>
+										<?php else: ?>
+											<a href="slider-change-status.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-xs" title="Click to activate">
+												<i class="fa fa-times"></i> Inactive
+											</a>
+										<?php endif; ?>
+									</td>
 									<td>										
 										<a href="slider-edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-xs">Edit</a>
 										<a href="#" class="btn btn-danger btn-xs" data-href="slider-delete.php?id=<?php echo $row['id']; ?>" data-toggle="modal" data-target="#confirm-delete">Delete</a>  
