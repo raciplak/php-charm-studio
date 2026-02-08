@@ -413,9 +413,9 @@ if($success_message1 != '') {
                             <div class="p-quantity">
                                 <div class="row">
                                     <?php if(isset($size)): ?>
-                                    <div class="col-md-12 mb_20">
+                                    <div class="col-md-6 col-sm-6 mb_20">
                                         <?php echo LANG_VALUE_52; ?> <br>
-                                        <select name="size_id" class="form-control select2" style="width:auto;">
+                                        <select name="size_id" class="form-control select2" style="width:100%;">
                                             <?php
                                             $statement = $pdo->prepare("SELECT * FROM tbl_size");
                                             $statement->execute();
@@ -433,9 +433,9 @@ if($success_message1 != '') {
                                     <?php endif; ?>
 
                                     <?php if(isset($color)): ?>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6 col-sm-6 mb_20">
                                         <?php echo LANG_VALUE_53; ?> <br>
-                                        <select name="color_id" class="form-control select2" style="width:auto;">
+                                        <select name="color_id" class="form-control select2" style="width:100%;">
                                             <?php
                                             $statement = $pdo->prepare("SELECT * FROM tbl_color");
                                             $statement->execute();
@@ -467,13 +467,23 @@ if($success_message1 != '') {
                             <input type="hidden" name="p_current_price" value="<?php echo $p_current_price; ?>">
                             <input type="hidden" name="p_name" value="<?php echo $p_name; ?>">
                             <input type="hidden" name="p_featured_photo" value="<?php echo $p_featured_photo; ?>">
-							<div class="p-quantity">
-                                <?php echo LANG_VALUE_55; ?> <br>
-								<input type="number" class="input-text qty" step="1" min="1" max="" name="p_qty" value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric">
+							<div class="p-quantity-wrapper" style="display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap;">
+                                <div class="p-quantity">
+                                    <?php echo LANG_VALUE_55; ?> <br>
+                                    <input type="number" class="input-text qty" step="1" min="1" max="" name="p_qty" value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" style="width: 80px;">
+                                </div>
+                                <div class="btn-cart btn-cart1" style="margin-top: 0;">
+                                    <input type="submit" value="<?php echo LANG_VALUE_154; ?>" name="form_add_to_cart">
+                                </div>
 							</div>
-							<div class="btn-cart btn-cart1">
-                                <input type="submit" value="<?php echo LANG_VALUE_154; ?>" name="form_add_to_cart">
-							</div>
+                            
+                            <div class="fast-shipping" style="display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 10px 15px; background-color: #f8f9fa; border-radius: 5px; border-left: 3px solid #28a745;">
+                                <i class="fa fa-truck" style="font-size: 24px; color: #28a745;"></i>
+                                <div>
+                                    <strong style="color: #28a745;">Fast Shipping</strong><br>
+                                    <span style="font-size: 12px; color: #666;">Free delivery on orders over $50</span>
+                                </div>
+                            </div>
                             </form>
 							<div class="share">
                                 <?php echo LANG_VALUE_58; ?> <br>
