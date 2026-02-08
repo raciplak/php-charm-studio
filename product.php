@@ -410,51 +410,158 @@ if($success_message1 != '') {
 								</p>
 							</div>
                             <form action="" method="post">
-                            <div class="p-quantity">
+                            <style>
+                                .size-selector, .color-selector {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 10px;
+                                    margin-top: 8px;
+                                }
+                                .size-cube {
+                                    width: 45px;
+                                    height: 45px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border: 2px solid #ddd;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-weight: 600;
+                                    font-size: 14px;
+                                    background: #fff;
+                                    transition: all 0.2s ease;
+                                }
+                                .size-cube:hover {
+                                    border-color: #333;
+                                    background: #f8f8f8;
+                                }
+                                .size-cube.selected {
+                                    border-color: #e67e22;
+                                    background: #e67e22;
+                                    color: #fff;
+                                }
+                                .color-cube {
+                                    width: 40px;
+                                    height: 40px;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    border: 3px solid #ddd;
+                                    transition: all 0.2s ease;
+                                    position: relative;
+                                }
+                                .color-cube:hover {
+                                    transform: scale(1.1);
+                                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                                }
+                                .color-cube.selected {
+                                    border-color: #333;
+                                    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+                                }
+                                .color-cube.selected::after {
+                                    content: '✓';
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                    color: #fff;
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+                                }
+                                .selection-label {
+                                    font-weight: 600;
+                                    margin-bottom: 5px;
+                                    color: #333;
+                                }
+                            </style>
+                            
+                            <div class="p-options">
                                 <div class="row">
                                     <?php if(isset($size)): ?>
                                     <div class="col-md-6 col-sm-6 mb_20">
-                                        <?php echo LANG_VALUE_52; ?> <br>
-                                        <select name="size_id" class="form-control select2" style="width:100%;">
+                                        <div class="selection-label"><?php echo LANG_VALUE_52; ?></div>
+                                        <input type="hidden" name="size_id" id="selected_size" value="">
+                                        <div class="size-selector">
                                             <?php
+                                            $first_size = true;
                                             $statement = $pdo->prepare("SELECT * FROM tbl_size");
                                             $statement->execute();
                                             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                                             foreach ($result as $row) {
                                                 if(in_array($row['size_id'],$size)) {
+                                                    $selected_class = $first_size ? 'selected' : '';
                                                     ?>
-                                                    <option value="<?php echo $row['size_id']; ?>"><?php echo $row['size_name']; ?></option>
+                                                    <div class="size-cube <?php echo $selected_class; ?>" 
+                                                         data-size-id="<?php echo $row['size_id']; ?>"
+                                                         onclick="selectSize(this, <?php echo $row['size_id']; ?>)">
+                                                        <?php echo $row['size_name']; ?>
+                                                    </div>
                                                     <?php
+                                                    if($first_size) {
+                                                        echo '<script>document.getElementById("selected_size").value = '.$row['size_id'].';</script>';
+                                                        $first_size = false;
+                                                    }
                                                 }
                                             }
                                             ?>
-                                        </select>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
 
                                     <?php if(isset($color)): ?>
                                     <div class="col-md-6 col-sm-6 mb_20">
-                                        <?php echo LANG_VALUE_53; ?> <br>
-                                        <select name="color_id" class="form-control select2" style="width:100%;">
+                                        <div class="selection-label"><?php echo LANG_VALUE_53; ?></div>
+                                        <input type="hidden" name="color_id" id="selected_color" value="">
+                                        <div class="color-selector">
                                             <?php
+                                            $first_color = true;
                                             $statement = $pdo->prepare("SELECT * FROM tbl_color");
                                             $statement->execute();
                                             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                                             foreach ($result as $row) {
                                                 if(in_array($row['color_id'],$color)) {
+                                                    $selected_class = $first_color ? 'selected' : '';
+                                                    $color_code = !empty($row['color_code']) ? $row['color_code'] : '#cccccc';
                                                     ?>
-                                                    <option value="<?php echo $row['color_id']; ?>"><?php echo $row['color_name']; ?></option>
+                                                    <div class="color-cube <?php echo $selected_class; ?>" 
+                                                         style="background-color: <?php echo $color_code; ?>;"
+                                                         data-color-id="<?php echo $row['color_id']; ?>"
+                                                         title="<?php echo $row['color_name']; ?>"
+                                                         onclick="selectColor(this, <?php echo $row['color_id']; ?>)">
+                                                    </div>
                                                     <?php
+                                                    if($first_color) {
+                                                        echo '<script>document.getElementById("selected_color").value = '.$row['color_id'].';</script>';
+                                                        $first_color = false;
+                                                    }
                                                 }
                                             }
                                             ?>
-                                        </select>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
 
                                 </div>
                                 
                             </div>
+                            
+                            <script>
+                                function selectSize(element, sizeId) {
+                                    document.querySelectorAll('.size-cube').forEach(function(cube) {
+                                        cube.classList.remove('selected');
+                                    });
+                                    element.classList.add('selected');
+                                    document.getElementById('selected_size').value = sizeId;
+                                }
+                                
+                                function selectColor(element, colorId) {
+                                    document.querySelectorAll('.color-cube').forEach(function(cube) {
+                                        cube.classList.remove('selected');
+                                    });
+                                    element.classList.add('selected');
+                                    document.getElementById('selected_color').value = colorId;
+                                }
+                            </script>
 							<div class="p-price">
                                 <span style="font-size:14px;"><?php echo LANG_VALUE_54; ?></span><br>
                                 <span>
