@@ -366,6 +366,361 @@ foreach ($result as $row)
 </div>
 <?php endif; ?>
 
+<!-- Category Banners Section - Fancy Cube Cards -->
+<?php
+$statement = $pdo->prepare("SELECT * FROM tbl_category_banner WHERE is_active = 1 ORDER BY display_order ASC");
+$statement->execute();
+$category_banners = $statement->fetchAll(PDO::FETCH_ASSOC);
+if(count($category_banners) > 0):
+?>
+<style>
+.category-banners-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-banners-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    background-size: 50px 50px;
+    animation: moveStars 20s linear infinite;
+}
+
+@keyframes moveStars {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+}
+
+.category-banners-section .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.category-banners-section .section-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.category-banners-section .section-header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.category-banner-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    padding: 0 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.category-banner-card {
+    position: relative;
+    height: 380px;
+    perspective: 1500px;
+    cursor: pointer;
+}
+
+.category-banner-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+}
+
+.category-banner-card:hover .category-banner-inner {
+    transform: rotateY(12deg) rotateX(-5deg) scale(1.02);
+}
+
+.category-banner-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.4),
+        0 10px 20px rgba(0,0,0,0.3),
+        inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.category-banner-face::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 30%,
+        rgba(0,0,0,0.3) 60%,
+        rgba(0,0,0,0.9) 100%
+    );
+    transition: all 0.4s ease;
+}
+
+.category-banner-card:hover .category-banner-face::before {
+    background: linear-gradient(
+        180deg,
+        rgba(102, 126, 234, 0.1) 0%,
+        rgba(118, 75, 162, 0.2) 30%,
+        rgba(0,0,0,0.4) 60%,
+        rgba(0,0,0,0.95) 100%
+    );
+}
+
+/* Animated border glow */
+.category-banner-face::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    transition: all 0.4s ease;
+}
+
+.category-banner-card:hover .category-banner-face::after {
+    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 
+        inset 0 0 30px rgba(102, 126, 234, 0.2),
+        0 0 30px rgba(102, 126, 234, 0.3);
+}
+
+/* Shine effect */
+.category-banner-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.2),
+        transparent
+    );
+    transition: left 0.6s ease;
+}
+
+.category-banner-card:hover .category-banner-shine {
+    left: 100%;
+}
+
+.category-banner-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    z-index: 3;
+    transform: translateY(10px);
+    opacity: 0.9;
+    transition: all 0.4s ease;
+}
+
+.category-banner-card:hover .category-banner-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.category-banner-tag {
+    display: inline-block;
+    padding: 5px 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    border-radius: 0;
+}
+
+.category-banner-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    line-height: 1.3;
+}
+
+.category-banner-content p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 18px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.category-banner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background: white;
+    color: #302b63;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.category-banner-btn:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.category-banner-btn i {
+    transition: transform 0.3s ease;
+}
+
+.category-banner-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* Floating elements decoration */
+.category-banner-card .floating-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    z-index: 4;
+    opacity: 0;
+    transform: scale(0.8) rotate(-20deg);
+    transition: all 0.4s ease;
+}
+
+.category-banner-card:hover .floating-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .category-banner-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .category-banner-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 20px;
+    }
+    .category-banner-card {
+        height: 340px;
+    }
+}
+
+@media (max-width: 600px) {
+    .category-banners-section {
+        padding: 40px 0;
+    }
+    .category-banner-grid {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+        gap: 20px;
+    }
+    .category-banner-card {
+        height: 320px;
+    }
+    .category-banners-section .section-header h2 {
+        font-size: 28px;
+    }
+}
+</style>
+
+<section class="category-banners-section" aria-label="Category Banners" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="Shop By Category">
+    <meta itemprop="description" content="Explore our product categories and find exactly what you're looking for">
+    
+    <div class="section-header">
+        <h2>Category Banners</h2>
+        <p>Explore our curated collections and discover amazing products</p>
+    </div>
+    
+    <div class="category-banner-grid" role="region" aria-label="Category showcase">
+        <?php
+        $banner_position = 0;
+        foreach ($category_banners as $banner) {
+            $banner_position++;
+            $banner_title = htmlspecialchars($banner['title'], ENT_QUOTES, 'UTF-8');
+            $banner_subtitle = htmlspecialchars($banner['subtitle'], ENT_QUOTES, 'UTF-8');
+            $banner_image = 'assets/uploads/' . $banner['photo'];
+            $banner_btn_text = htmlspecialchars($banner['button_text'], ENT_QUOTES, 'UTF-8');
+            $banner_btn_url = htmlspecialchars($banner['button_url'], ENT_QUOTES, 'UTF-8');
+        ?>
+        <article class="category-banner-card" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <meta itemprop="position" content="<?php echo $banner_position; ?>">
+            <div class="category-banner-inner">
+                <div class="category-banner-face" style="background-image: url(<?php echo $banner_image; ?>);" role="img" aria-label="<?php echo $banner_title; ?>">
+                    <img src="<?php echo $banner_image; ?>" alt="<?php echo $banner_title; ?> - <?php echo substr($banner_subtitle, 0, 80); ?>" loading="lazy" style="display:none;" itemprop="image">
+                    <div class="category-banner-shine"></div>
+                    <div class="floating-icon">
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </div>
+                    <div class="category-banner-content">
+                        <span class="category-banner-tag">Collection</span>
+                        <h3 itemprop="name"><?php echo $banner_title; ?></h3>
+                        <p itemprop="description"><?php echo $banner_subtitle; ?></p>
+                        <?php if(!empty($banner_btn_text)): ?>
+                        <a href="<?php echo $banner_btn_url; ?>" class="category-banner-btn" itemprop="url" title="<?php echo $banner_btn_text; ?> - <?php echo $banner_title; ?>">
+                            <?php echo $banner_btn_text; ?>
+                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <?php } ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php if($home_featured_product_on_off == 1): ?>
 <div class="product pt_70 pb_70">
     <div class="container">
