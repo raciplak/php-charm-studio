@@ -101,6 +101,7 @@ foreach ($result as $row) {
 	<link rel="stylesheet" href="assets/css/select2.min.css">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<link rel="stylesheet" href="assets/css/responsive.css">
+	<link rel="stylesheet" href="assets/css/side-cart.css">
 
 	<?php
 
@@ -300,29 +301,35 @@ foreach ($result as $row) {
 					}
 					?>
 
-					<li><a href="cart.php"><i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_18; ?> (<?php echo LANG_VALUE_1; ?><?php
-					if(isset($_SESSION['cart_p_id'])) {
-						$table_total_price = 0;
-						$i=0;
-	                    foreach($_SESSION['cart_p_qty'] as $key => $value) 
-	                    {
-	                        $i++;
-	                        $arr_cart_p_qty[$i] = $value;
-	                    }                    $i=0;
-	                    foreach($_SESSION['cart_p_current_price'] as $key => $value) 
-	                    {
-	                        $i++;
-	                        $arr_cart_p_current_price[$i] = $value;
-	                    }
-	                    for($i=1;$i<=count($arr_cart_p_qty);$i++) {
-	                    	$row_total_price = $arr_cart_p_current_price[$i]*$arr_cart_p_qty[$i];
-	                        $table_total_price = $table_total_price + $row_total_price;
-	                    }
-						echo $table_total_price;
-					} else {
-						echo '0.00';
-					}
-					?>)</a></li>
+					<li>
+						<a href="javascript:void(0);" onclick="toggleSideCart()" class="cart-trigger">
+							<i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_18; ?>
+							<?php
+							$header_cart_count = 0;
+							$header_cart_total = 0;
+							if(isset($_SESSION['cart_p_id'])) {
+								$header_cart_count = count($_SESSION['cart_p_id']);
+								$i=0;
+								foreach($_SESSION['cart_p_qty'] as $key => $value) {
+									$i++;
+									$h_arr_qty[$i] = $value;
+								}
+								$i=0;
+								foreach($_SESSION['cart_p_current_price'] as $key => $value) {
+									$i++;
+									$h_arr_price[$i] = $value;
+								}
+								for($i=1;$i<=$header_cart_count;$i++) {
+									$header_cart_total += $h_arr_price[$i] * $h_arr_qty[$i];
+								}
+							}
+							?>
+							(<span id="header-cart-total"><?php echo LANG_VALUE_1; ?><?php echo $header_cart_total > 0 ? $header_cart_total : '0.00'; ?></span>)
+							<?php if($header_cart_count > 0): ?>
+							<span class="cart-count-badge"><?php echo $header_cart_count; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="col-md-3 search-area">

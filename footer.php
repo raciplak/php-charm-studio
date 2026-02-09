@@ -220,6 +220,129 @@ foreach ($result as $row) {
         }
     }
 </script>
+<!-- Side Cart Overlay -->
+<div class="side-cart-overlay" id="sideCartOverlay" onclick="toggleSideCart()"></div>
+
+<!-- Side Cart Panel -->
+<div class="side-cart" id="sideCart">
+    <div class="side-cart-header">
+        <h3><i class="fa fa-shopping-cart"></i> Sepetim 
+            <?php 
+            $sc_count = isset($_SESSION['cart_p_id']) ? count($_SESSION['cart_p_id']) : 0;
+            ?>
+            <span class="cart-item-count"><?php echo $sc_count; ?> Ürün</span>
+        </h3>
+        <button class="side-cart-close" onclick="toggleSideCart()" aria-label="Kapat">&times;</button>
+    </div>
+
+    <?php if($sc_count > 0): ?>
+    <div class="side-cart-shipping-bar">
+        <i class="fa fa-truck"></i> Hızlı ve güvenli teslimat
+    </div>
+    <?php endif; ?>
+
+    <div class="side-cart-items">
+        <?php if(!isset($_SESSION['cart_p_id']) || $sc_count == 0): ?>
+            <div class="side-cart-empty">
+                <i class="fa fa-shopping-basket"></i>
+                <h4>Sepetiniz Boş</h4>
+                <p>Henüz sepetinize ürün eklemediniz.</p>
+                <a href="index.php" class="btn-continue" onclick="toggleSideCart()">Alışverişe Başla</a>
+            </div>
+        <?php else: ?>
+            <?php
+            $sc_total = 0;
+            $sc_i = 0;
+            foreach($_SESSION['cart_p_id'] as $key => $value) { $sc_i++; $sc_p_id[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_p_name'] as $key => $value) { $sc_i++; $sc_p_name[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_p_featured_photo'] as $key => $value) { $sc_i++; $sc_p_photo[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_p_qty'] as $key => $value) { $sc_i++; $sc_p_qty[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_p_current_price'] as $key => $value) { $sc_i++; $sc_p_price[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_size_id'] as $key => $value) { $sc_i++; $sc_size_id[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_size_name'] as $key => $value) { $sc_i++; $sc_size_name[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_color_id'] as $key => $value) { $sc_i++; $sc_color_id[$sc_i] = $value; }
+            $sc_i = 0;
+            foreach($_SESSION['cart_color_name'] as $key => $value) { $sc_i++; $sc_color_name[$sc_i] = $value; }
+            ?>
+
+            <?php for($sc_i=1; $sc_i<=$sc_count; $sc_i++): ?>
+                <?php 
+                $sc_row_total = $sc_p_price[$sc_i] * $sc_p_qty[$sc_i];
+                $sc_total += $sc_row_total;
+                ?>
+                <div class="side-cart-item" style="animation-delay: <?php echo ($sc_i - 1) * 0.05; ?>s">
+                    <div class="side-cart-item-img">
+                        <img src="assets/uploads/<?php echo $sc_p_photo[$sc_i]; ?>" alt="<?php echo $sc_p_name[$sc_i]; ?>">
+                    </div>
+                    <div class="side-cart-item-info">
+                        <p class="side-cart-item-name" title="<?php echo $sc_p_name[$sc_i]; ?>"><?php echo $sc_p_name[$sc_i]; ?></p>
+                        <div class="side-cart-item-meta">
+                            <span><i class="fa fa-th-large"></i> <?php echo $sc_size_name[$sc_i]; ?></span>
+                            <span><i class="fa fa-paint-brush"></i> <?php echo $sc_color_name[$sc_i]; ?></span>
+                        </div>
+                        <div class="side-cart-item-price">
+                            <span class="side-cart-item-unit"><?php echo LANG_VALUE_1; ?><?php echo $sc_p_price[$sc_i]; ?> × <?php echo $sc_p_qty[$sc_i]; ?></span>
+                            <span class="side-cart-item-total"><?php echo LANG_VALUE_1; ?><?php echo $sc_row_total; ?></span>
+                        </div>
+                    </div>
+                    <a href="cart-item-delete.php?id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" 
+                       class="side-cart-item-remove" 
+                       onclick="return confirm('Bu ürünü sepetinizden silmek istiyor musunuz?');"
+                       title="Ürünü Kaldır">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            <?php endfor; ?>
+        <?php endif; ?>
+    </div>
+
+    <?php if($sc_count > 0): ?>
+    <div class="side-cart-footer">
+        <div class="side-cart-subtotal">
+            <span>Toplam</span>
+            <span><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
+        </div>
+        <div class="side-cart-actions">
+            <a href="checkout.php" class="btn-checkout">Ödemeye Geç <i class="fa fa-arrow-right"></i></a>
+            <a href="cart.php" class="btn-view-cart">Sepeti Görüntüle</a>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<script>
+function toggleSideCart() {
+    var cart = document.getElementById('sideCart');
+    var overlay = document.getElementById('sideCartOverlay');
+    cart.classList.toggle('active');
+    overlay.classList.toggle('active');
+    
+    // Prevent body scroll when cart is open
+    if(cart.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+// Close on ESC key
+document.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape') {
+        var cart = document.getElementById('sideCart');
+        if(cart.classList.contains('active')) {
+            toggleSideCart();
+        }
+    }
+});
+</script>
+
 <?php echo $before_body; ?>
 </body>
 </html>
