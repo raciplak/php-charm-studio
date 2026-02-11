@@ -287,6 +287,11 @@ foreach ($result as $row) {
                             <span><i class="fa fa-th-large"></i> <?php echo $sc_size_name[$sc_i]; ?></span>
                             <span><i class="fa fa-paint-brush"></i> <?php echo $sc_color_name[$sc_i]; ?></span>
                         </div>
+                        <div class="side-cart-item-qty">
+                            <a href="cart.php?action=minus&id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" class="qty-btn qty-minus" title="Azalt">−</a>
+                            <span class="qty-value"><?php echo $sc_p_qty[$sc_i]; ?></span>
+                            <a href="cart.php?action=plus&id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" class="qty-btn qty-plus" title="Artır">+</a>
+                        </div>
                         <div class="side-cart-item-price">
                             <span class="side-cart-item-unit"><?php echo LANG_VALUE_1; ?><?php echo $sc_p_price[$sc_i]; ?> × <?php echo $sc_p_qty[$sc_i]; ?></span>
                             <span class="side-cart-item-total"><?php echo LANG_VALUE_1; ?><?php echo $sc_row_total; ?></span>
@@ -311,7 +316,6 @@ foreach ($result as $row) {
         </div>
         <div class="side-cart-actions">
             <a href="checkout.php" class="btn-checkout">Ödemeye Geç <i class="fa fa-arrow-right"></i></a>
-            <a href="cart.php" class="btn-view-cart">Sepeti Görüntüle</a>
         </div>
     </div>
     <?php endif; ?>
