@@ -277,7 +277,7 @@ foreach ($result as $row) {
                 $sc_row_total = $sc_p_price[$sc_i] * $sc_p_qty[$sc_i];
                 $sc_total += $sc_row_total;
                 ?>
-                <div class="side-cart-item" style="animation-delay: <?php echo ($sc_i - 1) * 0.05; ?>s">
+                <div class="side-cart-item" data-id="<?php echo $sc_p_id[$sc_i]; ?>" data-size="<?php echo $sc_size_id[$sc_i]; ?>" data-color="<?php echo $sc_color_id[$sc_i]; ?>" style="animation-delay: <?php echo ($sc_i - 1) * 0.05; ?>s">
                     <div class="side-cart-item-img">
                         <img src="assets/uploads/<?php echo $sc_p_photo[$sc_i]; ?>" alt="<?php echo $sc_p_name[$sc_i]; ?>">
                     </div>
@@ -288,21 +288,18 @@ foreach ($result as $row) {
                             <span><i class="fa fa-paint-brush"></i> <?php echo $sc_color_name[$sc_i]; ?></span>
                         </div>
                         <div class="side-cart-item-qty">
-                            <a href="cart.php?action=minus&id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" class="qty-btn qty-minus" title="Azalt">−</a>
+                            <button type="button" class="qty-btn qty-minus" onclick="updateSideCartQty(this, 'minus')" title="Azalt">−</button>
                             <span class="qty-value"><?php echo $sc_p_qty[$sc_i]; ?></span>
-                            <a href="cart.php?action=plus&id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" class="qty-btn qty-plus" title="Artır">+</a>
+                            <button type="button" class="qty-btn qty-plus" onclick="updateSideCartQty(this, 'plus')" title="Artır">+</button>
                         </div>
                         <div class="side-cart-item-price">
                             <span class="side-cart-item-unit"><?php echo LANG_VALUE_1; ?><?php echo $sc_p_price[$sc_i]; ?> × <?php echo $sc_p_qty[$sc_i]; ?></span>
                             <span class="side-cart-item-total"><?php echo LANG_VALUE_1; ?><?php echo $sc_row_total; ?></span>
                         </div>
                     </div>
-                    <a href="cart-item-delete.php?id=<?php echo $sc_p_id[$sc_i]; ?>&size=<?php echo $sc_size_id[$sc_i]; ?>&color=<?php echo $sc_color_id[$sc_i]; ?>" 
-                       class="side-cart-item-remove" 
-                       onclick="return confirm('Bu ürünü sepetinizden silmek istiyor musunuz?');"
-                       title="Ürünü Kaldır">
+                    <button type="button" class="side-cart-item-remove" onclick="updateSideCartQty(this, 'remove')" title="Ürünü Kaldır">
                         <i class="fa fa-times"></i>
-                    </a>
+                    </button>
                 </div>
             <?php endfor; ?>
         <?php endif; ?>
@@ -327,8 +324,6 @@ function toggleSideCart() {
     var overlay = document.getElementById('sideCartOverlay');
     cart.classList.toggle('active');
     overlay.classList.toggle('active');
-    
-    // Prevent body scroll when cart is open
     if(cart.classList.contains('active')) {
         document.body.style.overflow = 'hidden';
     } else {
@@ -336,7 +331,6 @@ function toggleSideCart() {
     }
 }
 
-// Close on ESC key
 document.addEventListener('keydown', function(e) {
     if(e.key === 'Escape') {
         var cart = document.getElementById('sideCart');
@@ -345,6 +339,77 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+function updateSideCartQty(btn, action) {
+    var item = btn.closest('.side-cart-item');
+    var id = item.getAttribute('data-id');
+    var size = item.getAttribute('data-size');
+    var color = item.getAttribute('data-color');
+    
+    // Disable buttons during request
+    var buttons = item.querySelectorAll('.qty-btn, .side-cart-item-remove');
+    buttons.forEach(function(b) { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'cart-update-ajax.php?action=' + action + '&id=' + id + '&size=' + size + '&color=' + color, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+            var resp = JSON.parse(xhr.responseText);
+            if(resp.success) {
+                renderSideCart(resp);
+            } else {
+                buttons.forEach(function(b) { b.style.pointerEvents = ''; b.style.opacity = ''; });
+            }
+        }
+    };
+    xhr.send();
+}
+
+function renderSideCart(data) {
+    var currency = '<?php echo LANG_VALUE_1; ?>';
+    var itemsContainer = document.querySelector('.side-cart-items');
+    var footer = document.querySelector('.side-cart-footer');
+    var headerCount = document.querySelector('.cart-item-count');
+    var headerBadge = document.querySelector('.cart-count-badge');
+
+    // Update header badge
+    if(headerCount) headerCount.textContent = data.cart_count + ' Ürün';
+    if(headerBadge) headerBadge.textContent = data.cart_count;
+
+    if(data.cart_count === 0) {
+        itemsContainer.innerHTML = '<div class="side-cart-empty"><i class="fa fa-shopping-basket"></i><h4>Sepetiniz Boş</h4><p>Henüz sepetinize ürün eklemediniz.</p><a href="index.php" class="btn-continue" onclick="toggleSideCart()">Alışverişe Başla</a></div>';
+        if(footer) footer.style.display = 'none';
+        var shippingBar = document.querySelector('.side-cart-shipping-bar');
+        if(shippingBar) shippingBar.style.display = 'none';
+        return;
+    }
+
+    var html = '';
+    for(var i = 0; i < data.items.length; i++) {
+        var it = data.items[i];
+        html += '<div class="side-cart-item" data-id="' + it.id + '" data-size="' + it.size_id + '" data-color="' + it.color_id + '">';
+        html += '<div class="side-cart-item-img"><img src="assets/uploads/' + it.photo + '" alt="' + it.name + '"></div>';
+        html += '<div class="side-cart-item-info">';
+        html += '<p class="side-cart-item-name" title="' + it.name + '">' + it.name + '</p>';
+        html += '<div class="side-cart-item-meta"><span><i class="fa fa-th-large"></i> ' + it.size_name + '</span><span><i class="fa fa-paint-brush"></i> ' + it.color_name + '</span></div>';
+        html += '<div class="side-cart-item-qty">';
+        html += '<button type="button" class="qty-btn qty-minus" onclick="updateSideCartQty(this, \'minus\')" title="Azalt">−</button>';
+        html += '<span class="qty-value">' + it.qty + '</span>';
+        html += '<button type="button" class="qty-btn qty-plus" onclick="updateSideCartQty(this, \'plus\')" title="Artır">+</button>';
+        html += '</div>';
+        html += '<div class="side-cart-item-price"><span class="side-cart-item-unit">' + currency + it.price + ' × ' + it.qty + '</span><span class="side-cart-item-total">' + currency + it.row_total + '</span></div>';
+        html += '</div>';
+        html += '<button type="button" class="side-cart-item-remove" onclick="updateSideCartQty(this, \'remove\')" title="Ürünü Kaldır"><i class="fa fa-times"></i></button>';
+        html += '</div>';
+    }
+    itemsContainer.innerHTML = html;
+
+    // Update footer total
+    if(footer) {
+        var subtotalEl = footer.querySelector('.side-cart-subtotal span:last-child');
+        if(subtotalEl) subtotalEl.textContent = currency + data.cart_total;
+    }
+}
 </script>
 
 <?php echo $before_body; ?>
