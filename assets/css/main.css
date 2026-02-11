@@ -138,65 +138,108 @@ a:hover {
   background: #fff;
 }
 
-.header .inner {
+.header .inner,
+.header .header-row {
   height: auto;
-  display: table;
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
 }
 
 .header .logo {
-  float: none;
-  display: table-cell;
-  vertical-align: middle;
+  flex: 0 0 auto;
 }
 
 .header .logo img {
   max-width: 100%;
-  height: 80px;
+  height: 70px;
 }
 
-.header .navbar-form .form-control {
-  width: 300px;
+.header .search-area-center {
+  flex: 1;
+  padding: 0 20px;
 }
 
-.header .search-area {
-  float: none;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.header .search-area .form-group {
-  width: calc(100% - 84px);
-}
-
-.header .search-area button {
-  width: 80px;
-}
-
-.header .search-area form {
+.header-search-form {
   width: 100%;
 }
 
-.header .right {
-  float: none;
-  display: table-cell;
-  vertical-align: middle;
-  padding-right: 0;
+.header-search-wrapper {
+  display: flex;
+  border: 2px solid #131921;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.header .right ul {
-  float: right;
-  margin-bottom: 0;
+.header-search-wrapper .search-top {
+  flex: 1;
+  border: none;
+  border-radius: 0;
+  height: 42px;
+  font-size: 14px;
+  padding: 0 14px;
+  box-shadow: none;
 }
 
-.header .right ul li {
+.header-search-wrapper .search-top:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.header-search-wrapper .btn-search {
+  width: 50px;
+  background: #ff6b35;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header-search-wrapper .btn-search:hover {
+  background: #e55a25;
+}
+
+.header .header-icons {
+  flex: 0 0 auto;
+  padding-left: 10px;
+}
+
+.header .header-icons ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header .header-icons ul li {
   list-style-type: none;
-  float: left;
-  margin-left: 14px;
-  color: #0d1452;
 }
 
-.header .right ul li a {
-  color: #0d1452;
+.header-icon-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #131921;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header-icon-link:hover {
+  background: #f0f0f0;
+  color: #131921;
+  text-decoration: none;
+}
+
+.header-icon-link i {
+  font-size: 18px;
 }
 
 .header .navbar-form .search-top {
