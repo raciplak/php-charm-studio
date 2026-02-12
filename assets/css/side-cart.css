@@ -481,3 +481,122 @@
     text-align: center;
     display: inline-block;
 }
+
+/* ================================================
+   SIDE CART ADDRESS SECTIONS
+   ================================================ */
+.side-cart-addresses {
+    margin-bottom: 14px;
+}
+
+.sc-address-section {
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.sc-address-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    transition: background 0.2s ease;
+    user-select: none;
+}
+
+.sc-address-header:hover {
+    background: #eee;
+}
+
+.sc-address-header span i {
+    margin-right: 6px;
+    color: #ff6b35;
+}
+
+.sc-addr-arrow {
+    font-size: 11px;
+    transition: transform 0.2s ease;
+    color: #999;
+}
+
+.sc-addr-arrow.open {
+    transform: rotate(180deg);
+}
+
+.sc-address-body {
+    display: none;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-top: 1px solid #eee;
+}
+
+.sc-address-body.open {
+    display: block;
+}
+
+.sc-addr-name {
+    margin: 0 0 4px;
+    font-weight: 600;
+    color: #222;
+    font-size: 13px;
+}
+
+.sc-addr-detail {
+    margin: 0 0 2px;
+    color: #555;
+}
+
+.sc-addr-detail i {
+    width: 14px;
+    color: #999;
+    margin-right: 4px;
+}
+
+.sc-addr-empty {
+    margin: 0 0 6px;
+    color: #e67e22;
+    font-size: 12px;
+}
+
+.sc-addr-empty i {
+    margin-right: 4px;
+}
+
+.sc-addr-add-link {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6b35;
+    text-decoration: underline;
+}
+
+.sc-addr-add-link:hover {
+    color: #e55a25;
+}
+
+.sc-login-prompt {
+    padding: 10px 0;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sc-login-prompt i {
+    color: #ff6b35;
+    margin-right: 4px;
+}
+
+.sc-login-prompt a {
+    color: #ff6b35;
+    font-weight: 600;
+    text-decoration: underline;
+}

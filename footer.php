@@ -307,6 +307,49 @@ foreach ($result as $row) {
 
     <?php if($sc_count > 0): ?>
     <div class="side-cart-footer">
+        <?php if(isset($_SESSION['customer'])): ?>
+        <div class="side-cart-addresses">
+            <div class="sc-address-section">
+                <div class="sc-address-header" onclick="toggleScAddress('billing')">
+                    <span><i class="fa fa-file-text-o"></i> Fatura Adresi</span>
+                    <i class="fa fa-chevron-down sc-addr-arrow" id="sc-billing-arrow"></i>
+                </div>
+                <div class="sc-address-body" id="sc-billing-body">
+                    <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
+                        <p class="sc-addr-name"><?php echo $_SESSION['customer']['cust_b_name']; ?></p>
+                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_b_address']; ?></p>
+                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_b_city']; ?> / <?php echo $_SESSION['customer']['cust_b_state']; ?> <?php echo $_SESSION['customer']['cust_b_zip']; ?></p>
+                        <p class="sc-addr-detail"><i class="fa fa-phone"></i> <?php echo $_SESSION['customer']['cust_b_phone']; ?></p>
+                    <?php else: ?>
+                        <p class="sc-addr-empty"><i class="fa fa-exclamation-circle"></i> Fatura adresi eklenmemiş</p>
+                        <a href="customer-billing-shipping-update.php" class="sc-addr-add-link">Adres Ekle</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="sc-address-section">
+                <div class="sc-address-header" onclick="toggleScAddress('shipping')">
+                    <span><i class="fa fa-truck"></i> Teslimat Adresi</span>
+                    <i class="fa fa-chevron-down sc-addr-arrow" id="sc-shipping-arrow"></i>
+                </div>
+                <div class="sc-address-body" id="sc-shipping-body">
+                    <?php if(!empty($_SESSION['customer']['cust_s_address'])): ?>
+                        <p class="sc-addr-name"><?php echo $_SESSION['customer']['cust_s_name']; ?></p>
+                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_s_address']; ?></p>
+                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_s_city']; ?> / <?php echo $_SESSION['customer']['cust_s_state']; ?> <?php echo $_SESSION['customer']['cust_s_zip']; ?></p>
+                        <p class="sc-addr-detail"><i class="fa fa-phone"></i> <?php echo $_SESSION['customer']['cust_s_phone']; ?></p>
+                    <?php else: ?>
+                        <p class="sc-addr-empty"><i class="fa fa-exclamation-circle"></i> Teslimat adresi eklenmemiş</p>
+                        <a href="customer-billing-shipping-update.php" class="sc-addr-add-link">Adres Ekle</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="sc-login-prompt">
+            <i class="fa fa-info-circle"></i> Ödeme için <a href="login.php">giriş yapın</a>
+        </div>
+        <?php endif; ?>
+
         <div class="side-cart-subtotal">
             <span>Toplam</span>
             <span><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
@@ -339,6 +382,13 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+function toggleScAddress(type) {
+    var body = document.getElementById('sc-' + type + '-body');
+    var arrow = document.getElementById('sc-' + type + '-arrow');
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+}
 
 function updateSideCartQty(btn, action) {
     var item = btn.closest('.side-cart-item');
