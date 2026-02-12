@@ -309,38 +309,126 @@ foreach ($result as $row) {
     <div class="side-cart-footer">
         <?php if(isset($_SESSION['customer'])): ?>
         <div class="side-cart-addresses">
-            <div class="sc-address-section">
+        <div class="sc-address-section">
                 <div class="sc-address-header" onclick="toggleScAddress('billing')">
-                    <span><i class="fa fa-file-text-o"></i> Fatura Adresi</span>
+                    <div class="sc-addr-header-left">
+                        <span class="sc-addr-title"><i class="fa fa-file-text-o"></i> Fatura Adresi</span>
+                        <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
+                        <span class="sc-addr-preview"><?php echo $_SESSION['customer']['cust_b_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'], 0, 35, '...'); ?>, <?php echo $_SESSION['customer']['cust_b_city']; ?></span>
+                        <?php else: ?>
+                        <span class="sc-addr-preview sc-addr-preview-empty"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
+                        <?php endif; ?>
+                    </div>
                     <i class="fa fa-chevron-down sc-addr-arrow" id="sc-billing-arrow"></i>
                 </div>
                 <div class="sc-address-body" id="sc-billing-body">
-                    <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
-                        <p class="sc-addr-name"><?php echo $_SESSION['customer']['cust_b_name']; ?></p>
-                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_b_address']; ?></p>
-                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_b_city']; ?> / <?php echo $_SESSION['customer']['cust_b_state']; ?> <?php echo $_SESSION['customer']['cust_b_zip']; ?></p>
-                        <p class="sc-addr-detail"><i class="fa fa-phone"></i> <?php echo $_SESSION['customer']['cust_b_phone']; ?></p>
-                    <?php else: ?>
-                        <p class="sc-addr-empty"><i class="fa fa-exclamation-circle"></i> Fatura adresi eklenmemiş</p>
-                        <a href="customer-billing-shipping-update.php" class="sc-addr-add-link">Adres Ekle</a>
-                    <?php endif; ?>
+                    <form class="sc-addr-form" id="sc-billing-form" onsubmit="saveScAddress(event, 'billing')">
+                        <div class="sc-addr-form-row">
+                            <label>Ad Soyad</label>
+                            <input type="text" name="b_name" value="<?php echo isset($_SESSION['customer']['cust_b_name']) ? $_SESSION['customer']['cust_b_name'] : ''; ?>" placeholder="Ad Soyad" required>
+                        </div>
+                        <div class="sc-addr-form-row">
+                            <label>Adres</label>
+                            <input type="text" name="b_address" value="<?php echo isset($_SESSION['customer']['cust_b_address']) ? $_SESSION['customer']['cust_b_address'] : ''; ?>" placeholder="Adres" required>
+                        </div>
+                        <div class="sc-addr-form-grid">
+                            <div class="sc-addr-form-row">
+                                <label>İl</label>
+                                <input type="text" name="b_city" value="<?php echo isset($_SESSION['customer']['cust_b_city']) ? $_SESSION['customer']['cust_b_city'] : ''; ?>" placeholder="İl" required>
+                            </div>
+                            <div class="sc-addr-form-row">
+                                <label>İlçe</label>
+                                <input type="text" name="b_state" value="<?php echo isset($_SESSION['customer']['cust_b_state']) ? $_SESSION['customer']['cust_b_state'] : ''; ?>" placeholder="İlçe" required>
+                            </div>
+                        </div>
+                        <div class="sc-addr-form-grid">
+                            <div class="sc-addr-form-row">
+                                <label>Posta Kodu</label>
+                                <input type="text" name="b_zip" value="<?php echo isset($_SESSION['customer']['cust_b_zip']) ? $_SESSION['customer']['cust_b_zip'] : ''; ?>" placeholder="Posta Kodu">
+                            </div>
+                            <div class="sc-addr-form-row">
+                                <label>Telefon</label>
+                                <input type="text" name="b_phone" value="<?php echo isset($_SESSION['customer']['cust_b_phone']) ? $_SESSION['customer']['cust_b_phone'] : ''; ?>" placeholder="Telefon" required>
+                            </div>
+                        </div>
+                        <div class="sc-addr-form-row">
+                            <label>Ülke</label>
+                            <select name="b_country">
+                                <?php
+                                $stmt_c = $pdo->prepare("SELECT * FROM tbl_country ORDER BY country_name ASC");
+                                $stmt_c->execute();
+                                $countries = $stmt_c->fetchAll(PDO::FETCH_ASSOC);
+                                foreach($countries as $c_row):
+                                ?>
+                                <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_b_country']) && $_SESSION['customer']['cust_b_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="sc-addr-form-actions">
+                            <button type="submit" class="sc-addr-save-btn"><i class="fa fa-check"></i> Kaydet</button>
+                            <span class="sc-addr-save-msg" id="sc-billing-msg"></span>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="sc-address-section">
                 <div class="sc-address-header" onclick="toggleScAddress('shipping')">
-                    <span><i class="fa fa-truck"></i> Teslimat Adresi</span>
+                    <div class="sc-addr-header-left">
+                        <span class="sc-addr-title"><i class="fa fa-truck"></i> Teslimat Adresi</span>
+                        <?php if(!empty($_SESSION['customer']['cust_s_address'])): ?>
+                        <span class="sc-addr-preview"><?php echo $_SESSION['customer']['cust_s_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_s_address'], 0, 35, '...'); ?>, <?php echo $_SESSION['customer']['cust_s_city']; ?></span>
+                        <?php else: ?>
+                        <span class="sc-addr-preview sc-addr-preview-empty"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
+                        <?php endif; ?>
+                    </div>
                     <i class="fa fa-chevron-down sc-addr-arrow" id="sc-shipping-arrow"></i>
                 </div>
                 <div class="sc-address-body" id="sc-shipping-body">
-                    <?php if(!empty($_SESSION['customer']['cust_s_address'])): ?>
-                        <p class="sc-addr-name"><?php echo $_SESSION['customer']['cust_s_name']; ?></p>
-                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_s_address']; ?></p>
-                        <p class="sc-addr-detail"><?php echo $_SESSION['customer']['cust_s_city']; ?> / <?php echo $_SESSION['customer']['cust_s_state']; ?> <?php echo $_SESSION['customer']['cust_s_zip']; ?></p>
-                        <p class="sc-addr-detail"><i class="fa fa-phone"></i> <?php echo $_SESSION['customer']['cust_s_phone']; ?></p>
-                    <?php else: ?>
-                        <p class="sc-addr-empty"><i class="fa fa-exclamation-circle"></i> Teslimat adresi eklenmemiş</p>
-                        <a href="customer-billing-shipping-update.php" class="sc-addr-add-link">Adres Ekle</a>
-                    <?php endif; ?>
+                    <div class="sc-addr-copy-row">
+                        <label class="sc-addr-copy-label"><input type="checkbox" id="sc-copy-billing" onchange="scCopyBilling(this)"> Fatura adresiyle aynı</label>
+                    </div>
+                    <form class="sc-addr-form" id="sc-shipping-form" onsubmit="saveScAddress(event, 'shipping')">
+                        <div class="sc-addr-form-row">
+                            <label>Ad Soyad</label>
+                            <input type="text" name="s_name" value="<?php echo isset($_SESSION['customer']['cust_s_name']) ? $_SESSION['customer']['cust_s_name'] : ''; ?>" placeholder="Ad Soyad" required>
+                        </div>
+                        <div class="sc-addr-form-row">
+                            <label>Adres</label>
+                            <input type="text" name="s_address" value="<?php echo isset($_SESSION['customer']['cust_s_address']) ? $_SESSION['customer']['cust_s_address'] : ''; ?>" placeholder="Adres" required>
+                        </div>
+                        <div class="sc-addr-form-grid">
+                            <div class="sc-addr-form-row">
+                                <label>İl</label>
+                                <input type="text" name="s_city" value="<?php echo isset($_SESSION['customer']['cust_s_city']) ? $_SESSION['customer']['cust_s_city'] : ''; ?>" placeholder="İl" required>
+                            </div>
+                            <div class="sc-addr-form-row">
+                                <label>İlçe</label>
+                                <input type="text" name="s_state" value="<?php echo isset($_SESSION['customer']['cust_s_state']) ? $_SESSION['customer']['cust_s_state'] : ''; ?>" placeholder="İlçe" required>
+                            </div>
+                        </div>
+                        <div class="sc-addr-form-grid">
+                            <div class="sc-addr-form-row">
+                                <label>Posta Kodu</label>
+                                <input type="text" name="s_zip" value="<?php echo isset($_SESSION['customer']['cust_s_zip']) ? $_SESSION['customer']['cust_s_zip'] : ''; ?>" placeholder="Posta Kodu">
+                            </div>
+                            <div class="sc-addr-form-row">
+                                <label>Telefon</label>
+                                <input type="text" name="s_phone" value="<?php echo isset($_SESSION['customer']['cust_s_phone']) ? $_SESSION['customer']['cust_s_phone'] : ''; ?>" placeholder="Telefon" required>
+                            </div>
+                        </div>
+                        <div class="sc-addr-form-row">
+                            <label>Ülke</label>
+                            <select name="s_country">
+                                <?php foreach($countries as $c_row): ?>
+                                <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_s_country']) && $_SESSION['customer']['cust_s_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="sc-addr-form-actions">
+                            <button type="submit" class="sc-addr-save-btn"><i class="fa fa-check"></i> Kaydet</button>
+                            <span class="sc-addr-save-msg" id="sc-shipping-msg"></span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -388,6 +476,60 @@ function toggleScAddress(type) {
     var arrow = document.getElementById('sc-' + type + '-arrow');
     body.classList.toggle('open');
     arrow.classList.toggle('open');
+}
+
+function scCopyBilling(cb) {
+    if(cb.checked) {
+        var bf = document.getElementById('sc-billing-form');
+        var sf = document.getElementById('sc-shipping-form');
+        sf.querySelector('[name="s_name"]').value = bf.querySelector('[name="b_name"]').value;
+        sf.querySelector('[name="s_address"]').value = bf.querySelector('[name="b_address"]').value;
+        sf.querySelector('[name="s_city"]').value = bf.querySelector('[name="b_city"]').value;
+        sf.querySelector('[name="s_state"]').value = bf.querySelector('[name="b_state"]').value;
+        sf.querySelector('[name="s_zip"]').value = bf.querySelector('[name="b_zip"]').value;
+        sf.querySelector('[name="s_phone"]').value = bf.querySelector('[name="b_phone"]').value;
+        sf.querySelector('[name="s_country"]').value = bf.querySelector('[name="b_country"]').value;
+    }
+}
+
+function saveScAddress(e, type) {
+    e.preventDefault();
+    var form = document.getElementById('sc-' + type + '-form');
+    var formData = new FormData(form);
+    formData.append('type', type);
+    var btn = form.querySelector('.sc-addr-save-btn');
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Kaydediliyor...';
+    btn.disabled = true;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-update-address.php', true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+            var resp = JSON.parse(xhr.responseText);
+            var msg = document.getElementById('sc-' + type + '-msg');
+            if(resp.success) {
+                msg.innerHTML = '<i class="fa fa-check-circle"></i> Kaydedildi';
+                msg.style.color = '#15803d';
+                // Update preview text in header
+                var section = form.closest('.sc-address-section');
+                var preview = section.querySelector('.sc-addr-preview');
+                var prefix = type === 'billing' ? 'b_' : 's_';
+                var name = form.querySelector('[name="' + prefix + 'name"]').value;
+                var addr = form.querySelector('[name="' + prefix + 'address"]').value;
+                var city = form.querySelector('[name="' + prefix + 'city"]').value;
+                if(addr.length > 35) addr = addr.substring(0, 35) + '...';
+                preview.textContent = name + ' — ' + addr + ', ' + city;
+                preview.classList.remove('sc-addr-preview-empty');
+            } else {
+                msg.innerHTML = '<i class="fa fa-times-circle"></i> Hata oluştu';
+                msg.style.color = '#e74c3c';
+            }
+            btn.innerHTML = '<i class="fa fa-check"></i> Kaydet';
+            btn.disabled = false;
+            setTimeout(function(){ msg.textContent = ''; }, 3000);
+        }
+    };
+    xhr.send(formData);
 }
 
 function updateSideCartQty(btn, action) {
