@@ -459,6 +459,7 @@ foreach ($photo_result as $photo_row) {
     <link rel="stylesheet" href="assets/css/select2.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="assets/css/side-cart.css">
     
     <!-- JSON-LD Structured Data: Product Schema -->
     <script type="application/ld+json">
@@ -687,59 +688,55 @@ $social_result = $statement->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <div class="header">
-    <div class="container">
-        <div class="row inner">
-            <div class="col-md-4 logo">
-                <a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="<?php echo htmlspecialchars($meta_title_home); ?> Logo" width="200" height="60"></a>
-            </div>
-            
-            <div class="col-md-5 right">
-                <ul>
-                    <?php if(isset($_SESSION['customer'])): ?>
-                        <li><i class="fa fa-user"></i> <?php echo LANG_VALUE_13; ?> <?php echo $_SESSION['customer']['cust_name']; ?></li>
-                        <li><a href="dashboard.php"><i class="fa fa-home"></i> <?php echo LANG_VALUE_89; ?></a></li>
-                    <?php else: ?>
-                        <li><a href="login.php"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
-                        <li><a href="registration.php"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
-                    <?php endif; ?>
+	<div class="container">
+		<div class="row inner header-row">
+			<div class="col-md-3 logo">
+				<a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="<?php echo htmlspecialchars($meta_title_home); ?> Logo"></a>
+			</div>
+			
+			<div class="col-md-5 search-area-center">
+				<form class="header-search-form" role="search" action="search-result.php" method="get">
+					<?php $csrf->echoInputField(); ?>
+					<div class="header-search-wrapper">
+						<input type="text" class="form-control search-top" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
+						<button type="submit" class="btn-search"><i class="fa fa-search"></i></button>
+					</div>
+				</form>
+			</div>
 
-                    <li><a href="cart.php"><i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_18; ?> (<?php echo LANG_VALUE_1; ?><?php
-                    if(isset($_SESSION['cart_p_id'])) {
-                        $table_total_price = 0;
-                        $i=0;
-                        foreach($_SESSION['cart_p_qty'] as $key => $value) 
-                        {
-                            $i++;
-                            $arr_cart_p_qty[$i] = $value;
-                        }
-                        $i=0;
-                        foreach($_SESSION['cart_p_current_price'] as $key => $value) 
-                        {
-                            $i++;
-                            $arr_cart_p_current_price[$i] = $value;
-                        }
-                        for($i=1;$i<=count($arr_cart_p_qty);$i++) {
-                            $row_total_price = $arr_cart_p_current_price[$i]*$arr_cart_p_qty[$i];
-                            $table_total_price = $table_total_price + $row_total_price;
-                        }
-                        echo $table_total_price;
-                    } else {
-                        echo '0.00';
-                    }
-                    ?>)</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3 search-area">
-                <form class="navbar-form navbar-left" role="search" action="search-result.php" method="get">
-                    <?php $csrf->echoInputField(); ?>
-                    <div class="form-group">
-                        <input type="text" class="form-control search-top" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
-                    </div>
-                    <button type="submit" class="btn btn-danger"><?php echo LANG_VALUE_3; ?></button>
-                </form>
-            </div>
-        </div>
-    </div>
+			<div class="col-md-4 header-icons">
+				<ul>
+					<?php
+					$header_cart_count = 0;
+					$header_cart_total = 0;
+					if(isset($_SESSION['cart_p_id'])) {
+						$header_cart_count = count($_SESSION['cart_p_id']);
+						$i=0;
+						foreach($_SESSION['cart_p_qty'] as $key => $value) { $i++; $h_arr_qty[$i] = $value; }
+						$i=0;
+						foreach($_SESSION['cart_p_current_price'] as $key => $value) { $i++; $h_arr_price[$i] = $value; }
+						for($i=1;$i<=$header_cart_count;$i++) { $header_cart_total += $h_arr_price[$i] * $h_arr_qty[$i]; }
+					}
+					?>
+					<?php if(isset($_SESSION['customer'])): ?>
+						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user"></i><span class="icon-label"><?php echo $_SESSION['customer']['cust_name']; ?></span></a></li>
+					<?php else: ?>
+						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-sign-in"></i><span class="icon-label"><?php echo LANG_VALUE_9; ?></span></a></li>
+						<li><a href="registration.php" class="header-icon-link" title="<?php echo LANG_VALUE_15; ?>"><i class="fa fa-user-plus"></i><span class="icon-label"><?php echo LANG_VALUE_15; ?></span></a></li>
+					<?php endif; ?>
+					<li>
+						<a href="javascript:void(0);" onclick="toggleSideCart()" class="header-icon-link cart-trigger" title="Sepet">
+							<i class="fa fa-shopping-cart"></i>
+							<span class="icon-label"><?php echo LANG_VALUE_1; ?><?php echo $header_cart_total > 0 ? $header_cart_total : '0.00'; ?></span>
+							<?php if($header_cart_count > 0): ?>
+							<span class="cart-count-badge"><?php echo $header_cart_count; ?></span>
+							<?php endif; ?>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php
