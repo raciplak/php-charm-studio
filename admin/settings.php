@@ -736,10 +736,10 @@ if(isset($_POST['form7_10'])) {
 
 if(isset($_POST['form9'])) {
     // updating the database
-    $statement = $pdo->prepare("UPDATE tbl_settings SET paypal_email=?, bank_detail=? WHERE id=1");
-    $statement->execute(array($_POST['paypal_email'],$_POST['bank_detail']));
+    $statement = $pdo->prepare("UPDATE tbl_settings SET bank_detail=?, bank_transfer_on_off=? WHERE id=1");
+    $statement->execute(array($_POST['bank_detail'], isset($_POST['bank_transfer_on_off']) ? $_POST['bank_transfer_on_off'] : 0));
 
-    $success_message = 'Payment Settings is updated successfully.';
+    $success_message = 'Ödeme ayarları başarıyla güncellendi.';
 }
 
 if(isset($_POST['form10'])) {
@@ -840,6 +840,7 @@ foreach ($result as $row) {
   //  $stripe_public_key               = $row['stripe_public_key'];
  //   $stripe_secret_key               = $row['stripe_secret_key'];
     $bank_detail                     = $row['bank_detail'];
+    $bank_transfer_on_off            = isset($row['bank_transfer_on_off']) ? $row['bank_transfer_on_off'] : 1;
     $before_head                     = $row['before_head'];
     $after_body                      = $row['after_body'];
     $before_body                     = $row['before_body'];
@@ -1638,25 +1639,16 @@ foreach ($result as $row) {
                                 <div class="box box-info">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">PayPal - Business Email </label>
-                                            <div class="col-sm-5">
-                                                <input type="text" name="paypal_email" class="form-control" value="<?php echo $paypal_email; ?>">
-                                            </div>
-                                        </div>
-                                      <!-- <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Stripe - Public Key </label>
-                                            <div class="col-sm-5">
-                                                <input type="text" name="stripe_public_key" class="form-control" value="<?php echo $stripe_public_key; ?>">
+                                            <label for="" class="col-sm-2 control-label">Banka Havalesi Durumu</label>
+                                            <div class="col-sm-3">
+                                                <select name="bank_transfer_on_off" class="form-control" style="width:auto;">
+                                                    <option value="1" <?php if($bank_transfer_on_off == 1) {echo 'selected';} ?>>Aktif</option>
+                                                    <option value="0" <?php if($bank_transfer_on_off == 0) {echo 'selected';} ?>>Pasif</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Stripe - Secret Key </label>
-                                            <div class="col-sm-5">
-                                                <input type="text" name="stripe_secret_key" class="form-control" value="<?php echo $stripe_secret_key; ?>">
-                                            </div>
-                                        </div> -->
-                                        <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Bank Information </label>
+                                            <label for="" class="col-sm-2 control-label">Banka Bilgileri</label>
                                             <div class="col-sm-5">
                                                 <textarea name="bank_detail" class="form-control" cols="30" rows="10"><?php echo $bank_detail; ?></textarea>
                                             </div>
@@ -1664,7 +1656,7 @@ foreach ($result as $row) {
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-6">
-                                                <button type="submit" class="btn btn-success pull-left" name="form9">Update</button>
+                                                <button type="submit" class="btn btn-success pull-left" name="form9">Güncelle</button>
                                             </div>
                                         </div>
                                     </div>

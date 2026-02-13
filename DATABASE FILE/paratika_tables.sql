@@ -58,3 +58,7 @@ CREATE TABLE IF NOT EXISTS `tbl_paratika_payment_results` (
   INDEX `idx_payment_id` (`payment_id`),
   INDEX `idx_customer_id` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 3. Add bank_transfer_on_off column to tbl_settings (if not exists)
+-- Run this to add the toggle for bank transfer payment method
+ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `bank_transfer_on_off` TINYINT(1) NOT NULL DEFAULT 1;
