@@ -193,18 +193,18 @@ if($isSuccess && isset($_SESSION['customer']) && isset($_SESSION['cart_p_id'])) 
     unset($_SESSION['cart_p_name']);
     unset($_SESSION['cart_p_featured_photo']);
 
-    // Redirect to success
-    header('location: ../../payment_success.php');
+    // Redirect to index with success params (dialog will show result)
+    header('location: ' . BASE_URL . 'index.php?payment_result=success&payment_id=' . urlencode($payment_id) . '&amount=' . urlencode($amount));
     exit;
 
 } elseif($isSuccess) {
     // Payment successful but no session/cart (maybe session expired)
-    header('location: ../../payment_success.php');
+    header('location: ' . BASE_URL . 'index.php?payment_result=success&amount=' . urlencode($amount));
     exit;
 } else {
-    // Payment failed
+    // Payment failed - redirect back with error params (dialog will show result)
     $failMsg = !empty($errorMsg) ? $errorMsg : (!empty($responseMsg) ? $responseMsg : 'Ödeme başarısız oldu');
-    header('location: ../../payment_failed.php?error=' . urlencode($failMsg) . '&code=' . urlencode($errorCode));
+    header('location: ' . BASE_URL . 'index.php?payment_result=error&error=' . urlencode($failMsg) . '&code=' . urlencode($errorCode));
     exit;
 }
 ?>
