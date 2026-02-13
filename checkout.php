@@ -624,10 +624,19 @@ if (isset($_POST['update_address'])) {
 
 	                                <div class="col-md-12 form-group">
 	                                    <label for=""><?php echo LANG_VALUE_34; ?> *</label>
-	                                    <select name="payment_method" class="form-control select2" id="advFieldsStatus">
+                                    <select name="payment_method" class="form-control select2" id="advFieldsStatus">
 	                                        <option value=""><?php echo LANG_VALUE_35; ?></option>
+                                            <?php
+                                            // Check if Paratika (Kredi Kartı) is active
+                                            $stmt_pk = $pdo->prepare("SELECT is_active FROM tbl_payment_gateway_settings WHERE gateway_name='paratika' LIMIT 1");
+                                            $stmt_pk->execute();
+                                            $pk_row = $stmt_pk->fetch(PDO::FETCH_ASSOC);
+                                            if($pk_row && $pk_row['is_active'] == 1):
+                                            ?>
+                                            <option value="Kredi Kartı">Kredi Kartı (3D Secure)</option>
+                                            <?php endif; ?>
 	                                        <option value="PayPal"><?php echo LANG_VALUE_36; ?></option>
-	                                        <option value="Bank Deposit"><?php echo LANG_VALUE_38; ?></option>
+	                                        <option value="Banka Havalesi"><?php echo LANG_VALUE_38; ?></option>
 	                                    </select>
 	                                </div>
 
@@ -646,7 +655,48 @@ if (isset($_POST['update_address'])) {
 
 
 
-                                    <form action="payment/bank/init.php" method="post" id="bank_form">
+                                    <!-- Kredi Kartı Form -->
+                                    <form action="payment/paratika/init.php" method="post" id="kredi_karti_form" style="display:none;">
+                                        <input type="hidden" name="amount" value="<?php echo $final_total; ?>">
+                                        <div class="col-md-12 form-group">
+                                            <label>Kart Üzerindeki İsim *</label>
+                                            <input type="text" name="card_holder" class="form-control" placeholder="Ad Soyad" required>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label>Kart Numarası *</label>
+                                            <input type="text" name="card_number" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required 
+                                                oninput="this.value=this.value.replace(/[^\d]/g,'').replace(/(.{4})/g,'$1 ').trim()">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>Ay *</label>
+                                            <select name="expiry_month" class="form-control" required>
+                                                <option value="">Ay</option>
+                                                <?php for($m=1;$m<=12;$m++): ?>
+                                                <option value="<?php echo str_pad($m,2,'0',STR_PAD_LEFT); ?>"><?php echo str_pad($m,2,'0',STR_PAD_LEFT); ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>Yıl *</label>
+                                            <select name="expiry_year" class="form-control" required>
+                                                <option value="">Yıl</option>
+                                                <?php $cy=date('Y'); for($y=$cy;$y<=$cy+10;$y++): ?>
+                                                <option value="<?php echo $y; ?>"><?php echo $y; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>CVV *</label>
+                                            <input type="text" name="cvv" class="form-control" placeholder="***" maxlength="4" required 
+                                                oninput="this.value=this.value.replace(/[^\d]/g,'')">
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <p style="font-size:11px;color:#888;"><i class="fa fa-lock"></i> Güvenli ödeme için 3D Secure doğrulaması yapılacaktır. Kart bilgileriniz sunucumuzda saklanmaz.</p>
+                                            <input type="submit" class="btn btn-success btn-block" value="Kredi Kartı ile Öde" name="form_paratika" style="font-size:16px;padding:12px;">
+                                        </div>
+                                    </form>
+
+                                    <form action="payment/bank/init.php" method="post" id="bank_form" style="display:none;">
                                         <input type="hidden" name="amount" value="<?php echo $final_total; ?>">
                                         <div class="col-md-12 form-group">
                                             <label for=""><?php echo LANG_VALUE_43; ?></span></label><br>
