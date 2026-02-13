@@ -7,6 +7,11 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 $size = isset($_GET['size']) ? $_GET['size'] : '';
 $color = isset($_GET['color']) ? $_GET['color'] : '';
 
+if($action === 'refresh') {
+    // Just return current cart data without modifying
+    goto build_response;
+}
+
 if(empty($action) || empty($id)) {
     echo json_encode(['success' => false, 'message' => 'Geçersiz istek']);
     exit;
@@ -74,6 +79,7 @@ if($action == 'plus') {
 }
 
 // Build response with updated cart data
+build_response:
 $cart_items = [];
 $cart_total = 0;
 $cart_count = isset($_SESSION['cart_p_id']) ? count($_SESSION['cart_p_id']) : 0;
