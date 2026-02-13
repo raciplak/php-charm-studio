@@ -18,7 +18,7 @@ $dbuser = 'root';
 $dbpass = '';
 
 // Defining base url
-define("BASE_URL", "");
+define("BASE_URL", "http://localhost/php-charm-studio");
 
 // Getting Admin url
 define("ADMIN_URL", BASE_URL . "admin" . "/");
