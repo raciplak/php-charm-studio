@@ -642,15 +642,10 @@ foreach ($photo_result as $photo_row) {
 
 <?php echo $after_body; ?>
 
-<?php
-if($error_message1 != '') {
-    echo "<script>alert('".$error_message1."')</script>";
-}
-if($success_message1 != '') {
-    echo "<script>alert('".$success_message1."')</script>";
-    echo "<script>window.location.href='product.php?id=".$_REQUEST['id']."';</script>";
-}
-?>
+<!-- Cart Toast Notification -->
+<div id="cart-toast" style="display:none;position:fixed;top:20px;right:20px;z-index:99999;padding:14px 22px;color:#fff;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:320px;">
+    <span id="cart-toast-msg"></span>
+</div>
 
 <!-- Include header navigation (top bar, logo, menu) -->
 <?php 
@@ -946,7 +941,7 @@ foreach ($page_result as $row) {
                                 <p><?php echo $p_short_description; ?></p>
                             </div>
                             
-                            <form action="" method="post">
+                            <form id="addToCartForm" action="" method="post" onsubmit="return ajaxAddToCart(event)">
                                 <style>
                                     .size-selector,.color-selector{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
                                     .size-cube{width:45px;height:45px;display:flex;align-items:center;justify-content:center;border:2px solid #ddd;border-radius:0;cursor:pointer;font-weight:600;font-size:14px;background:#fff;transition:all .2s ease}
@@ -1314,5 +1309,87 @@ foreach ($page_result as $row) {
         </div>
     </div>
 </section>
+
+<script>
+function showCartToast(msg, isSuccess) {
+    var toast = document.getElementById('cart-toast');
+    var msgEl = document.getElementById('cart-toast-msg');
+    msgEl.textContent = msg;
+    toast.style.background = isSuccess ? '#28a745' : '#dc3545';
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.style.display = 'none'; }, 300);
+    }, 3000);
+}
+
+function ajaxAddToCart(e) {
+    e.preventDefault();
+    var form = document.getElementById('addToCartForm');
+    var formData = new FormData();
+    formData.append('p_id', '<?php echo $p_id; ?>');
+    formData.append('p_qty', form.querySelector('[name="p_qty"]').value);
+    formData.append('p_current_price', form.querySelector('[name="p_current_price"]').value);
+    formData.append('p_name', form.querySelector('[name="p_name"]').value);
+    formData.append('p_featured_photo', form.querySelector('[name="p_featured_photo"]').value);
+    
+    var sizeEl = form.querySelector('[name="size_id"]');
+    var colorEl = form.querySelector('[name="color_id"]');
+    if(sizeEl) formData.append('size_id', sizeEl.value);
+    if(colorEl) formData.append('color_id', colorEl.value);
+
+    var btn = form.querySelector('[name="form_add_to_cart"]');
+    btn.disabled = true;
+    btn.value = '...';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-add-ajax.php', true);
+    xhr.onload = function() {
+        if(xhr.status === 200) {
+            try {
+                var res = JSON.parse(xhr.responseText);
+                showCartToast(res.message, res.status === 'success');
+                if(res.status === 'success') {
+                    // Update all cart count badges
+                    var badges = document.querySelectorAll('.cart-count-badge');
+                    badges.forEach(function(b) { b.textContent = res.cart_count; });
+                    // If no badge exists, create one
+                    if(badges.length === 0) {
+                        var cartLink = document.querySelector('.cart-trigger');
+                        if(cartLink) {
+                            var badge = document.createElement('span');
+                            badge.className = 'cart-count-badge';
+                            badge.textContent = res.cart_count;
+                            cartLink.appendChild(badge);
+                        }
+                    }
+                    // Update cart total text
+                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                    iconLabels.forEach(function(l) {
+                        l.textContent = '<?php echo LANG_VALUE_1; ?>' + res.cart_total;
+                    });
+                    btn.value = '✓ Eklendi';
+                    setTimeout(function() { btn.value = '<?php echo LANG_VALUE_154; ?>'; btn.disabled = false; }, 2000);
+                } else {
+                    btn.value = '<?php echo LANG_VALUE_154; ?>';
+                    btn.disabled = false;
+                }
+            } catch(ex) {
+                showCartToast('Bir hata oluştu', false);
+                btn.value = '<?php echo LANG_VALUE_154; ?>';
+                btn.disabled = false;
+            }
+        }
+    };
+    xhr.onerror = function() {
+        showCartToast('Bağlantı hatası', false);
+        btn.value = '<?php echo LANG_VALUE_154; ?>';
+        btn.disabled = false;
+    };
+    xhr.send(formData);
+    return false;
+}
+</script>
 
 <?php require_once('footer.php'); ?>
