@@ -166,36 +166,18 @@ foreach ($result as $row) {
 	$(document).ready(function () {
 		advFieldsStatus = $('#advFieldsStatus').val();
 
-		$('#paypal_form').hide();
-		$('#stripe_form').hide();
-		$('#bank_form').hide();
+	$('#bank_form').hide();
 		$('#kredi_karti_form').hide();
 
         $('#advFieldsStatus').on('change',function() {
             advFieldsStatus = $('#advFieldsStatus').val();
             if ( advFieldsStatus == '' ) {
-            	$('#paypal_form').hide();
-				$('#stripe_form').hide();
-				$('#bank_form').hide();
-				$('#kredi_karti_form').hide();
-            } else if ( advFieldsStatus == 'PayPal' ) {
-               	$('#paypal_form').show();
-				$('#stripe_form').hide();
-				$('#bank_form').hide();
-				$('#kredi_karti_form').hide();
-            } else if ( advFieldsStatus == 'Stripe' ) {
-               	$('#paypal_form').hide();
-				$('#stripe_form').show();
 				$('#bank_form').hide();
 				$('#kredi_karti_form').hide();
             } else if ( advFieldsStatus == 'Banka Havalesi' ) {
-            	$('#paypal_form').hide();
-				$('#stripe_form').hide();
 				$('#bank_form').show();
 				$('#kredi_karti_form').hide();
             } else if ( advFieldsStatus == 'Kredi Kartı' ) {
-            	$('#paypal_form').hide();
-				$('#stripe_form').hide();
 				$('#bank_form').hide();
 				$('#kredi_karti_form').show();
             }
@@ -494,18 +476,30 @@ foreach ($result as $row) {
                     <span class="sc-payment-amount"><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
                 </div>
                 <div class="sc-payment-methods">
+                    <?php
+                    // Check Paratika active
+                    $stmt_pk2 = $pdo->prepare("SELECT is_active FROM tbl_payment_gateway_settings WHERE gateway_name='paratika' LIMIT 1");
+                    $stmt_pk2->execute();
+                    $pk_row2 = $stmt_pk2->fetch(PDO::FETCH_ASSOC);
+                    if($pk_row2 && $pk_row2['is_active'] == 1):
+                    ?>
                     <label class="sc-payment-option">
                         <input type="radio" name="sc_payment_method" value="kredi_karti" onchange="scTogglePayment(this.value)">
                         <span class="sc-payment-option-label"><i class="fa fa-credit-card"></i> Kredi Kartı (3D Secure)</span>
                     </label>
+                    <?php endif; ?>
+                    <?php
+                    // Check Bank Transfer active
+                    $stmt_bt2 = $pdo->prepare("SELECT bank_transfer_on_off FROM tbl_settings WHERE id=1");
+                    $stmt_bt2->execute();
+                    $bt_row2 = $stmt_bt2->fetch(PDO::FETCH_ASSOC);
+                    if(!$bt_row2 || $bt_row2['bank_transfer_on_off'] == 1):
+                    ?>
                     <label class="sc-payment-option">
                         <input type="radio" name="sc_payment_method" value="bank" onchange="scTogglePayment(this.value)">
                         <span class="sc-payment-option-label"><i class="fa fa-university"></i> Banka Havalesi</span>
                     </label>
-                    <label class="sc-payment-option">
-                        <input type="radio" name="sc_payment_method" value="paypal" onchange="scTogglePayment(this.value)">
-                        <span class="sc-payment-option-label"><i class="fa fa-paypal"></i> PayPal</span>
-                    </label>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Kredi Kartı Form -->
@@ -574,18 +568,7 @@ foreach ($result as $row) {
                     </form>
                 </div>
 
-                <!-- PayPal Form -->
-                <div class="sc-payment-form" id="sc-pay-paypal" style="display:none;">
-                    <form action="<?php echo BASE_URL; ?>payment/paypal/payment_process.php" method="post" target="_blank">
-                        <input type="hidden" name="cmd" value="_xclick">
-                        <input type="hidden" name="no_note" value="1">
-                        <input type="hidden" name="lc" value="UK">
-                        <input type="hidden" name="currency_code" value="USD">
-                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest">
-                        <input type="hidden" name="final_total" value="<?php echo $sc_total; ?>">
-                        <button type="submit" name="form1" class="sc-pay-submit-btn" style="background:#0070ba;"><i class="fa fa-paypal"></i> PayPal ile Öde</button>
-                    </form>
-                </div>
+                <!-- PayPal removed -->
             <?php endif; ?>
         <?php endif; ?>
     </div>

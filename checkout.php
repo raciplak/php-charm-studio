@@ -635,23 +635,19 @@ if (isset($_POST['update_address'])) {
                                             ?>
                                             <option value="Kredi Kartı">Kredi Kartı (3D Secure)</option>
                                             <?php endif; ?>
-	                                        <option value="PayPal"><?php echo LANG_VALUE_36; ?></option>
+                                            <?php
+                                            // Check if Bank Transfer is active
+                                            $stmt_bt = $pdo->prepare("SELECT bank_transfer_on_off FROM tbl_settings WHERE id=1");
+                                            $stmt_bt->execute();
+                                            $bt_row = $stmt_bt->fetch(PDO::FETCH_ASSOC);
+                                            if(!$bt_row || $bt_row['bank_transfer_on_off'] == 1):
+                                            ?>
 	                                        <option value="Banka Havalesi"><?php echo LANG_VALUE_38; ?></option>
+                                            <?php endif; ?>
 	                                    </select>
 	                                </div>
 
-                                    <form class="paypal" action="<?php echo BASE_URL; ?>payment/paypal/payment_process.php" method="post" id="paypal_form" target="_blank">
-                                        <input type="hidden" name="cmd" value="_xclick" />
-                                        <input type="hidden" name="no_note" value="1" />
-                                        <input type="hidden" name="lc" value="UK" />
-                                        <input type="hidden" name="currency_code" value="USD" />
-                                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest" />
-
-                                        <input type="hidden" name="final_total" value="<?php echo $final_total; ?>">
-                                        <div class="col-md-12 form-group">
-                                            <input type="submit" class="btn btn-primary" value="<?php echo LANG_VALUE_46; ?>" name="form1">
-                                        </div>
-                                    </form>
+                                    <!-- PayPal removed -->
 
 
 
