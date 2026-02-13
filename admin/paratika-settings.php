@@ -103,10 +103,10 @@ if(count($result) > 0) {
                     <h3 class="box-title">Bilgi</h3>
                 </div>
                 <div class="box-body">
-                    <p><strong>Callback URL:</strong></p>
+                    <p><strong>Callback URL (Otomatik):</strong></p>
                     <code style="word-break:break-all;"><?php echo BASE_URL; ?>payment/paratika/callback.php</code>
                     <hr>
-                    <p>Paratika panelinde <strong>Return URL</strong> ve <strong>Error URL</strong> olarak yukarıdaki callback URL'yi girin.</p>
+                    <p>Callback URL, ödeme başlatılırken API'ye <code>RETURNURL</code> ve <code>ERRORURL</code> parametreleri olarak otomatik gönderilir. Paratika panelinde manuel bir ayar yapmanıza <strong>gerek yoktur</strong>.</p>
                     <hr>
                     <p><strong>Veritabanı:</strong> Önce <code>DATABASE FILE/paratika_tables.sql</code> dosyasını çalıştırarak tabloları oluşturun.</p>
                 </div>
