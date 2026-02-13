@@ -448,7 +448,12 @@ foreach ($result as $row) {
         <h3><i class="fa fa-credit-card"></i> Ödeme Yöntemi</h3>
         <button type="button" class="sc-payment-close" onclick="closePaymentDialog()">&times;</button>
     </div>
-    <div class="sc-payment-body">
+    <div class="sc-payment-body" id="scPaymentBody">
+        <!-- Payment Result View (shown via JS when payment_result param exists) -->
+        <div id="sc-payment-result" style="display:none;"></div>
+
+        <!-- Payment Form View -->
+        <div id="sc-payment-form-view">
         <?php if(!isset($_SESSION['customer'])): ?>
             <div class="sc-login-prompt" style="padding:30px 0;">
                 <i class="fa fa-info-circle"></i> Ödeme için <a href="login.php">giriş yapın</a>
@@ -571,10 +576,83 @@ foreach ($result as $row) {
                 <!-- PayPal removed -->
             <?php endif; ?>
         <?php endif; ?>
+        </div><!-- /sc-payment-form-view -->
     </div>
 </div>
 
 <script>
+// Payment result handling
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var paymentResult = params.get('payment_result');
+    if (!paymentResult) return;
+
+    var resultDiv = document.getElementById('sc-payment-result');
+    var formView = document.getElementById('sc-payment-form-view');
+    var html = '';
+
+    if (paymentResult === 'error') {
+        var errorMsg = params.get('error') || 'Ödeme başarısız oldu';
+        var errorCode = params.get('code') || '';
+        html += '<div style="text-align:center;padding:30px 16px;">';
+        html += '<div style="width:70px;height:70px;margin:0 auto 16px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;">';
+        html += '<i class="fa fa-times" style="font-size:34px;color:#ef4444;"></i></div>';
+        html += '<h3 style="color:#ef4444;margin-bottom:10px;font-size:18px;">Ödeme Başarısız</h3>';
+        html += '<p style="color:#666;font-size:13px;margin-bottom:4px;">' + decodeURIComponent(errorMsg).replace(/</g,'&lt;') + '</p>';
+        if (errorCode) html += '<p style="color:#999;font-size:11px;margin-bottom:16px;">Hata Kodu: ' + decodeURIComponent(errorCode).replace(/</g,'&lt;') + '</p>';
+        html += '<p style="color:#666;font-size:12px;margin-bottom:20px;">Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyiniz.</p>';
+        html += '<button type="button" class="sc-pay-submit-btn" style="margin:0 auto;display:inline-block;width:auto;padding:10px 28px;" onclick="scPaymentRetry()"><i class="fa fa-refresh"></i> Tekrar Dene</button>';
+        html += '</div>';
+    } else if (paymentResult === 'success') {
+        var payAmount = params.get('amount') || '';
+        var payId = params.get('payment_id') || '';
+        html += '<div style="text-align:center;padding:30px 16px;">';
+        html += '<div style="width:70px;height:70px;margin:0 auto 16px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;">';
+        html += '<i class="fa fa-check" style="font-size:34px;color:#22c55e;"></i></div>';
+        html += '<h3 style="color:#22c55e;margin-bottom:10px;font-size:18px;">Ödeme Başarılı!</h3>';
+        html += '<p style="color:#666;font-size:13px;margin-bottom:16px;">Siparişiniz başarıyla oluşturuldu.</p>';
+        html += '<div style="background:#f9fafb;border-radius:8px;padding:14px 16px;text-align:left;margin-bottom:20px;border:1px solid #e5e7eb;">';
+        if (payId) html += '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;"><span style="color:#888;">Sipariş No:</span><span style="font-weight:600;color:#333;">#' + payId + '</span></div>';
+        if (payAmount) html += '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;"><span style="color:#888;">Ödenen Tutar:</span><span style="font-weight:600;color:#333;"><?php echo LANG_VALUE_1; ?>' + payAmount + '</span></div>';
+        html += '<div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:#888;">Ödeme Yöntemi:</span><span style="font-weight:600;color:#333;">Kredi Kartı (3D Secure)</span></div>';
+        html += '</div>';
+        html += '<a href="customer-order.php" class="sc-pay-submit-btn" style="display:inline-block;width:auto;padding:10px 28px;text-decoration:none;"><i class="fa fa-list-alt"></i> Siparişlerimi Görüntüle</a>';
+        html += '</div>';
+    }
+
+    resultDiv.innerHTML = html;
+    resultDiv.style.display = 'block';
+    formView.style.display = 'none';
+
+    // Auto-open the payment dialog
+    document.getElementById('scPaymentOverlay').classList.add('active');
+    document.getElementById('scPaymentDialog').classList.add('active');
+
+    // Also open side cart
+    var cart = document.getElementById('sideCart');
+    var overlay = document.getElementById('sideCartOverlay');
+    if (paymentResult === 'error') {
+        cart.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Clean URL
+    var cleanUrl = window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+})();
+
+function scPaymentRetry() {
+    var resultDiv = document.getElementById('sc-payment-result');
+    var formView = document.getElementById('sc-payment-form-view');
+    resultDiv.style.display = 'none';
+    formView.style.display = 'block';
+    // Reset payment method selection
+    var radios = document.querySelectorAll('input[name="sc_payment_method"]');
+    radios.forEach(function(r) { r.checked = false; });
+    var forms = document.querySelectorAll('.sc-payment-form');
+    forms.forEach(function(f) { f.style.display = 'none'; });
+}
 function openPaymentDialog() {
     <?php if(!isset($_SESSION['customer'])): ?>
     window.location.href = 'login.php';
