@@ -453,12 +453,164 @@ foreach ($result as $row) {
             <span><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
         </div>
         <div class="side-cart-actions">
-            <a href="checkout.php" class="btn-checkout">Ödemeye Geç <i class="fa fa-arrow-right"></i></a>
+            <button type="button" class="btn-checkout" onclick="openPaymentDialog()">Ödemeye Geç <i class="fa fa-arrow-right"></i></button>
         </div>
     </div>
     <?php endif; ?>
 </div>
 
+<!-- Payment Dialog Modal -->
+<div class="sc-payment-overlay" id="scPaymentOverlay" onclick="closePaymentDialog()"></div>
+<div class="sc-payment-dialog" id="scPaymentDialog">
+    <div class="sc-payment-header">
+        <h3><i class="fa fa-credit-card"></i> Ödeme Yöntemi</h3>
+        <button type="button" class="sc-payment-close" onclick="closePaymentDialog()">&times;</button>
+    </div>
+    <div class="sc-payment-body">
+        <?php if(!isset($_SESSION['customer'])): ?>
+            <div class="sc-login-prompt" style="padding:30px 0;">
+                <i class="fa fa-info-circle"></i> Ödeme için <a href="login.php">giriş yapın</a>
+            </div>
+        <?php else: ?>
+            <?php
+            // Check address completeness
+            $sc_addr_ok = 1;
+            if(
+                empty($_SESSION['customer']['cust_b_name']) ||
+                empty($_SESSION['customer']['cust_b_address']) ||
+                empty($_SESSION['customer']['cust_b_city']) ||
+                empty($_SESSION['customer']['cust_s_name']) ||
+                empty($_SESSION['customer']['cust_s_address']) ||
+                empty($_SESSION['customer']['cust_s_city'])
+            ) { $sc_addr_ok = 0; }
+            ?>
+            <?php if($sc_addr_ok == 0): ?>
+                <div style="padding:16px;background:#fff3cd;color:#856404;border-radius:6px;font-size:13px;margin-bottom:12px;">
+                    <i class="fa fa-exclamation-triangle"></i> Lütfen fatura ve teslimat adreslerinizi yukarıda doldurun.
+                </div>
+            <?php else: ?>
+                <div class="sc-payment-total">
+                    <span>Toplam Tutar:</span>
+                    <span class="sc-payment-amount"><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
+                </div>
+                <div class="sc-payment-methods">
+                    <label class="sc-payment-option">
+                        <input type="radio" name="sc_payment_method" value="kredi_karti" onchange="scTogglePayment(this.value)">
+                        <span class="sc-payment-option-label"><i class="fa fa-credit-card"></i> Kredi Kartı (3D Secure)</span>
+                    </label>
+                    <label class="sc-payment-option">
+                        <input type="radio" name="sc_payment_method" value="bank" onchange="scTogglePayment(this.value)">
+                        <span class="sc-payment-option-label"><i class="fa fa-university"></i> Banka Havalesi</span>
+                    </label>
+                    <label class="sc-payment-option">
+                        <input type="radio" name="sc_payment_method" value="paypal" onchange="scTogglePayment(this.value)">
+                        <span class="sc-payment-option-label"><i class="fa fa-paypal"></i> PayPal</span>
+                    </label>
+                </div>
+
+                <!-- Kredi Kartı Form -->
+                <div class="sc-payment-form" id="sc-pay-kredi_karti" style="display:none;">
+                    <form action="payment/paratika/init.php" method="post" id="sc-kredi-form">
+                        <input type="hidden" name="amount" value="<?php echo $sc_total; ?>">
+                        <div class="sc-pay-field">
+                            <label>Kart Üzerindeki İsim *</label>
+                            <input type="text" name="card_holder" placeholder="Ad Soyad" required>
+                        </div>
+                        <div class="sc-pay-field">
+                            <label>Kart Numarası *</label>
+                            <input type="text" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" required
+                                oninput="this.value=this.value.replace(/[^\d]/g,'').replace(/(.{4})/g,'$1 ').trim()">
+                        </div>
+                        <div class="sc-pay-field-grid">
+                            <div class="sc-pay-field">
+                                <label>Ay *</label>
+                                <select name="expiry_month" required>
+                                    <option value="">Ay</option>
+                                    <?php for($m=1;$m<=12;$m++): ?>
+                                    <option value="<?php echo str_pad($m,2,'0',STR_PAD_LEFT); ?>"><?php echo str_pad($m,2,'0',STR_PAD_LEFT); ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="sc-pay-field">
+                                <label>Yıl *</label>
+                                <select name="expiry_year" required>
+                                    <option value="">Yıl</option>
+                                    <?php $cy=date('Y'); for($y=$cy;$y<=$cy+10;$y++): ?>
+                                    <option value="<?php echo $y; ?>"><?php echo $y; ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="sc-pay-field">
+                                <label>CVV *</label>
+                                <input type="text" name="cvv" placeholder="***" maxlength="4" required
+                                    oninput="this.value=this.value.replace(/[^\d]/g,'')">
+                            </div>
+                        </div>
+                        <p style="font-size:11px;color:#888;margin:8px 0;"><i class="fa fa-lock"></i> 3D Secure doğrulaması yapılacaktır. Kart bilgileriniz saklanmaz.</p>
+                        <button type="submit" class="sc-pay-submit-btn"><i class="fa fa-lock"></i> Kredi Kartı ile Öde</button>
+                    </form>
+                </div>
+
+                <!-- Banka Havalesi Form -->
+                <div class="sc-payment-form" id="sc-pay-bank" style="display:none;">
+                    <form action="payment/bank/init.php" method="post">
+                        <input type="hidden" name="amount" value="<?php echo $sc_total; ?>">
+                        <div class="sc-pay-field">
+                            <label>Banka Bilgileri</label>
+                            <div style="font-size:12px;color:#555;padding:8px;background:#f9f9f9;border-radius:4px;line-height:1.6;">
+                                <?php
+                                $stmt_bank = $pdo->prepare("SELECT bank_detail FROM tbl_settings WHERE id=1");
+                                $stmt_bank->execute();
+                                $bank_r = $stmt_bank->fetch(PDO::FETCH_ASSOC);
+                                echo nl2br($bank_r['bank_detail']);
+                                ?>
+                            </div>
+                        </div>
+                        <div class="sc-pay-field">
+                            <label>İşlem Bilgisi</label>
+                            <textarea name="transaction_info" rows="3" placeholder="Havale/EFT dekont bilgileriniz..."></textarea>
+                        </div>
+                        <button type="submit" name="form3" class="sc-pay-submit-btn"><i class="fa fa-university"></i> Havale ile Öde</button>
+                    </form>
+                </div>
+
+                <!-- PayPal Form -->
+                <div class="sc-payment-form" id="sc-pay-paypal" style="display:none;">
+                    <form action="<?php echo BASE_URL; ?>payment/paypal/payment_process.php" method="post" target="_blank">
+                        <input type="hidden" name="cmd" value="_xclick">
+                        <input type="hidden" name="no_note" value="1">
+                        <input type="hidden" name="lc" value="UK">
+                        <input type="hidden" name="currency_code" value="USD">
+                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest">
+                        <input type="hidden" name="final_total" value="<?php echo $sc_total; ?>">
+                        <button type="submit" name="form1" class="sc-pay-submit-btn" style="background:#0070ba;"><i class="fa fa-paypal"></i> PayPal ile Öde</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
+function openPaymentDialog() {
+    <?php if(!isset($_SESSION['customer'])): ?>
+    window.location.href = 'login.php';
+    return;
+    <?php endif; ?>
+    document.getElementById('scPaymentOverlay').classList.add('active');
+    document.getElementById('scPaymentDialog').classList.add('active');
+}
+function closePaymentDialog() {
+    document.getElementById('scPaymentOverlay').classList.remove('active');
+    document.getElementById('scPaymentDialog').classList.remove('active');
+}
+function scTogglePayment(val) {
+    var forms = document.querySelectorAll('.sc-payment-form');
+    for(var i=0;i<forms.length;i++) forms[i].style.display='none';
+    var target = document.getElementById('sc-pay-' + val);
+    if(target) target.style.display='block';
+}
+</script>
 <script>
 function toggleSideCart() {
     var cart = document.getElementById('sideCart');
