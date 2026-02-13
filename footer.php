@@ -169,6 +169,7 @@ foreach ($result as $row) {
 		$('#paypal_form').hide();
 		$('#stripe_form').hide();
 		$('#bank_form').hide();
+		$('#kredi_karti_form').hide();
 
         $('#advFieldsStatus').on('change',function() {
             advFieldsStatus = $('#advFieldsStatus').val();
@@ -176,18 +177,27 @@ foreach ($result as $row) {
             	$('#paypal_form').hide();
 				$('#stripe_form').hide();
 				$('#bank_form').hide();
+				$('#kredi_karti_form').hide();
             } else if ( advFieldsStatus == 'PayPal' ) {
                	$('#paypal_form').show();
 				$('#stripe_form').hide();
 				$('#bank_form').hide();
+				$('#kredi_karti_form').hide();
             } else if ( advFieldsStatus == 'Stripe' ) {
                	$('#paypal_form').hide();
 				$('#stripe_form').show();
 				$('#bank_form').hide();
+				$('#kredi_karti_form').hide();
             } else if ( advFieldsStatus == 'Banka Havalesi' ) {
             	$('#paypal_form').hide();
 				$('#stripe_form').hide();
 				$('#bank_form').show();
+				$('#kredi_karti_form').hide();
+            } else if ( advFieldsStatus == 'Kredi Kartı' ) {
+            	$('#paypal_form').hide();
+				$('#stripe_form').hide();
+				$('#bank_form').hide();
+				$('#kredi_karti_form').show();
             }
         });
 	});
