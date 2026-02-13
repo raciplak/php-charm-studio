@@ -504,15 +504,15 @@ foreach ($result as $row) {
 
                 <!-- Kredi Kartı Form -->
                 <div class="sc-payment-form" id="sc-pay-kredi_karti" style="display:none;">
-                    <form action="payment/paratika/init.php" method="post" id="sc-kredi-form">
+                    <form action="payment/paratika/init.php" method="post" id="sc-kredi-form" autocomplete="off">
                         <input type="hidden" name="amount" value="<?php echo $sc_total; ?>">
                         <div class="sc-pay-field">
                             <label>Kart Üzerindeki İsim *</label>
-                            <input type="text" name="card_holder" placeholder="Ad Soyad" required>
+                            <input type="text" name="card_holder" placeholder="Ad Soyad" required autocomplete="off" data-lpignore="true" data-form-type="other">
                         </div>
                         <div class="sc-pay-field">
                             <label>Kart Numarası *</label>
-                            <input type="text" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" required
+                            <input type="text" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19" required autocomplete="off" data-lpignore="true" data-form-type="other"
                                 oninput="this.value=this.value.replace(/[^\d]/g,'').replace(/(.{4})/g,'$1 ').trim()">
                         </div>
                         <div class="sc-pay-field-grid">
@@ -536,7 +536,7 @@ foreach ($result as $row) {
                             </div>
                             <div class="sc-pay-field">
                                 <label>CVV *</label>
-                                <input type="text" name="cvv" placeholder="***" maxlength="4" required
+                                <input type="text" name="cvv" placeholder="***" maxlength="4" required autocomplete="off" data-lpignore="true" data-form-type="other"
                                     oninput="this.value=this.value.replace(/[^\d]/g,'')">
                             </div>
                         </div>
