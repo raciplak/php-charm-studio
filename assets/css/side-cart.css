@@ -212,9 +212,7 @@
 }
 
 .side-cart-item-price {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: none;
 }
 
 .side-cart-item-unit {
@@ -223,9 +221,26 @@
 }
 
 .side-cart-item-total {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: #131921;
+    margin-left: 10px;
+}
+
+.side-cart-item-price-inline {
+    display: inline;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #131921;
+}
+
+.side-cart-item-original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 12px;
+    font-weight: 400;
+    margin-left: 6px;
 }
 
 /* Quantity Controls */
@@ -313,24 +328,7 @@
 }
 
 .side-cart-subtotal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.side-cart-subtotal span:first-child {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.side-cart-subtotal span:last-child {
-    font-size: 20px;
-    font-weight: 700;
-    color: #131921;
+    display: none;
 }
 
 .side-cart-actions {
@@ -340,9 +338,11 @@
 }
 
 .side-cart-actions .btn-checkout {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 14px;
+    padding: 14px 20px;
     background: #ff6b35;
     color: #fff;
     text-align: center;
@@ -352,6 +352,21 @@
     letter-spacing: 1px;
     text-decoration: none;
     transition: background 0.3s ease;
+    border: none;
+    cursor: pointer;
+    gap: 0;
+}
+
+.side-cart-actions .btn-checkout .checkout-label {
+    flex: 1;
+    text-align: left;
+}
+
+.side-cart-actions .btn-checkout .checkout-total {
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 12px;
+    white-space: nowrap;
 }
 
 .side-cart-actions .btn-checkout:hover {
@@ -360,23 +375,7 @@
 }
 
 .side-cart-actions .btn-view-cart {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background: #131921;
-    color: #fff;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-decoration: none;
-    transition: background 0.3s ease;
-}
-
-.side-cart-actions .btn-view-cart:hover {
-    background: #232f3e;
-    color: #fff;
+    display: none;
 }
 
 /* Free Shipping Bar */
