@@ -166,8 +166,8 @@ a:hover {
 
 .header-search-wrapper {
   display: flex;
-  border: 2px solid #131921;
-  border-radius: 6px;
+  border: 1px solid #ddd;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -2189,4 +2189,19 @@ div.pagination span.disabled {
   color: #fff;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+/* Move Tawk.to / chat widgets to left side */
+#tawk-bubble-container,
+.tawk-min-container,
+iframe[title*="chat"],
+div[class*="tawk"] {
+    left: 20px !important;
+    right: auto !important;
+}
+
+/* Move ShareThis buttons to left */
+.st-sticky-share-buttons {
+    left: 0 !important;
+    right: auto !important;
 }

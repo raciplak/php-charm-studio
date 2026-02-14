@@ -84,6 +84,9 @@ $cart_items = [];
 $cart_total = 0;
 $cart_count = isset($_SESSION['cart_p_id']) ? count($_SESSION['cart_p_id']) : 0;
 
+// Need DB connection for old prices
+include("admin/inc/config.php");
+
 if($cart_count > 0) {
     $sc_p_id = array_values_reindex($_SESSION['cart_p_id']);
     $sc_p_name = array_values_reindex($_SESSION['cart_p_name']);
@@ -98,12 +101,21 @@ if($cart_count > 0) {
     for($i = 0; $i < $cart_count; $i++) {
         $row_total = $sc_p_price[$i] * $sc_p_qty[$i];
         $cart_total += $row_total;
+        // Get old price
+        $old_price = 0;
+        $stmt_op = $pdo->prepare("SELECT p_old_price FROM tbl_product WHERE p_id=?");
+        $stmt_op->execute(array($sc_p_id[$i]));
+        $op_row = $stmt_op->fetch(PDO::FETCH_ASSOC);
+        if($op_row && $op_row['p_old_price'] > 0 && $op_row['p_old_price'] > $sc_p_price[$i]) {
+            $old_price = $op_row['p_old_price'];
+        }
         $cart_items[] = [
             'id' => $sc_p_id[$i],
             'name' => $sc_p_name[$i],
             'photo' => $sc_p_photo[$i],
             'qty' => $sc_p_qty[$i],
             'price' => $sc_p_price[$i],
+            'old_price' => $old_price,
             'row_total' => $row_total,
             'size_id' => $sc_size_id[$i],
             'size_name' => $sc_size_name[$i],

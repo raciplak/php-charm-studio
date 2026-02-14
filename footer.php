@@ -268,6 +268,11 @@ foreach ($result as $row) {
                 <?php 
                 $sc_row_total = $sc_p_price[$sc_i] * $sc_p_qty[$sc_i];
                 $sc_total += $sc_row_total;
+                // Get original price for discount display
+                $stmt_orig = $pdo->prepare("SELECT p_old_price FROM tbl_product WHERE p_id=?");
+                $stmt_orig->execute(array($sc_p_id[$sc_i]));
+                $orig_row = $stmt_orig->fetch(PDO::FETCH_ASSOC);
+                $sc_old_price = ($orig_row && $orig_row['p_old_price'] > 0 && $orig_row['p_old_price'] > $sc_p_price[$sc_i]) ? $orig_row['p_old_price'] : 0;
                 ?>
                 <div class="side-cart-item" data-id="<?php echo $sc_p_id[$sc_i]; ?>" data-size="<?php echo $sc_size_id[$sc_i]; ?>" data-color="<?php echo $sc_color_id[$sc_i]; ?>" style="animation-delay: <?php echo ($sc_i - 1) * 0.05; ?>s">
                     <div class="side-cart-item-img">
@@ -276,17 +281,21 @@ foreach ($result as $row) {
                     <div class="side-cart-item-info">
                         <p class="side-cart-item-name" title="<?php echo $sc_p_name[$sc_i]; ?>"><?php echo $sc_p_name[$sc_i]; ?></p>
                         <div class="side-cart-item-meta">
+                            <?php if(!empty($sc_size_name[$sc_i]) && $sc_size_name[$sc_i] != '-' && strtolower($sc_size_name[$sc_i]) != 'n/a'): ?>
                             <span><i class="fa fa-th-large"></i> <?php echo $sc_size_name[$sc_i]; ?></span>
+                            <?php endif; ?>
+                            <?php if(!empty($sc_color_name[$sc_i]) && $sc_color_name[$sc_i] != '-' && strtolower($sc_color_name[$sc_i]) != 'n/a'): ?>
                             <span><i class="fa fa-paint-brush"></i> <?php echo $sc_color_name[$sc_i]; ?></span>
+                            <?php endif; ?>
                         </div>
                         <div class="side-cart-item-qty">
                             <button type="button" class="qty-btn qty-minus" onclick="updateSideCartQty(this, 'minus')" title="Azalt">−</button>
                             <span class="qty-value"><?php echo $sc_p_qty[$sc_i]; ?></span>
                             <button type="button" class="qty-btn qty-plus" onclick="updateSideCartQty(this, 'plus')" title="Artır">+</button>
-                        </div>
-                        <div class="side-cart-item-price">
-                            <span class="side-cart-item-unit"><?php echo LANG_VALUE_1; ?><?php echo $sc_p_price[$sc_i]; ?> × <?php echo $sc_p_qty[$sc_i]; ?></span>
-                            <span class="side-cart-item-total"><?php echo LANG_VALUE_1; ?><?php echo $sc_row_total; ?></span>
+                            <span class="side-cart-item-price-inline"><?php echo LANG_VALUE_1; ?><?php echo $sc_row_total; ?></span>
+                            <?php if($sc_old_price > 0): ?>
+                            <span class="side-cart-item-original-price"><?php echo LANG_VALUE_1; ?><?php echo $sc_old_price * $sc_p_qty[$sc_i]; ?></span>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <button type="button" class="side-cart-item-remove" onclick="updateSideCartQty(this, 'remove')" title="Ürünü Kaldır">
@@ -300,11 +309,20 @@ foreach ($result as $row) {
     <?php if($sc_count > 0): ?>
     <div class="side-cart-footer">
         <?php if(isset($_SESSION['customer'])): ?>
+        <?php
+        // Check if billing and shipping addresses are the same
+        $sc_addr_same = (
+            isset($_SESSION['customer']['cust_b_name']) && isset($_SESSION['customer']['cust_s_name']) &&
+            $_SESSION['customer']['cust_b_name'] == $_SESSION['customer']['cust_s_name'] &&
+            $_SESSION['customer']['cust_b_address'] == $_SESSION['customer']['cust_s_address'] &&
+            $_SESSION['customer']['cust_b_city'] == $_SESSION['customer']['cust_s_city']
+        );
+        ?>
         <div class="side-cart-addresses">
-        <div class="sc-address-section">
+            <div class="sc-address-section">
                 <div class="sc-address-header" onclick="toggleScAddress('billing')">
                     <div class="sc-addr-header-left">
-                        <span class="sc-addr-title"><i class="fa fa-file-text-o"></i> Fatura Adresi</span>
+                        <span class="sc-addr-title"><i class="fa fa-map-marker"></i> <?php echo $sc_addr_same ? 'Fatura & Teslimat Adresi' : 'Fatura Adresi'; ?></span>
                         <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
                         <span class="sc-addr-preview"><?php echo $_SESSION['customer']['cust_b_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'], 0, 35, '...'); ?>, <?php echo $_SESSION['customer']['cust_b_city']; ?></span>
                         <?php else: ?>
@@ -363,7 +381,16 @@ foreach ($result as $row) {
                     </form>
                 </div>
             </div>
-            <div class="sc-address-section">
+
+            <!-- Different Delivery Address Toggle -->
+            <div class="sc-addr-copy-row" style="padding:6px 0;">
+                <label class="sc-addr-copy-label">
+                    <input type="checkbox" id="sc-diff-shipping" onchange="scToggleDiffShipping(this)" <?php echo $sc_addr_same ? '' : 'checked'; ?>>
+                    Farklı teslimat adresi kullan
+                </label>
+            </div>
+
+            <div class="sc-address-section" id="sc-shipping-section" style="<?php echo $sc_addr_same ? 'display:none;' : ''; ?>">
                 <div class="sc-address-header" onclick="toggleScAddress('shipping')">
                     <div class="sc-addr-header-left">
                         <span class="sc-addr-title"><i class="fa fa-truck"></i> Teslimat Adresi</span>
@@ -376,9 +403,6 @@ foreach ($result as $row) {
                     <i class="fa fa-chevron-down sc-addr-arrow" id="sc-shipping-arrow"></i>
                 </div>
                 <div class="sc-address-body" id="sc-shipping-body">
-                    <div class="sc-addr-copy-row">
-                        <label class="sc-addr-copy-label"><input type="checkbox" id="sc-copy-billing" onchange="scCopyBilling(this)"> Fatura adresiyle aynı</label>
-                    </div>
                     <form class="sc-addr-form" id="sc-shipping-form" onsubmit="saveScAddress(event, 'shipping')">
                         <div class="sc-addr-form-row">
                             <label>Ad Soyad</label>
@@ -430,12 +454,11 @@ foreach ($result as $row) {
         </div>
         <?php endif; ?>
 
-        <div class="side-cart-subtotal">
-            <span>Toplam</span>
-            <span><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
-        </div>
         <div class="side-cart-actions">
-            <button type="button" class="btn-checkout" onclick="openPaymentDialog()">Ödemeye Geç <i class="fa fa-arrow-right"></i></button>
+            <button type="button" class="btn-checkout" onclick="openPaymentDialog()">
+                <span class="checkout-label">Ödemeye Geç <i class="fa fa-arrow-right"></i></span>
+                <span class="checkout-total"><?php echo LANG_VALUE_1; ?><?php echo $sc_total; ?></span>
+            </button>
         </div>
     </div>
     <?php endif; ?>
@@ -489,7 +512,7 @@ foreach ($result as $row) {
                     if($pk_row2 && $pk_row2['is_active'] == 1):
                     ?>
                     <label class="sc-payment-option">
-                        <input type="radio" name="sc_payment_method" value="kredi_karti" onchange="scTogglePayment(this.value)">
+                        <input type="radio" name="sc_payment_method" value="kredi_karti" onchange="scTogglePayment(this.value)" checked>
                         <span class="sc-payment-option-label"><i class="fa fa-credit-card"></i> Kredi Kartı (3D Secure)</span>
                     </label>
                     <?php endif; ?>
@@ -508,7 +531,7 @@ foreach ($result as $row) {
                 </div>
 
                 <!-- Kredi Kartı Form -->
-                <div class="sc-payment-form" id="sc-pay-kredi_karti" style="display:none;">
+                <div class="sc-payment-form" id="sc-pay-kredi_karti" style="display:block;">
                     <form action="payment/paratika/init.php" method="post" id="sc-kredi-form" autocomplete="off">
                         <input type="hidden" name="amount" value="<?php echo $sc_total; ?>">
                         <div class="sc-pay-field">
@@ -718,17 +741,26 @@ function toggleScAddress(type) {
     arrow.classList.toggle('open');
 }
 
-function scCopyBilling(cb) {
+function scToggleDiffShipping(cb) {
+    var section = document.getElementById('sc-shipping-section');
     if(cb.checked) {
+        section.style.display = '';
+    } else {
+        section.style.display = 'none';
+        // Copy billing to shipping silently
         var bf = document.getElementById('sc-billing-form');
         var sf = document.getElementById('sc-shipping-form');
-        sf.querySelector('[name="s_name"]').value = bf.querySelector('[name="b_name"]').value;
-        sf.querySelector('[name="s_address"]').value = bf.querySelector('[name="b_address"]').value;
-        sf.querySelector('[name="s_city"]').value = bf.querySelector('[name="b_city"]').value;
-        sf.querySelector('[name="s_state"]').value = bf.querySelector('[name="b_state"]').value;
-        sf.querySelector('[name="s_zip"]').value = bf.querySelector('[name="b_zip"]').value;
-        sf.querySelector('[name="s_phone"]').value = bf.querySelector('[name="b_phone"]').value;
-        sf.querySelector('[name="s_country"]').value = bf.querySelector('[name="b_country"]').value;
+        if(bf && sf) {
+            sf.querySelector('[name="s_name"]').value = bf.querySelector('[name="b_name"]').value;
+            sf.querySelector('[name="s_address"]').value = bf.querySelector('[name="b_address"]').value;
+            sf.querySelector('[name="s_city"]').value = bf.querySelector('[name="b_city"]').value;
+            sf.querySelector('[name="s_state"]').value = bf.querySelector('[name="b_state"]').value;
+            sf.querySelector('[name="s_zip"]').value = bf.querySelector('[name="b_zip"]').value;
+            sf.querySelector('[name="s_phone"]').value = bf.querySelector('[name="b_phone"]').value;
+            sf.querySelector('[name="s_country"]').value = bf.querySelector('[name="b_country"]').value;
+            // Auto-save shipping = billing
+            saveScAddress(new Event('submit', {cancelable:true}), 'shipping');
+        }
     }
 }
 
@@ -797,16 +829,31 @@ function updateSideCartQty(btn, action) {
     xhr.send();
 }
 
+function updateHeaderCart(data) {
+    var currency = '<?php echo LANG_VALUE_1; ?>';
+    // Update header icon badge and total
+    var badges = document.querySelectorAll('.cart-count-badge');
+    badges.forEach(function(b) { b.textContent = data.cart_count; });
+    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+    iconLabels.forEach(function(l) { l.textContent = currency + (data.cart_total > 0 ? data.cart_total : '0.00'); });
+    // Update payment dialog total
+    var payAmountEl = document.querySelector('.sc-payment-amount');
+    if(payAmountEl) payAmountEl.textContent = currency + data.cart_total;
+    var payHiddenInputs = document.querySelectorAll('.sc-payment-form input[name="amount"]');
+    payHiddenInputs.forEach(function(inp) { inp.value = data.cart_total; });
+}
+
 function renderSideCart(data) {
     var currency = '<?php echo LANG_VALUE_1; ?>';
     var itemsContainer = document.querySelector('.side-cart-items');
     var footer = document.querySelector('.side-cart-footer');
     var headerCount = document.querySelector('.cart-item-count');
-    var headerBadge = document.querySelector('.cart-count-badge');
 
-    // Update header badge
+    // Update side cart header badge
     if(headerCount) headerCount.textContent = data.cart_count + ' Ürün';
-    if(headerBadge) headerBadge.textContent = data.cart_count;
+
+    // Update header icon area
+    updateHeaderCart(data);
 
     if(data.cart_count === 0) {
         itemsContainer.innerHTML = '<div class="side-cart-empty"><i class="fa fa-shopping-basket"></i><h4>Sepetiniz Boş</h4><p>Henüz sepetinize ürün eklemediniz.</p><a href="index.php" class="btn-continue" onclick="toggleSideCart()">Alışverişe Başla</a></div>';
@@ -823,24 +870,36 @@ function renderSideCart(data) {
         html += '<div class="side-cart-item-img"><img src="assets/uploads/' + it.photo + '" alt="' + it.name + '"></div>';
         html += '<div class="side-cart-item-info">';
         html += '<p class="side-cart-item-name" title="' + it.name + '">' + it.name + '</p>';
-        html += '<div class="side-cart-item-meta"><span><i class="fa fa-th-large"></i> ' + it.size_name + '</span><span><i class="fa fa-paint-brush"></i> ' + it.color_name + '</span></div>';
+        // Only show meta if size/color are meaningful
+        var metaHtml = '';
+        if(it.size_name && it.size_name !== '-' && it.size_name.toLowerCase() !== 'n/a') {
+            metaHtml += '<span><i class="fa fa-th-large"></i> ' + it.size_name + '</span>';
+        }
+        if(it.color_name && it.color_name !== '-' && it.color_name.toLowerCase() !== 'n/a') {
+            metaHtml += '<span><i class="fa fa-paint-brush"></i> ' + it.color_name + '</span>';
+        }
+        if(metaHtml) html += '<div class="side-cart-item-meta">' + metaHtml + '</div>';
         html += '<div class="side-cart-item-qty">';
         html += '<button type="button" class="qty-btn qty-minus" onclick="updateSideCartQty(this, \'minus\')" title="Azalt">−</button>';
         html += '<span class="qty-value">' + it.qty + '</span>';
         html += '<button type="button" class="qty-btn qty-plus" onclick="updateSideCartQty(this, \'plus\')" title="Artır">+</button>';
+        html += '<span class="side-cart-item-price-inline">' + currency + it.row_total + '</span>';
+        if(it.old_price && it.old_price > it.price) {
+            html += '<span class="side-cart-item-original-price">' + currency + (it.old_price * it.qty) + '</span>';
+        }
         html += '</div>';
-        html += '<div class="side-cart-item-price"><span class="side-cart-item-unit">' + currency + it.price + ' × ' + it.qty + '</span><span class="side-cart-item-total">' + currency + it.row_total + '</span></div>';
         html += '</div>';
         html += '<button type="button" class="side-cart-item-remove" onclick="updateSideCartQty(this, \'remove\')" title="Ürünü Kaldır"><i class="fa fa-times"></i></button>';
         html += '</div>';
     }
     itemsContainer.innerHTML = html;
 
-    // Update footer total
-    if(footer) {
-        var subtotalEl = footer.querySelector('.side-cart-subtotal span:last-child');
-        if(subtotalEl) subtotalEl.textContent = currency + data.cart_total;
-    }
+    // Update checkout button total
+    var checkoutTotal = document.querySelector('.checkout-total');
+    if(checkoutTotal) checkoutTotal.textContent = currency + data.cart_total;
+
+    // Show footer
+    if(footer) footer.style.display = '';
 }
 </script>
 
