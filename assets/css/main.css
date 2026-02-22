@@ -2200,6 +2200,16 @@ div[class*="tawk"] {
     right: auto !important;
 }
 
+/* Hide Tawk.to attention grabber ("We are here!" bubble) */
+.tawk-attention,
+div[class*="tawk-attention"],
+.tawk-tooltip,
+div[class*="attention"] iframe,
+iframe[title*="attention"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
 /* Move ShareThis buttons to left */
 .st-sticky-share-buttons {
     left: 0 !important;
