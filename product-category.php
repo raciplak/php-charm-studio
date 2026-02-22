@@ -31,11 +31,13 @@ $col_class = 'col-md-' . intval(12 / $category_product_columns);
 .product-cat-grid .item-product-cat .thumb {
     position: relative;
     overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: #f9f9f9;
 }
 .product-cat-grid .item-product-cat .thumb .photo-img {
     width: 100%;
-    height: 280px;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
     display: block;
 }
 @media (max-width: 991px) {
