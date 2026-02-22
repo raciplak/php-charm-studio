@@ -104,6 +104,7 @@ if(isset($_POST['form1'])) {
 		//Saving data into the main table tbl_product
 		$statement = $pdo->prepare("INSERT INTO tbl_product(
 										p_name,
+										p_barcode,
 										p_old_price,
 										p_current_price,
 										p_qty,
@@ -117,9 +118,10 @@ if(isset($_POST['form1'])) {
 										p_is_featured,
 										p_is_active,
 										ecat_id
-									) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+									) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		$statement->execute(array(
 										$_POST['p_name'],
+										$_POST['p_barcode'],
 										$_POST['p_old_price'],
 										$_POST['p_current_price'],
 										$_POST['p_qty'],
@@ -242,6 +244,12 @@ if(isset($_POST['form1'])) {
 							<label for="" class="col-sm-3 control-label">Product Name <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" name="p_name" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Barcode</label>
+							<div class="col-sm-4">
+								<input type="text" name="p_barcode" class="form-control" placeholder="Enter product barcode">
 							</div>
 						</div>
 						<div class="form-group">
