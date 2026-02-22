@@ -907,5 +907,44 @@ function renderSideCart(data) {
 </script>
 
 <?php echo $before_body; ?>
+
+<script>
+// Force Tawk.to widget to left side
+(function moveTawkToLeft() {
+    function applyLeftPosition() {
+        var selectors = [
+            '#tawk-bubble-container',
+            '.tawk-min-container', 
+            'iframe[title*="chat"]',
+            'iframe[title*="Tawk"]'
+        ];
+        selectors.forEach(function(sel) {
+            var els = document.querySelectorAll(sel);
+            els.forEach(function(el) {
+                el.style.setProperty('right', 'auto', 'important');
+                el.style.setProperty('left', '20px', 'important');
+            });
+        });
+        // Also target the main tawk widget container
+        var allDivs = document.querySelectorAll('div[style*="right"]');
+        allDivs.forEach(function(el) {
+            if (el.id && el.id.indexOf('tawk') !== -1) {
+                el.style.setProperty('right', 'auto', 'important');
+                el.style.setProperty('left', '20px', 'important');
+            }
+        });
+    }
+    // Run repeatedly to catch dynamically injected elements
+    var attempts = 0;
+    var interval = setInterval(function() {
+        applyLeftPosition();
+        attempts++;
+        if (attempts > 30) clearInterval(interval);
+    }, 500);
+    // Also use MutationObserver for reliability
+    var observer = new MutationObserver(function() { applyLeftPosition(); });
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
