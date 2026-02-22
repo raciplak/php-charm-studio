@@ -378,17 +378,17 @@ foreach ($result as $row) {
                             <button type="submit" class="sc-addr-save-btn"><i class="fa fa-check"></i> Kaydet</button>
                             <span class="sc-addr-save-msg" id="sc-billing-msg"></span>
                         </div>
+                        <div class="sc-addr-copy-row" style="padding:8px 0 0; margin-top:8px; border-top:1px solid #eee;">
+                            <label class="sc-addr-copy-label">
+                                <input type="checkbox" id="sc-diff-shipping" onchange="scToggleDiffShipping(this)" <?php echo $sc_addr_same ? '' : 'checked'; ?>>
+                                Farklı teslimat adresi kullan
+                            </label>
+                        </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Different Delivery Address Toggle -->
-            <div class="sc-addr-copy-row" style="padding:6px 0;">
-                <label class="sc-addr-copy-label">
-                    <input type="checkbox" id="sc-diff-shipping" onchange="scToggleDiffShipping(this)" <?php echo $sc_addr_same ? '' : 'checked'; ?>>
-                    Farklı teslimat adresi kullan
-                </label>
-            </div>
+            
 
             <div class="sc-address-section" id="sc-shipping-section" style="<?php echo $sc_addr_same ? 'display:none;' : ''; ?>">
                 <div class="sc-address-header" onclick="toggleScAddress('shipping')">
