@@ -368,7 +368,7 @@ $statement->execute(array($_REQUEST['id']));
 $photo_result = $statement->fetchAll(PDO::FETCH_ASSOC);
 $photo_index = 1;
 foreach ($photo_result as $photo_row) {
-    $product_images[] = BASE_URL . 'assets/uploads/' . $photo_row['photo'];
+    $product_images[] = BASE_URL . 'assets/uploads/product_photos/' . $photo_row['photo'];
     $photo_index++;
 }
 ?>
@@ -861,9 +861,9 @@ foreach ($page_result as $row) {
                                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($result as $row) {
                                     ?>
-                                    <li style="background-image: url(assets/uploads/<?php echo $row['photo']; ?>);">
-                                        <a class="popup" href="assets/uploads/<?php echo $row['photo']; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> image <?php echo $img_index; ?>">
-                                            <img src="assets/uploads/<?php echo $row['photo']; ?>" 
+                                    <li style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>);">
+                                        <a class="popup" href="assets/uploads/product_photos/<?php echo $row['photo']; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> image <?php echo $img_index; ?>">
+                                            <img src="assets/uploads/product_photos/<?php echo $row['photo']; ?>"
                                                  alt="<?php echo htmlspecialchars($p_name); ?> - Product Photo <?php echo $img_index; ?>" 
                                                  loading="lazy"
                                                  width="500" 
@@ -888,7 +888,7 @@ foreach ($page_result as $row) {
                                 foreach ($result as $row) {
                                     ?>
                                     <a data-slide-index="<?php echo $i; ?>" href="" aria-label="View image <?php echo $i+1; ?>">
-                                        <div class="prod-pager-thumb" style="background-image: url(assets/uploads/<?php echo $row['photo']; ?>)"></div>
+                                        <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>)"></div>
                                     </a>
                                     <?php
                                     $i++;
