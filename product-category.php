@@ -6,9 +6,7 @@ $statement->execute();
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
 foreach ($result as $row) {
     $banner_product_category = $row['banner_product_category'];
-    $product_category_columns = isset($row['product_category_columns']) ? intval($row['product_category_columns']) : 3;
 }
-$col_class = 'col-md-' . floor(12 / $product_category_columns);
 ?>
 
 <?php
@@ -166,7 +164,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($result as $row) {
                                     ?>
-                                    <div class="<?php echo $col_class; ?> item item-product-cat">
+                                    <div class="col-md-4 item item-product-cat">
                                         <div class="inner">
                                             <div class="thumb">
                                                 <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);"></div>
