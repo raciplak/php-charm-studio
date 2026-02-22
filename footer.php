@@ -906,64 +906,25 @@ function renderSideCart(data) {
 }
 </script>
 
+<script>
+// Configure Tawk.to position BEFORE the script loads
+var Tawk_API = Tawk_API || {};
+Tawk_API.customStyle = {
+    visibility: {
+        desktop: { position: 'bl' },
+        mobile: { position: 'bl' }
+    }
+};
+</script>
+
 <?php echo $before_body; ?>
 
 <script>
-// Force Tawk.to widget to left side using CSS injection (prevents flashing)
+// Hide attention grabber
 (function() {
     var style = document.createElement('style');
-    style.textContent = 
-        'iframe[title*="chat"], iframe[title*="Tawk"],' +
-        '#tawk-bubble-container, .tawk-min-container,' +
-        'div[class*="tawk"], div[id*="tawk"],' +
-        '.tawk-button, .tawk-tooltip,' +
-        '[class*="widget-visible"]' +
-        '{ right: auto !important; left: 20px !important; transition: none !important; }' +
-        '.tawk-attention, div[class*="tawk-attention"],' +
-        'iframe[title*="attention"]' +
-        '{ display: none !important; }';
+    style.textContent = '.tawk-attention, div[class*="tawk-attention"], iframe[title*="attention"] { display: none !important; visibility: hidden !important; }';
     document.head.appendChild(style);
-
-    // Use Tawk API to set position natively (no flashing)
-    if (typeof Tawk_API === 'undefined') window.Tawk_API = {};
-    Tawk_API.onLoad = function() {
-        // Tawk API doesn't have a left position method, so we keep CSS approach
-        // but also re-apply on every state change
-        var applyLeft = function() {
-            var els = document.querySelectorAll('iframe[title*="chat"], iframe[title*="Tawk"], div[id*="tawk"], #tawk-bubble-container, .tawk-min-container');
-            els.forEach(function(el) {
-                el.style.setProperty('right', 'auto', 'important');
-                el.style.setProperty('left', '20px', 'important');
-                el.style.setProperty('transition', 'none', 'important');
-            });
-        };
-        applyLeft();
-        if (Tawk_API.onChatStarted) Tawk_API.onChatStarted = function(){ applyLeft(); };
-    };
-    Tawk_API.onBeforeLoad = function() {
-        var style2 = document.createElement('style');
-        style2.textContent = 'iframe[title*="chat"], iframe[title*="Tawk"], div[id*="tawk"] { right: auto !important; left: 20px !important; transition: none !important; }';
-        document.head.appendChild(style2);
-    };
-
-    // MutationObserver with transition kill
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(m) {
-            m.addedNodes.forEach(function(node) {
-                if (node.nodeType === 1) {
-                    var isT = (node.id && node.id.indexOf('tawk') !== -1) || 
-                              (node.className && typeof node.className === 'string' && node.className.indexOf('tawk') !== -1) ||
-                              (node.tagName === 'IFRAME' && node.title && (node.title.indexOf('chat') !== -1 || node.title.indexOf('Tawk') !== -1));
-                    if (isT) {
-                        node.style.setProperty('right', 'auto', 'important');
-                        node.style.setProperty('left', '20px', 'important');
-                        node.style.setProperty('transition', 'none', 'important');
-                    }
-                }
-            });
-        });
-    });
-    observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
 })();
 </script>
 </body>
