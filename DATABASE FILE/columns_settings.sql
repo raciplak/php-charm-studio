@@ -7,3 +7,4 @@ ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `popular_columns` INT NOT NU
 ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `category_banner_columns` INT NOT NULL DEFAULT 4;
 ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `category_banner_title` VARCHAR(255) NOT NULL DEFAULT 'Kategori Bannerları';
 ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `category_banner_subtitle` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `category_product_columns` INT NOT NULL DEFAULT 3;
