@@ -209,11 +209,14 @@ if(isset($_POST['form6_4'])) {
         $error_message .= 'Featured Product SubTitle can not be empty<br>';
     }
 
+    $feat_cols = intval($_POST['featured_columns']);
+    if($feat_cols < 1 || $feat_cols > 6) $feat_cols = 4;
+
     if($valid == 1) {
 
         // updating the database
-        $statement = $pdo->prepare("UPDATE tbl_settings SET featured_product_title=?,featured_product_subtitle=? WHERE id=1");
-        $statement->execute(array($_POST['featured_product_title'],$_POST['featured_product_subtitle']));
+        $statement = $pdo->prepare("UPDATE tbl_settings SET featured_product_title=?,featured_product_subtitle=?,featured_columns=? WHERE id=1");
+        $statement->execute(array($_POST['featured_product_title'],$_POST['featured_product_subtitle'],$feat_cols));
 
         $success_message = 'Featured Product Data is updated successfully.';
         
@@ -234,11 +237,14 @@ if(isset($_POST['form6_5'])) {
         $error_message .= 'Latest Product SubTitle can not be empty<br>';
     }
 
+    $lat_cols = intval($_POST['latest_columns']);
+    if($lat_cols < 1 || $lat_cols > 6) $lat_cols = 4;
+
     if($valid == 1) {
 
         // updating the database
-        $statement = $pdo->prepare("UPDATE tbl_settings SET latest_product_title=?,latest_product_subtitle=? WHERE id=1");
-        $statement->execute(array($_POST['latest_product_title'],$_POST['latest_product_subtitle']));
+        $statement = $pdo->prepare("UPDATE tbl_settings SET latest_product_title=?,latest_product_subtitle=?,latest_columns=? WHERE id=1");
+        $statement->execute(array($_POST['latest_product_title'],$_POST['latest_product_subtitle'],$lat_cols));
 
         $success_message = 'Latest Product Data is updated successfully.';
         
@@ -259,11 +265,14 @@ if(isset($_POST['form6_6'])) {
         $error_message .= 'Popular Product SubTitle can not be empty<br>';
     }
 
+    $pop_cols = intval($_POST['popular_columns']);
+    if($pop_cols < 1 || $pop_cols > 6) $pop_cols = 4;
+
     if($valid == 1) {
 
         // updating the database
-        $statement = $pdo->prepare("UPDATE tbl_settings SET popular_product_title=?,popular_product_subtitle=? WHERE id=1");
-        $statement->execute(array($_POST['popular_product_title'],$_POST['popular_product_subtitle']));
+        $statement = $pdo->prepare("UPDATE tbl_settings SET popular_product_title=?,popular_product_subtitle=?,popular_columns=? WHERE id=1");
+        $statement->execute(array($_POST['popular_product_title'],$_POST['popular_product_subtitle'],$pop_cols));
 
         $success_message = 'Popular Product Data is updated successfully.';
         
@@ -362,6 +371,16 @@ if(isset($_POST['form6_3'])) {
         
         $success_message = 'Newsletter Text is updated successfully.';
  
+}
+
+if(isset($_POST['form_cat_banner_cols'])) {
+    $cat_cols = intval($_POST['category_banner_columns']);
+    if($cat_cols < 1 || $cat_cols > 6) $cat_cols = 4;
+    
+    $statement = $pdo->prepare("UPDATE tbl_settings SET category_banner_columns=? WHERE id=1");
+    $statement->execute(array($cat_cols));
+    
+    $success_message = 'Category Banner Columns updated successfully.';
 }
 
 if(isset($_POST['form7_1'])) {
@@ -830,6 +849,10 @@ foreach ($result as $row) {
     $latest_product_subtitle         = $row['latest_product_subtitle'];
     $popular_product_title           = $row['popular_product_title'];
     $popular_product_subtitle        = $row['popular_product_subtitle'];
+    $featured_columns                = isset($row['featured_columns']) ? $row['featured_columns'] : 4;
+    $latest_columns                  = isset($row['latest_columns']) ? $row['latest_columns'] : 4;
+    $popular_columns                 = isset($row['popular_columns']) ? $row['popular_columns'] : 4;
+    $category_banner_columns         = isset($row['category_banner_columns']) ? $row['category_banner_columns'] : 4;
    // $testimonial_title               = $row['testimonial_title'];
    // $testimonial_subtitle            = $row['testimonial_subtitle'];
   //  $testimonial_photo               = $row['testimonial_photo'];
@@ -1320,6 +1343,16 @@ foreach ($result as $row) {
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="featured_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($featured_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="" class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
                                             <button type="submit" class="btn btn-success pull-left" name="form6_4">Update</button>
@@ -1344,6 +1377,16 @@ foreach ($result as $row) {
                                         <label for="" class="col-sm-3 control-label">Latest Product SubTitle<span>*</span></label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="latest_product_subtitle" value="<?php echo $latest_product_subtitle; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="latest_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($latest_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -1374,9 +1417,44 @@ foreach ($result as $row) {
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="popular_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($popular_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="" class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
                                             <button type="submit" class="btn btn-success pull-left" name="form6_6">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+
+
+                            <h3>Category Banner Section</h3>
+                            <form class="form-horizontal" action="" method="post">
+                            <div class="box box-info">
+                                <div class="box-body">                                          
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="category_banner_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($category_banner_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <button type="submit" class="btn btn-success pull-left" name="form_cat_banner_cols">Update</button>
                                         </div>
                                     </div>
                                 </div>
