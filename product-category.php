@@ -10,6 +10,24 @@ foreach ($result as $row) {
 }
 $col_class = 'col-md-' . intval(12 / $category_product_columns);
 ?>
+<style>
+.product-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(<?php echo $category_product_columns; ?>, 1fr);
+    gap: 20px;
+}
+.product-cat-grid .item-product-cat {
+    width: 100%;
+    padding: 0;
+    float: none;
+}
+@media (max-width: 991px) {
+    .product-cat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 575px) {
+    .product-cat-grid { grid-template-columns: 1fr; }
+}
+</style>
 
 <?php
 if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
@@ -140,7 +158,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                 <h3><?php echo LANG_VALUE_51; ?> "<?php echo $title; ?>"</h3>
                 <div class="product product-cat">
 
-                    <div class="row">
+                    <div class="product-cat-grid">
                         <?php
                         // Checking if any product is available or not
                         $prod_count = 0;
@@ -166,7 +184,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($result as $row) {
                                     ?>
-                                    <div class="<?php echo $col_class; ?> item item-product-cat">
+                                    <div class="item item-product-cat">
                                         <div class="inner">
                                             <div class="thumb">
                                                 <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);"></div>
