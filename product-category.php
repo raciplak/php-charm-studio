@@ -21,6 +21,11 @@ $col_class = 'col-md-' . intval(12 / $category_product_columns);
     padding: 0;
     float: none;
 }
+.product-cat-grid .item-product-cat .thumb .photo {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
 @media (max-width: 991px) {
     .product-cat-grid { grid-template-columns: repeat(2, 1fr); }
 }
