@@ -376,11 +376,13 @@ if(isset($_POST['form6_3'])) {
 if(isset($_POST['form_cat_banner_cols'])) {
     $cat_cols = intval($_POST['category_banner_columns']);
     if($cat_cols < 1 || $cat_cols > 6) $cat_cols = 4;
+    $cb_title = strip_tags($_POST['category_banner_title']);
+    $cb_subtitle = strip_tags($_POST['category_banner_subtitle']);
     
-    $statement = $pdo->prepare("UPDATE tbl_settings SET category_banner_columns=? WHERE id=1");
-    $statement->execute(array($cat_cols));
+    $statement = $pdo->prepare("UPDATE tbl_settings SET category_banner_columns=?, category_banner_title=?, category_banner_subtitle=? WHERE id=1");
+    $statement->execute(array($cat_cols, $cb_title, $cb_subtitle));
     
-    $success_message = 'Category Banner Columns updated successfully.';
+    $success_message = 'Category Banner Section updated successfully.';
 }
 
 if(isset($_POST['form7_1'])) {
@@ -853,6 +855,8 @@ foreach ($result as $row) {
     $latest_columns                  = isset($row['latest_columns']) ? $row['latest_columns'] : 4;
     $popular_columns                 = isset($row['popular_columns']) ? $row['popular_columns'] : 4;
     $category_banner_columns         = isset($row['category_banner_columns']) ? $row['category_banner_columns'] : 4;
+    $category_banner_title           = isset($row['category_banner_title']) ? $row['category_banner_title'] : 'Kategori Bannerları';
+    $category_banner_subtitle        = isset($row['category_banner_subtitle']) ? $row['category_banner_subtitle'] : '';
    // $testimonial_title               = $row['testimonial_title'];
    // $testimonial_subtitle            = $row['testimonial_subtitle'];
   //  $testimonial_photo               = $row['testimonial_photo'];
@@ -1440,7 +1444,19 @@ foreach ($result as $row) {
                             <h3>Category Banner Section</h3>
                             <form class="form-horizontal" action="" method="post">
                             <div class="box box-info">
-                                <div class="box-body">                                          
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Section Title<span>*</span></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="category_banner_title" value="<?php echo $category_banner_title; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Section Subtitle</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="category_banner_subtitle" value="<?php echo $category_banner_subtitle; ?>">
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
                                         <div class="col-sm-2">
