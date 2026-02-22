@@ -382,7 +382,7 @@ if(count($category_banners) > 0):
 <style>
 .category-banners-section {
     padding: 50px 0;
-    background: #ffffff;
+    background: #f2f3f3;
     position: relative;
     overflow: hidden;
 }
