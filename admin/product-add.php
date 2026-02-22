@@ -226,11 +226,24 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Product ID</label>
+							<div class="col-sm-4">
+								<?php
+								$statement_pid = $pdo->prepare("SHOW TABLE STATUS LIKE 'tbl_product'");
+								$statement_pid->execute();
+								$result_pid = $statement_pid->fetchAll();
+								$next_product_id = $result_pid[0][10];
+								?>
+								<input type="text" class="form-control" value="<?php echo $next_product_id; ?>" disabled>
+								<span class="help-block" style="font-size:11px;color:#999;">Auto-assigned ID for the new product</span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Product Name <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" name="p_name" class="form-control">
 							</div>
-						</div>	
+						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Old Price <br><span style="font-size:10px;font-weight:normal;">(In USD)</span></label>
 							<div class="col-sm-4">
