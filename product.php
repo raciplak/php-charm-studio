@@ -345,7 +345,7 @@ $canonical_url = BASE_URL . 'product/' . $p_id . '/' . $product_slug;
 $current_url = BASE_URL . 'product.php?id=' . $p_id;
 
 // Full image URL for Open Graph
-$og_image_url = BASE_URL . 'assets/uploads/' . $p_featured_photo;
+$og_image_url = BASE_URL . 'assets/uploads/product_photos/' . $p_featured_photo;
 
 // SEO Title (max 60 chars, keyword-first)
 $seo_title = substr($p_name . ' - Buy ' . $ecat_name . ' | ' . $meta_title_home, 0, 60);
@@ -423,7 +423,7 @@ foreach ($photo_result as $photo_row) {
     <link rel="icon" type="image/png" href="assets/uploads/<?php echo $favicon; ?>">
     
     <!-- Preload Main Product Image (Core Web Vitals - LCP) -->
-    <link rel="preload" as="image" href="assets/uploads/<?php echo $p_featured_photo; ?>" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" fetchpriority="high">
     
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -843,9 +843,9 @@ foreach ($page_result as $row) {
                         <div class="col-md-5">
                             <ul class="prod-slider">
                                 <!-- Main Featured Image (Eager loaded for LCP) -->
-                                <li style="background-image: url(assets/uploads/<?php echo $p_featured_photo; ?>);">
-                                    <a class="popup" href="assets/uploads/<?php echo $p_featured_photo; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> full size image">
-                                        <img src="assets/uploads/<?php echo $p_featured_photo; ?>" 
+                                <li style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>);">
+                                    <a class="popup" href="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> full size image">
+                                        <img src="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>"
                                              alt="<?php echo htmlspecialchars($p_name); ?> - Main Product Image" 
                                              itemprop="image"
                                              width="500" 
@@ -878,7 +878,7 @@ foreach ($page_result as $row) {
                             </ul>
                             <div id="prod-pager">
                                 <a data-slide-index="0" href="" aria-label="View main image">
-                                    <div class="prod-pager-thumb" style="background-image: url(assets/uploads/<?php echo $p_featured_photo; ?>)"></div>
+                                    <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>)"></div>
                                 </a>
                                 <?php
                                 $i=1;
@@ -1261,8 +1261,8 @@ foreach ($page_result as $row) {
                         <div class="item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                             <meta itemprop="position" content="<?php echo $related_position; ?>">
                             <div class="thumb" itemprop="item" itemscope itemtype="https://schema.org/Product">
-                                <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);">
-                                    <img src="assets/uploads/<?php echo $row['p_featured_photo']; ?>" 
+                                <div class="photo" style="background-image:url(assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>);">
+                                    <img src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>"
                                          alt="<?php echo htmlspecialchars($row['p_name']); ?> - Related Product" 
                                          loading="lazy"
                                          width="300"
