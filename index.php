@@ -578,7 +578,7 @@ if(count($category_banners) > 0):
         <div class="row">
             <div class="col-md-12">
 
-                <div class="product-carousel" id="featured-carousel">
+                <div class="product-carousel" id="featured-carousel" data-columns="<?php echo $featured_columns; ?>">
                     
                     <?php
                     $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_is_featured=? AND p_is_active=? LIMIT ".$total_featured_product_home);
@@ -707,7 +707,7 @@ if(count($category_banners) > 0):
         <div class="row">
             <div class="col-md-12">
 
-                <div class="product-carousel" id="latest-carousel">
+                <div class="product-carousel" id="latest-carousel" data-columns="<?php echo $latest_columns; ?>">
 
                     <?php
                     $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_is_active=? ORDER BY p_id DESC LIMIT ".$total_latest_product_home);
@@ -838,7 +838,7 @@ if(count($category_banners) > 0):
         <div class="row">
             <div class="col-md-12">
 
-                <div class="product-carousel" id="popular-carousel">
+                <div class="product-carousel" id="popular-carousel" data-columns="<?php echo $popular_columns; ?>">
 
                     <?php
                     $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_is_active=? ORDER BY p_total_view DESC LIMIT ".$total_popular_product_home);
@@ -956,39 +956,6 @@ if(count($category_banners) > 0):
 
 
 
-<script>
-$(window).on('load', function() {
-    // Re-initialize carousels with custom column counts
-    var carouselConfig = {
-        'featured-carousel': <?php echo $featured_columns; ?>,
-        'latest-carousel': <?php echo $latest_columns; ?>,
-        'popular-carousel': <?php echo $popular_columns; ?>
-    };
-    
-    $.each(carouselConfig, function(id, cols) {
-        var el = $('#' + id);
-        if(el.length) {
-            el.trigger('destroy.owl.carousel');
-            el.owlCarousel({
-                loop: true,
-                autoplay: true,
-                margin: 15,
-                dots: false,
-                animateIn: true,
-                responsiveClass: true,
-                navText: [
-                    '<i class="fa fa-angle-left"></i>',
-                    '<i class="fa fa-angle-right"></i>'
-                ],
-                responsive: {
-                    0: { items: 1, nav: true },
-                    600: { items: Math.min(cols, 3), nav: true },
-                    1000: { items: cols, nav: true, loop: true }
-                }
-            });
-        }
-    });
-});
-</script>
+<!-- Column counts are now handled via data-columns attributes on each carousel -->
 
 <?php require_once('footer.php'); ?>

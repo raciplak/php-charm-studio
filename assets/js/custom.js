@@ -31,33 +31,37 @@
             fixedContentPos: false
         });
 
-        // Carousel - Product
-        productCarousel.owlCarousel({
-            loop: true,
-            autoplay: true,
-            margin: 15,
-            dots: false,
-            animateIn: true,
-            responsiveClass: true,
-            navText: [
-                '<i class="fa fa-angle-left"></i>',
-                '<i class="fa fa-angle-right"></i>'
-            ],
-            responsive: {
-                0: {
-                    items: 1,
-                    nav: true
-                },
-                600: {
-                    items: 3,
-                    nav: true
-                },
-                1000: {
-                    items: 4,
-                    nav: true,
-                    loop: true
+        // Carousel - Product (reads data-columns attribute for dynamic column count)
+        productCarousel.each(function() {
+            var $this = $(this);
+            var cols = parseInt($this.attr('data-columns')) || 4;
+            $this.owlCarousel({
+                loop: true,
+                autoplay: true,
+                margin: 15,
+                dots: false,
+                animateIn: true,
+                responsiveClass: true,
+                navText: [
+                    '<i class="fa fa-angle-left"></i>',
+                    '<i class="fa fa-angle-right"></i>'
+                ],
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: Math.min(cols, 3),
+                        nav: true
+                    },
+                    1000: {
+                        items: cols,
+                        nav: true,
+                        loop: true
+                    }
                 }
-            }
+            });
         });
 
         testimonialCarousel.owlCarousel({
