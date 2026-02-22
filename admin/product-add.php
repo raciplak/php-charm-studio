@@ -69,23 +69,14 @@ if(isset($_POST['form1'])) {
             $photo_temp = $_FILES['photo']["tmp_name"];
             $photo_temp = array_values(array_filter($photo_temp));
 
-        	$statement = $pdo->prepare("SHOW TABLE STATUS LIKE 'tbl_product_photo'");
-			$statement->execute();
-			$result = $statement->fetchAll();
-			foreach($result as $row) {
-				$next_id1=$row[10];
-			}
-			$z = $next_id1;
-
             $m=0;
             for($i=0;$i<count($photo);$i++)
             {
                 $my_ext1 = pathinfo( $photo[$i], PATHINFO_EXTENSION );
 		        if( $my_ext1=='jpg' || $my_ext1=='png' || $my_ext1=='jpeg' || $my_ext1=='gif' ) {
-		            $final_name1[$m] = $z.'.'.$my_ext1;
-                    move_uploaded_file($photo_temp[$i],"../assets/uploads/product_photos/".$final_name1[$m]);
+		            $final_name1[$m] = $ai_id.'_'.($m+1).'.'.$my_ext1;
+                    move_uploaded_file($photo_temp[$i],"../assets/uploads/".$final_name1[$m]);
                     $m++;
-                    $z++;
 		        }
             }
 
@@ -98,7 +89,7 @@ if(isset($_POST['form1'])) {
             }            
         }
 
-		$final_name = 'product-featured-'.$ai_id.'.'.$ext;
+		$final_name = $ai_id.'_main.'.$ext;
         move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
 		//Saving data into the main table tbl_product

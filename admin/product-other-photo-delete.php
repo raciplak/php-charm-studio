@@ -28,7 +28,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['id1']) ) {
 
 	// Unlink the photo
 	if($photo!='') {
-		unlink('../assets/uploads/product_photos/'.$photo);	
+		unlink('../assets/uploads/'.$photo);	
 	}
 
 	// Delete from tbl_testimonial
