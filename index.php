@@ -388,7 +388,7 @@ if(count($category_banners) > 0):
 }
 
 .category-banners-section .section-header {
-    text-align: left;
+    text-align: center;
     margin-bottom: 25px;
     position: relative;
     z-index: 2;
