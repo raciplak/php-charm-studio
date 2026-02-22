@@ -319,7 +319,7 @@ foreach ($result as $row) {
         );
         ?>
         <div class="side-cart-addresses">
-            <div class="sc-address-section">
+            <div class="sc-address-section" id="sc-billing-section">
                 <div class="sc-address-header" onclick="toggleScAddress('billing')">
                     <div class="sc-addr-header-left">
                         <span class="sc-addr-title"><i class="fa fa-map-marker"></i> <?php echo $sc_addr_same ? 'Fatura & Teslimat Adresi' : 'Fatura Adresi'; ?></span>
@@ -743,10 +743,13 @@ function toggleScAddress(type) {
 
 function scToggleDiffShipping(cb) {
     var section = document.getElementById('sc-shipping-section');
+    var titleEl = document.querySelector('#sc-billing-section .sc-addr-title');
     if(cb.checked) {
         section.style.display = '';
+        if(titleEl) titleEl.innerHTML = '<i class="fa fa-map-marker"></i> Fatura Adresi';
     } else {
         section.style.display = 'none';
+        if(titleEl) titleEl.innerHTML = '<i class="fa fa-map-marker"></i> Fatura & Teslimat Adresi';
         // Copy billing to shipping silently
         var bf = document.getElementById('sc-billing-form');
         var sf = document.getElementById('sc-shipping-form');
