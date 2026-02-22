@@ -2191,25 +2191,6 @@ div.pagination span.disabled {
   padding-right: 15px;
 }
 
-/* Move Tawk.to / chat widgets to left side */
-#tawk-bubble-container,
-.tawk-min-container,
-iframe[title*="chat"],
-div[class*="tawk"] {
-    left: 20px !important;
-    right: auto !important;
-}
-
-/* Hide Tawk.to attention grabber ("We are here!" bubble) */
-.tawk-attention,
-div[class*="tawk-attention"],
-.tawk-tooltip,
-div[class*="attention"] iframe,
-iframe[title*="attention"] {
-    display: none !important;
-    visibility: hidden !important;
-}
-
 /* Move ShareThis buttons to left */
 .st-sticky-share-buttons {
     left: 0 !important;
