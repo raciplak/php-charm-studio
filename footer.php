@@ -321,13 +321,14 @@ foreach ($result as $row) {
         <div class="side-cart-addresses">
             <div class="sc-address-section" id="sc-unified-address">
                 <div class="sc-address-header" onclick="toggleScAddress('unified')">
-                    <div class="sc-addr-header-left">
-                        <span class="sc-addr-title" style="font-size:12px;"><i class="fa fa-map-marker"></i> Adres Bilgileri</span>
+                    <div class="sc-addr-header-left" style="overflow:hidden;">
                         <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
-                        <span class="sc-addr-preview" style="font-size:10px;"><i class="fa fa-file-text-o" style="font-size:9px;color:#999;margin-right:3px;"></i><?php echo $_SESSION['customer']['cust_b_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'], 0, 28, '...'); ?>, <?php echo $_SESSION['customer']['cust_b_city']; ?></span>
-                        <?php if(!$sc_addr_same && !empty($_SESSION['customer']['cust_s_address'])): ?>
-                        <span class="sc-addr-preview" style="font-size:10px;color:#ff6b35;"><i class="fa fa-truck" style="font-size:9px;margin-right:3px;"></i><?php echo $_SESSION['customer']['cust_s_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_s_address'], 0, 28, '...'); ?>, <?php echo $_SESSION['customer']['cust_s_city']; ?></span>
-                        <?php endif; ?>
+                            <?php if($sc_addr_same): ?>
+                        <span class="sc-addr-preview" style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;"><i class="fa fa-map-marker" style="font-size:9px;color:#ff6b35;margin-right:4px;"></i><strong>Fatura ve Teslimat Adresi:</strong> <?php echo $_SESSION['customer']['cust_b_name']; ?>, <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'].', '.$_SESSION['customer']['cust_b_city'], 0, 40, '...'); ?></span>
+                            <?php else: ?>
+                        <span class="sc-addr-preview" style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;"><i class="fa fa-file-text-o" style="font-size:9px;color:#999;margin-right:3px;"></i><strong>Fatura Adresi:</strong> <?php echo $_SESSION['customer']['cust_b_name']; ?>, <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'].', '.$_SESSION['customer']['cust_b_city'], 0, 35, '...'); ?></span>
+                        <span class="sc-addr-preview" style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;color:#ff6b35;"><i class="fa fa-truck" style="font-size:9px;margin-right:3px;"></i><strong>Teslimat Adresi:</strong> <?php echo $_SESSION['customer']['cust_s_name']; ?>, <?php echo mb_strimwidth($_SESSION['customer']['cust_s_address'].', '.$_SESSION['customer']['cust_s_city'], 0, 35, '...'); ?></span>
+                            <?php endif; ?>
                         <?php else: ?>
                         <span class="sc-addr-preview sc-addr-preview-empty" style="font-size:10px;"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
                         <?php endif; ?>
