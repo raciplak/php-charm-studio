@@ -60,21 +60,19 @@ if(isset($_POST['form1'])) {
             $photo_temp = $_FILES['photo']["tmp_name"];
             $photo_temp = array_values(array_filter($photo_temp));
 
-        	$statement = $pdo->prepare("SHOW TABLE STATUS LIKE 'tbl_product_photo'");
-			$statement->execute();
-			$result = $statement->fetchAll();
-			foreach($result as $row) {
-				$next_id1=$row[10];
-			}
-			$z = $next_id1;
+            // Count existing other photos for this product to continue numbering
+            $statement = $pdo->prepare("SELECT COUNT(*) as cnt FROM tbl_product_photo WHERE p_id=?");
+            $statement->execute(array($_REQUEST['id']));
+            $cnt_row = $statement->fetch(PDO::FETCH_ASSOC);
+            $z = $cnt_row['cnt'] + 1;
 
             $m=0;
             for($i=0;$i<count($photo);$i++)
             {
                 $my_ext1 = pathinfo( $photo[$i], PATHINFO_EXTENSION );
 		        if( $my_ext1=='jpg' || $my_ext1=='png' || $my_ext1=='jpeg' || $my_ext1=='gif' ) {
-		            $final_name1[$m] = $z.'.'.$my_ext1;
-                    move_uploaded_file($photo_temp[$i],"../assets/uploads/product_photos/".$final_name1[$m]);
+		            $final_name1[$m] = $_REQUEST['id'].'_'.$z.'.'.$my_ext1;
+                    move_uploaded_file($photo_temp[$i],"../assets/uploads/".$final_name1[$m]);
                     $m++;
                     $z++;
 		        }
@@ -126,7 +124,7 @@ if(isset($_POST['form1'])) {
 
         	unlink('../assets/uploads/'.$_POST['current_photo']);
 
-			$final_name = 'product-featured-'.$_REQUEST['id'].'.'.$ext;
+			$final_name = $_REQUEST['id'].'_main.'.$ext;
         	move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
 
@@ -469,7 +467,7 @@ foreach ($result as $row) {
 			                        		?>
 											<tr>
 				                                <td>
-				                                    <img src="../assets/uploads/product_photos/<?php echo $row['photo']; ?>" alt="" style="width:150px;margin-bottom:5px;">
+				                                    <img src="../assets/uploads/<?php echo $row['photo']; ?>" alt="" style="width:150px;margin-bottom:5px;">
 				                                </td>
 				                                <td style="width:28px;">
 				                                	<a onclick="return confirmDelete();" href="product-other-photo-delete.php?id=<?php echo $row['pp_id']; ?>&id1=<?php echo $_REQUEST['id']; ?>" class="btn btn-danger btn-xs">X</a>
