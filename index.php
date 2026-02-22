@@ -30,6 +30,8 @@ foreach ($result as $row)
     $latest_columns = isset($row['latest_columns']) ? intval($row['latest_columns']) : 4;
     $popular_columns = isset($row['popular_columns']) ? intval($row['popular_columns']) : 4;
     $category_banner_columns = isset($row['category_banner_columns']) ? intval($row['category_banner_columns']) : 4;
+    $category_banner_title = isset($row['category_banner_title']) ? $row['category_banner_title'] : 'Kategori Bannerları';
+    $category_banner_subtitle = isset($row['category_banner_subtitle']) ? $row['category_banner_subtitle'] : '';
 }
 ?>
 
@@ -530,11 +532,14 @@ if(count($category_banners) > 0):
 </style>
 
 <section class="category-banners-section" aria-label="Category Banners" itemscope itemtype="https://schema.org/ItemList">
-    <meta itemprop="name" content="Shop By Category">
-    <meta itemprop="description" content="Explore our product categories and find exactly what you're looking for">
+    <meta itemprop="name" content="<?php echo htmlspecialchars($category_banner_title, ENT_QUOTES, 'UTF-8'); ?>">
+    <meta itemprop="description" content="<?php echo htmlspecialchars($category_banner_subtitle, ENT_QUOTES, 'UTF-8'); ?>">
     
     <div class="section-header">
-        <h2>Kategori Bannerları</h2>
+        <h2><?php echo htmlspecialchars($category_banner_title, ENT_QUOTES, 'UTF-8'); ?></h2>
+        <?php if(!empty($category_banner_subtitle)): ?>
+        <p style="color:#777; margin-top:5px; font-size:15px;"><?php echo htmlspecialchars($category_banner_subtitle, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
     </div>
     
     <div class="category-banner-grid" role="region" aria-label="Category showcase">
