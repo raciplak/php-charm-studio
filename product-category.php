@@ -20,11 +20,23 @@ $col_class = 'col-md-' . intval(12 / $category_product_columns);
     width: 100%;
     padding: 0;
     float: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
 }
-.product-cat-grid .item-product-cat .thumb .photo {
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
+.product-cat-grid .item-product-cat .inner {
+    border: none;
+}
+.product-cat-grid .item-product-cat .thumb {
+    position: relative;
+    overflow: hidden;
+}
+.product-cat-grid .item-product-cat .thumb .photo-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
 }
 @media (max-width: 991px) {
     .product-cat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -192,7 +204,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                                     <div class="item item-product-cat">
                                         <div class="inner">
                                             <div class="thumb">
-                                                <div class="photo" style="background-image:url(assets/uploads/<?php echo $row['p_featured_photo']; ?>);"></div>
+                                                <img class="photo-img" src="assets/uploads/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name']); ?>">
                                                 <div class="overlay"></div>
                                             </div>
                                             <div class="text">
