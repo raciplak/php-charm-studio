@@ -92,6 +92,7 @@ if(isset($_POST['form1'])) {
         if($path == '') {
         	$statement = $pdo->prepare("UPDATE tbl_product SET 
         							p_name=?, 
+        							p_barcode=?,
         							p_old_price=?, 
         							p_current_price=?, 
         							p_qty=?,
@@ -107,6 +108,7 @@ if(isset($_POST['form1'])) {
         							WHERE p_id=?");
         	$statement->execute(array(
         							$_POST['p_name'],
+        							$_POST['p_barcode'],
         							$_POST['p_old_price'],
         							$_POST['p_current_price'],
         							$_POST['p_qty'],
@@ -130,6 +132,7 @@ if(isset($_POST['form1'])) {
 
         	$statement = $pdo->prepare("UPDATE tbl_product SET 
         							p_name=?, 
+        							p_barcode=?,
         							p_old_price=?, 
         							p_current_price=?, 
         							p_qty=?,
@@ -146,6 +149,7 @@ if(isset($_POST['form1'])) {
         							WHERE p_id=?");
         	$statement->execute(array(
         							$_POST['p_name'],
+        							$_POST['p_barcode'],
         							$_POST['p_old_price'],
         							$_POST['p_current_price'],
         							$_POST['p_qty'],
@@ -228,6 +232,7 @@ $statement->execute(array($_REQUEST['id']));
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 foreach ($result as $row) {
 	$p_name = $row['p_name'];
+	$p_barcode = $row['p_barcode'];
 	$p_old_price = $row['p_old_price'];
 	$p_current_price = $row['p_current_price'];
 	$p_qty = $row['p_qty'];
@@ -362,6 +367,12 @@ foreach ($result as $row) {
 							<label for="" class="col-sm-3 control-label">Product Name <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" name="p_name" class="form-control" value="<?php echo $p_name; ?>">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Barcode</label>
+							<div class="col-sm-4">
+								<input type="text" name="p_barcode" class="form-control" value="<?php echo $p_barcode; ?>" placeholder="Enter product barcode">
 							</div>
 						</div>
 						<div class="form-group">
