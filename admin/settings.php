@@ -373,6 +373,16 @@ if(isset($_POST['form6_3'])) {
  
 }
 
+if(isset($_POST['form_product_category_cols'])) {
+    $pc_cols = intval($_POST['product_category_columns']);
+    if($pc_cols < 1 || $pc_cols > 6) $pc_cols = 3;
+    
+    $statement = $pdo->prepare("UPDATE tbl_settings SET product_category_columns=? WHERE id=1");
+    $statement->execute(array($pc_cols));
+    
+    $success_message = 'Product Category Page columns updated successfully.';
+}
+
 if(isset($_POST['form_cat_banner_cols'])) {
     $cat_cols = intval($_POST['category_banner_columns']);
     if($cat_cols < 1 || $cat_cols > 6) $cat_cols = 4;
@@ -857,6 +867,7 @@ foreach ($result as $row) {
     $category_banner_columns         = isset($row['category_banner_columns']) ? $row['category_banner_columns'] : 4;
     $category_banner_title           = isset($row['category_banner_title']) ? $row['category_banner_title'] : 'Kategori Bannerları';
     $category_banner_subtitle        = isset($row['category_banner_subtitle']) ? $row['category_banner_subtitle'] : '';
+    $product_category_columns        = isset($row['product_category_columns']) ? $row['product_category_columns'] : 3;
    // $testimonial_title               = $row['testimonial_title'];
    // $testimonial_subtitle            = $row['testimonial_subtitle'];
   //  $testimonial_photo               = $row['testimonial_photo'];
@@ -1440,6 +1451,30 @@ foreach ($result as $row) {
                             </div>
                             </form>
 
+
+                            <h3>Product Category Page</h3>
+                            <form class="form-horizontal" action="" method="post">
+                            <div class="box box-info">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Products Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="product_category_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($product_category_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <button type="submit" class="btn btn-success pull-left" name="form_product_category_cols">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
 
                             <h3>Category Banner Section</h3>
                             <form class="form-horizontal" action="" method="post">
