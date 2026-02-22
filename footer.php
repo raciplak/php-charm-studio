@@ -276,7 +276,7 @@ foreach ($result as $row) {
                 ?>
                 <div class="side-cart-item" data-id="<?php echo $sc_p_id[$sc_i]; ?>" data-size="<?php echo $sc_size_id[$sc_i]; ?>" data-color="<?php echo $sc_color_id[$sc_i]; ?>" style="animation-delay: <?php echo ($sc_i - 1) * 0.05; ?>s">
                     <div class="side-cart-item-img">
-                        <img src="assets/uploads/<?php echo $sc_p_photo[$sc_i]; ?>" alt="<?php echo $sc_p_name[$sc_i]; ?>">
+                        <img src="assets/uploads/product_photos/<?php echo $sc_p_photo[$sc_i]; ?>" alt="<?php echo $sc_p_name[$sc_i]; ?>">
                     </div>
                     <div class="side-cart-item-info">
                         <p class="side-cart-item-name" title="<?php echo $sc_p_name[$sc_i]; ?>"><?php echo $sc_p_name[$sc_i]; ?></p>
@@ -870,7 +870,7 @@ function renderSideCart(data) {
     for(var i = 0; i < data.items.length; i++) {
         var it = data.items[i];
         html += '<div class="side-cart-item" data-id="' + it.id + '" data-size="' + it.size_id + '" data-color="' + it.color_id + '">';
-        html += '<div class="side-cart-item-img"><img src="assets/uploads/' + it.photo + '" alt="' + it.name + '"></div>';
+        html += '<div class="side-cart-item-img"><img src="assets/uploads/product_photos/' + it.photo + '" alt="' + it.name + '"></div>';
         html += '<div class="side-cart-item-info">';
         html += '<p class="side-cart-item-name" title="' + it.name + '">' + it.name + '</p>';
         // Only show meta if size/color are meaningful

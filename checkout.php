@@ -267,7 +267,7 @@ if (isset($_POST['update_address'])) {
                             <tr>
                                 <td><?php echo $i; ?></td>
                                 <td>
-                                    <img src="assets/uploads/<?php echo $arr_cart_p_featured_photo[$i]; ?>" alt="">
+                                    <img src="assets/uploads/product_photos/<?php echo $arr_cart_p_featured_photo[$i]; ?>" alt="">
                                 </td>
                                 <td class="product-name"><?php echo $arr_cart_p_name[$i]; ?></td>
                                 <td><?php echo $arr_cart_size_name[$i]; ?></td>

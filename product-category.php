@@ -206,7 +206,7 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                                     <div class="item item-product-cat">
                                         <div class="inner">
                                             <div class="thumb">
-                                                <img class="photo-img" src="assets/uploads/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name']); ?>">
+                                                <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name']); ?>">
                                                 <div class="overlay"></div>
                                             </div>
                                             <div class="text">

@@ -122,10 +122,10 @@ if(isset($_POST['form1'])) {
         						));
         } else {
 
-        	unlink('../assets/uploads/'.$_POST['current_photo']);
+        	unlink('../assets/uploads/product_photos/'.$_POST['current_photo']);
 
 			$final_name = $_REQUEST['id'].'_main.'.$ext;
-        	move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
+        	move_uploaded_file( $path_tmp, '../assets/uploads/product_photos/'.$final_name );
 
 
         	$statement = $pdo->prepare("UPDATE tbl_product SET 
@@ -444,7 +444,7 @@ foreach ($result as $row) {
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Existing Featured Photo</label>
 							<div class="col-sm-4" style="padding-top:4px;">
-								<img src="../assets/uploads/<?php echo $p_featured_photo; ?>" alt="" style="width:150px;">
+								<img src="../assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" alt="" style="width:150px;">
 								<input type="hidden" name="current_photo" value="<?php echo $p_featured_photo; ?>">
 							</div>
 						</div>
