@@ -319,132 +319,76 @@ foreach ($result as $row) {
         );
         ?>
         <div class="side-cart-addresses">
-            <div class="sc-address-section">
-                <div class="sc-address-header" onclick="toggleScAddress('billing')">
+            <div class="sc-address-section" id="sc-unified-address">
+                <div class="sc-address-header" onclick="toggleScAddress('unified')">
                     <div class="sc-addr-header-left">
-                        <span class="sc-addr-title"><i class="fa fa-map-marker"></i> <?php echo $sc_addr_same ? 'Fatura & Teslimat Adresi' : 'Fatura Adresi'; ?></span>
+                        <span class="sc-addr-title" style="font-size:12px;"><i class="fa fa-map-marker"></i> Adres Bilgileri</span>
                         <?php if(!empty($_SESSION['customer']['cust_b_address'])): ?>
-                        <span class="sc-addr-preview"><?php echo $_SESSION['customer']['cust_b_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'], 0, 35, '...'); ?>, <?php echo $_SESSION['customer']['cust_b_city']; ?></span>
+                        <span class="sc-addr-preview" style="font-size:10px;"><i class="fa fa-file-text-o" style="font-size:9px;color:#999;margin-right:3px;"></i><?php echo $_SESSION['customer']['cust_b_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_b_address'], 0, 28, '...'); ?>, <?php echo $_SESSION['customer']['cust_b_city']; ?></span>
+                        <?php if(!$sc_addr_same && !empty($_SESSION['customer']['cust_s_address'])): ?>
+                        <span class="sc-addr-preview" style="font-size:10px;color:#ff6b35;"><i class="fa fa-truck" style="font-size:9px;margin-right:3px;"></i><?php echo $_SESSION['customer']['cust_s_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_s_address'], 0, 28, '...'); ?>, <?php echo $_SESSION['customer']['cust_s_city']; ?></span>
+                        <?php endif; ?>
                         <?php else: ?>
-                        <span class="sc-addr-preview sc-addr-preview-empty"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
+                        <span class="sc-addr-preview sc-addr-preview-empty" style="font-size:10px;"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
                         <?php endif; ?>
                     </div>
-                    <i class="fa fa-chevron-down sc-addr-arrow" id="sc-billing-arrow"></i>
+                    <i class="fa fa-chevron-down sc-addr-arrow" id="sc-unified-arrow"></i>
                 </div>
-                <div class="sc-address-body" id="sc-billing-body">
-                    <form class="sc-addr-form" id="sc-billing-form" onsubmit="saveScAddress(event, 'billing')">
-                        <div class="sc-addr-form-row">
-                            <label>Ad Soyad</label>
-                            <input type="text" name="b_name" value="<?php echo isset($_SESSION['customer']['cust_b_name']) ? $_SESSION['customer']['cust_b_name'] : ''; ?>" placeholder="Ad Soyad" required>
-                        </div>
-                        <div class="sc-addr-form-row">
-                            <label>Adres</label>
-                            <input type="text" name="b_address" value="<?php echo isset($_SESSION['customer']['cust_b_address']) ? $_SESSION['customer']['cust_b_address'] : ''; ?>" placeholder="Adres" required>
-                        </div>
-                        <div class="sc-addr-form-grid">
-                            <div class="sc-addr-form-row">
-                                <label>İl</label>
-                                <input type="text" name="b_city" value="<?php echo isset($_SESSION['customer']['cust_b_city']) ? $_SESSION['customer']['cust_b_city'] : ''; ?>" placeholder="İl" required>
+                <div class="sc-address-body" id="sc-unified-body">
+                    <div style="margin-bottom:6px;">
+                        <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;"><i class="fa fa-file-text-o" style="color:#ff6b35;margin-right:4px;font-size:10px;"></i>Fatura Adresi</div>
+                        <form class="sc-addr-form" id="sc-billing-form" onsubmit="saveScAddress(event, 'billing')">
+                            <div class="sc-addr-form-row"><label>Ad Soyad</label><input type="text" name="b_name" value="<?php echo isset($_SESSION['customer']['cust_b_name']) ? $_SESSION['customer']['cust_b_name'] : ''; ?>" placeholder="Ad Soyad" required></div>
+                            <div class="sc-addr-form-row"><label>Adres</label><input type="text" name="b_address" value="<?php echo isset($_SESSION['customer']['cust_b_address']) ? $_SESSION['customer']['cust_b_address'] : ''; ?>" placeholder="Adres" required></div>
+                            <div class="sc-addr-form-grid">
+                                <div class="sc-addr-form-row"><label>İl</label><input type="text" name="b_city" value="<?php echo isset($_SESSION['customer']['cust_b_city']) ? $_SESSION['customer']['cust_b_city'] : ''; ?>" placeholder="İl" required></div>
+                                <div class="sc-addr-form-row"><label>İlçe</label><input type="text" name="b_state" value="<?php echo isset($_SESSION['customer']['cust_b_state']) ? $_SESSION['customer']['cust_b_state'] : ''; ?>" placeholder="İlçe" required></div>
                             </div>
-                            <div class="sc-addr-form-row">
-                                <label>İlçe</label>
-                                <input type="text" name="b_state" value="<?php echo isset($_SESSION['customer']['cust_b_state']) ? $_SESSION['customer']['cust_b_state'] : ''; ?>" placeholder="İlçe" required>
+                            <div class="sc-addr-form-grid">
+                                <div class="sc-addr-form-row"><label>Posta Kodu</label><input type="text" name="b_zip" value="<?php echo isset($_SESSION['customer']['cust_b_zip']) ? $_SESSION['customer']['cust_b_zip'] : ''; ?>" placeholder="Posta Kodu"></div>
+                                <div class="sc-addr-form-row"><label>Telefon</label><input type="text" name="b_phone" value="<?php echo isset($_SESSION['customer']['cust_b_phone']) ? $_SESSION['customer']['cust_b_phone'] : ''; ?>" placeholder="Telefon" required></div>
                             </div>
-                        </div>
-                        <div class="sc-addr-form-grid">
-                            <div class="sc-addr-form-row">
-                                <label>Posta Kodu</label>
-                                <input type="text" name="b_zip" value="<?php echo isset($_SESSION['customer']['cust_b_zip']) ? $_SESSION['customer']['cust_b_zip'] : ''; ?>" placeholder="Posta Kodu">
+                            <div class="sc-addr-form-row"><label>Ülke</label>
+                                <select name="b_country">
+                                    <?php
+                                    $stmt_c = $pdo->prepare("SELECT * FROM tbl_country ORDER BY country_name ASC");
+                                    $stmt_c->execute();
+                                    $countries = $stmt_c->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach($countries as $c_row):
+                                    ?>
+                                    <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_b_country']) && $_SESSION['customer']['cust_b_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                            <div class="sc-addr-form-row">
-                                <label>Telefon</label>
-                                <input type="text" name="b_phone" value="<?php echo isset($_SESSION['customer']['cust_b_phone']) ? $_SESSION['customer']['cust_b_phone'] : ''; ?>" placeholder="Telefon" required>
-                            </div>
-                        </div>
-                        <div class="sc-addr-form-row">
-                            <label>Ülke</label>
-                            <select name="b_country">
-                                <?php
-                                $stmt_c = $pdo->prepare("SELECT * FROM tbl_country ORDER BY country_name ASC");
-                                $stmt_c->execute();
-                                $countries = $stmt_c->fetchAll(PDO::FETCH_ASSOC);
-                                foreach($countries as $c_row):
-                                ?>
-                                <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_b_country']) && $_SESSION['customer']['cust_b_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="sc-addr-form-actions">
-                            <button type="submit" class="sc-addr-save-btn"><i class="fa fa-check"></i> Kaydet</button>
-                            <span class="sc-addr-save-msg" id="sc-billing-msg"></span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Different Delivery Address Toggle -->
-            <div class="sc-addr-copy-row" style="padding:6px 0;">
-                <label class="sc-addr-copy-label">
-                    <input type="checkbox" id="sc-diff-shipping" onchange="scToggleDiffShipping(this)" <?php echo $sc_addr_same ? '' : 'checked'; ?>>
-                    Farklı teslimat adresi kullan
-                </label>
-            </div>
-
-            <div class="sc-address-section" id="sc-shipping-section" style="<?php echo $sc_addr_same ? 'display:none;' : ''; ?>">
-                <div class="sc-address-header" onclick="toggleScAddress('shipping')">
-                    <div class="sc-addr-header-left">
-                        <span class="sc-addr-title"><i class="fa fa-truck"></i> Teslimat Adresi</span>
-                        <?php if(!empty($_SESSION['customer']['cust_s_address'])): ?>
-                        <span class="sc-addr-preview"><?php echo $_SESSION['customer']['cust_s_name']; ?> — <?php echo mb_strimwidth($_SESSION['customer']['cust_s_address'], 0, 35, '...'); ?>, <?php echo $_SESSION['customer']['cust_s_city']; ?></span>
-                        <?php else: ?>
-                        <span class="sc-addr-preview sc-addr-preview-empty"><i class="fa fa-exclamation-circle"></i> Adres eklenmemiş</span>
-                        <?php endif; ?>
+                            <div class="sc-addr-form-actions"><button type="submit" class="sc-addr-save-btn" style="font-size:11px;padding:6px 14px;"><i class="fa fa-check"></i> Kaydet</button><span class="sc-addr-save-msg" id="sc-billing-msg"></span></div>
+                        </form>
                     </div>
-                    <i class="fa fa-chevron-down sc-addr-arrow" id="sc-shipping-arrow"></i>
-                </div>
-                <div class="sc-address-body" id="sc-shipping-body">
-                    <form class="sc-addr-form" id="sc-shipping-form" onsubmit="saveScAddress(event, 'shipping')">
-                        <div class="sc-addr-form-row">
-                            <label>Ad Soyad</label>
-                            <input type="text" name="s_name" value="<?php echo isset($_SESSION['customer']['cust_s_name']) ? $_SESSION['customer']['cust_s_name'] : ''; ?>" placeholder="Ad Soyad" required>
-                        </div>
-                        <div class="sc-addr-form-row">
-                            <label>Adres</label>
-                            <input type="text" name="s_address" value="<?php echo isset($_SESSION['customer']['cust_s_address']) ? $_SESSION['customer']['cust_s_address'] : ''; ?>" placeholder="Adres" required>
-                        </div>
-                        <div class="sc-addr-form-grid">
-                            <div class="sc-addr-form-row">
-                                <label>İl</label>
-                                <input type="text" name="s_city" value="<?php echo isset($_SESSION['customer']['cust_s_city']) ? $_SESSION['customer']['cust_s_city'] : ''; ?>" placeholder="İl" required>
+                    <div style="border-top:1px solid #eee;padding-top:6px;margin-top:4px;">
+                        <label class="sc-addr-copy-label" style="font-size:11px;cursor:pointer;"><input type="checkbox" id="sc-diff-shipping" onchange="scToggleDiffShipping(this)" <?php echo $sc_addr_same ? '' : 'checked'; ?>> Farklı teslimat adresi kullan</label>
+                    </div>
+                    <div id="sc-shipping-section" style="<?php echo $sc_addr_same ? 'display:none;' : ''; ?>margin-top:6px;">
+                        <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;"><i class="fa fa-truck" style="color:#ff6b35;margin-right:4px;font-size:10px;"></i>Teslimat Adresi</div>
+                        <form class="sc-addr-form" id="sc-shipping-form" onsubmit="saveScAddress(event, 'shipping')">
+                            <div class="sc-addr-form-row"><label>Ad Soyad</label><input type="text" name="s_name" value="<?php echo isset($_SESSION['customer']['cust_s_name']) ? $_SESSION['customer']['cust_s_name'] : ''; ?>" placeholder="Ad Soyad" required></div>
+                            <div class="sc-addr-form-row"><label>Adres</label><input type="text" name="s_address" value="<?php echo isset($_SESSION['customer']['cust_s_address']) ? $_SESSION['customer']['cust_s_address'] : ''; ?>" placeholder="Adres" required></div>
+                            <div class="sc-addr-form-grid">
+                                <div class="sc-addr-form-row"><label>İl</label><input type="text" name="s_city" value="<?php echo isset($_SESSION['customer']['cust_s_city']) ? $_SESSION['customer']['cust_s_city'] : ''; ?>" placeholder="İl" required></div>
+                                <div class="sc-addr-form-row"><label>İlçe</label><input type="text" name="s_state" value="<?php echo isset($_SESSION['customer']['cust_s_state']) ? $_SESSION['customer']['cust_s_state'] : ''; ?>" placeholder="İlçe" required></div>
                             </div>
-                            <div class="sc-addr-form-row">
-                                <label>İlçe</label>
-                                <input type="text" name="s_state" value="<?php echo isset($_SESSION['customer']['cust_s_state']) ? $_SESSION['customer']['cust_s_state'] : ''; ?>" placeholder="İlçe" required>
+                            <div class="sc-addr-form-grid">
+                                <div class="sc-addr-form-row"><label>Posta Kodu</label><input type="text" name="s_zip" value="<?php echo isset($_SESSION['customer']['cust_s_zip']) ? $_SESSION['customer']['cust_s_zip'] : ''; ?>" placeholder="Posta Kodu"></div>
+                                <div class="sc-addr-form-row"><label>Telefon</label><input type="text" name="s_phone" value="<?php echo isset($_SESSION['customer']['cust_s_phone']) ? $_SESSION['customer']['cust_s_phone'] : ''; ?>" placeholder="Telefon" required></div>
                             </div>
-                        </div>
-                        <div class="sc-addr-form-grid">
-                            <div class="sc-addr-form-row">
-                                <label>Posta Kodu</label>
-                                <input type="text" name="s_zip" value="<?php echo isset($_SESSION['customer']['cust_s_zip']) ? $_SESSION['customer']['cust_s_zip'] : ''; ?>" placeholder="Posta Kodu">
+                            <div class="sc-addr-form-row"><label>Ülke</label>
+                                <select name="s_country">
+                                    <?php foreach($countries as $c_row): ?>
+                                    <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_s_country']) && $_SESSION['customer']['cust_s_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                            <div class="sc-addr-form-row">
-                                <label>Telefon</label>
-                                <input type="text" name="s_phone" value="<?php echo isset($_SESSION['customer']['cust_s_phone']) ? $_SESSION['customer']['cust_s_phone'] : ''; ?>" placeholder="Telefon" required>
-                            </div>
-                        </div>
-                        <div class="sc-addr-form-row">
-                            <label>Ülke</label>
-                            <select name="s_country">
-                                <?php foreach($countries as $c_row): ?>
-                                <option value="<?php echo $c_row['country_name']; ?>" <?php echo (isset($_SESSION['customer']['cust_s_country']) && $_SESSION['customer']['cust_s_country'] == $c_row['country_name']) ? 'selected' : ''; ?>><?php echo $c_row['country_name']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="sc-addr-form-actions">
-                            <button type="submit" class="sc-addr-save-btn"><i class="fa fa-check"></i> Kaydet</button>
-                            <span class="sc-addr-save-msg" id="sc-shipping-msg"></span>
-                        </div>
-                    </form>
+                            <div class="sc-addr-form-actions"><button type="submit" class="sc-addr-save-btn" style="font-size:11px;padding:6px 14px;"><i class="fa fa-check"></i> Kaydet</button><span class="sc-addr-save-msg" id="sc-shipping-msg"></span></div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -737,8 +681,8 @@ document.addEventListener('keydown', function(e) {
 function toggleScAddress(type) {
     var body = document.getElementById('sc-' + type + '-body');
     var arrow = document.getElementById('sc-' + type + '-arrow');
-    body.classList.toggle('open');
-    arrow.classList.toggle('open');
+    if(body) { body.classList.toggle('open'); }
+    if(arrow) { arrow.classList.toggle('open'); }
 }
 
 function scToggleDiffShipping(cb) {
