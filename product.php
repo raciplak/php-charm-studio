@@ -1116,7 +1116,7 @@ foreach ($page_result as $row) {
                                 </div>
                                 <div class="guarantee-item">
                                     <i class="fa fa-headphones" aria-hidden="true"></i>
-                                    <span>24/7 Support</span>
+                                    <span>Hızlı Destek</span>
                                 </div>
                             </div>
                             
