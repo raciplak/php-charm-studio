@@ -435,13 +435,12 @@ foreach ($photo_result as $photo_row) {
     <!-- Stylesheets (Critical CSS inline for faster FCP) -->
     <style>
         /* Critical CSS for above-the-fold content */
-        .product-hero{display:flex;gap:30px;margin-bottom:40px}
-        .product-gallery{flex:0 0 45%}
-        .product-info{flex:1}
-        h1.product-title{font-size:28px;font-weight:700;margin:0 0 15px;color:#222;line-height:1.3}
-        .product-price{font-size:26px;font-weight:700;color:#e74c3c}
-        .product-price del{color:#999;font-size:18px;margin-right:10px}
-        @media(max-width:768px){.product-hero{flex-direction:column}.product-gallery{flex:none}}
+        .product-detail-info{padding-left:15px}
+        ul.prod-slider li{height:500px;background-size:contain;background-position:center;background-repeat:no-repeat;background-color:#f8f8f8;border:1px solid #eee;position:relative}
+        h1.product-title{font-size:26px;font-weight:700;margin:0 0 12px;color:#1a1a1a;line-height:1.3}
+        .product-price .current-price{font-size:32px;font-weight:800;color:#e74c3c}
+        .product-price del{color:#bbb;font-size:18px}
+        @media(max-width:768px){.product-detail-info{padding-left:0;margin-top:20px}}
     </style>
     
     <!-- Stylesheets -->
@@ -840,16 +839,14 @@ foreach ($page_result as $row) {
                 <article class="product">
                     <div class="row">
                         <!-- Product Gallery -->
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <ul class="prod-slider">
-                                <!-- Main Featured Image (Eager loaded for LCP) -->
                                 <li style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>);">
                                     <a class="popup" href="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> full size image">
                                         <img src="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>"
                                              alt="<?php echo htmlspecialchars($p_name); ?> - Main Product Image" 
                                              itemprop="image"
-                                             width="500" 
-                                             height="500"
+                                             width="500" height="500"
                                              fetchpriority="high"
                                              style="opacity:0;position:absolute;">
                                     </a>
@@ -862,12 +859,10 @@ foreach ($page_result as $row) {
                                 foreach ($result as $row) {
                                     ?>
                                     <li style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>);">
-                                        <a class="popup" href="assets/uploads/product_photos/<?php echo $row['photo']; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> image <?php echo $img_index; ?>">
+                                        <a class="popup" href="assets/uploads/product_photos/<?php echo $row['photo']; ?>" aria-label="View image <?php echo $img_index; ?>">
                                             <img src="assets/uploads/product_photos/<?php echo $row['photo']; ?>"
-                                                 alt="<?php echo htmlspecialchars($p_name); ?> - Product Photo <?php echo $img_index; ?>" 
-                                                 loading="lazy"
-                                                 width="500" 
-                                                 height="500"
+                                                 alt="<?php echo htmlspecialchars($p_name); ?> - Photo <?php echo $img_index; ?>" 
+                                                 loading="lazy" width="500" height="500"
                                                  style="opacity:0;position:absolute;">
                                         </a>
                                     </li>
@@ -898,22 +893,21 @@ foreach ($page_result as $row) {
                         </div>
                         
                         <!-- Product Information -->
-                        <div class="col-md-7">
-                            <!-- H1 Product Title (Critical for SEO) -->
+                        <div class="col-md-6 product-detail-info">
+                            <!-- Product Title -->
                             <div class="p-title">
-                                <h1 itemprop="name" class="product-title" style="font-size:28px;font-weight:700;margin:0 0 15px;color:#222;"><?php echo htmlspecialchars($p_name); ?></h1>
+                                <h1 itemprop="name" class="product-title"><?php echo htmlspecialchars($p_name); ?></h1>
                             </div>
                             
-                            <!-- Hidden SEO data -->
                             <meta itemprop="sku" content="<?php echo $product_sku; ?>">
                             <link itemprop="url" href="<?php echo $canonical_url; ?>">
                             
-                            <!-- Rating Display -->
+                            <!-- Rating -->
                             <div class="p-review" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
                                 <div class="rating" aria-label="Product rating: <?php echo $avg_rating; ?> out of 5 stars">
                                     <?php
                                     if($avg_rating == 0) {
-                                        echo '<span style="color:#999;">No reviews yet</span>';
+                                        echo '<span style="color:#999;font-size:13px;">No reviews yet</span>';
                                     } else {
                                         for($i=1;$i<=5;$i++) {
                                             if($i <= floor($avg_rating)) {
@@ -941,17 +935,41 @@ foreach ($page_result as $row) {
                                 <p><?php echo $p_short_description; ?></p>
                             </div>
                             
+                            <!-- Price -->
+                            <div class="p-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                                <span class="price-label"><?php echo LANG_VALUE_54; ?></span>
+                                <div class="product-price">
+                                    <?php if($p_old_price!=''): ?>
+                                        <del><?php echo LANG_VALUE_1; ?><?php echo $p_old_price; ?></del>
+                                    <?php endif; ?>
+                                    <span class="current-price" itemprop="price" content="<?php echo $p_current_price; ?>"><?php echo LANG_VALUE_1; ?><?php echo $p_current_price; ?></span>
+                                    <?php if($p_old_price!='' && $p_old_price > 0): 
+                                        $discount_pct = round((($p_old_price - $p_current_price) / $p_old_price) * 100);
+                                        if($discount_pct > 0):
+                                    ?>
+                                        <span class="discount-badge">-<?php echo $discount_pct; ?>%</span>
+                                    <?php endif; endif; ?>
+                                </div>
+                                <meta itemprop="priceCurrency" content="USD">
+                                <link itemprop="availability" href="<?php echo $stock_url; ?>">
+                                <link itemprop="itemCondition" href="https://schema.org/NewCondition">
+                                <link itemprop="url" href="<?php echo $canonical_url; ?>">
+                                <?php if($p_old_price != ''): ?>
+                                <meta itemprop="priceValidUntil" content="<?php echo date('Y-m-d', strtotime('+1 year')); ?>">
+                                <?php endif; ?>
+                            </div>
+                            
                             <form id="addToCartForm" action="" method="post" onsubmit="return ajaxAddToCart(event)">
                                 <style>
                                     .size-selector,.color-selector{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
                                     .size-cube{width:45px;height:45px;display:flex;align-items:center;justify-content:center;border:2px solid #ddd;border-radius:0;cursor:pointer;font-weight:600;font-size:14px;background:#fff;transition:all .2s ease}
                                     .size-cube:hover{border-color:#333;background:#f8f8f8}
-                                    .size-cube.selected{border-color:#e67e22;background:#e67e22;color:#fff}
+                                    .size-cube.selected{border-color:#f19000;background:#f19000;color:#fff}
                                     .color-cube{width:40px;height:40px;border-radius:0;cursor:pointer;border:3px solid #ddd;transition:all .2s ease;position:relative}
                                     .color-cube:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,.15)}
                                     .color-cube.selected{border-color:#333;box-shadow:0 0 0 2px #fff,0 0 0 4px #333}
                                     .color-cube.selected::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:16px;font-weight:bold;text-shadow:0 1px 2px rgba(0,0,0,.5)}
-                                    .selection-label{font-weight:600;margin-bottom:5px;color:#333}
+                                    .selection-label{font-weight:600;margin-bottom:5px;color:#333;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
                                 </style>
                                 
                                 <div class="p-options">
@@ -1034,61 +1052,76 @@ foreach ($page_result as $row) {
                                 function selectColor(element,colorId){document.querySelectorAll('.color-cube').forEach(function(cube){cube.classList.remove('selected');cube.setAttribute('aria-checked','false');});element.classList.add('selected');element.setAttribute('aria-checked','true');document.getElementById('selected_color').value=colorId;}
                                 </script>
                                 
-                                <!-- Price with Schema -->
-                                <div class="p-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                                    <span style="font-size:14px;"><?php echo LANG_VALUE_54; ?></span><br>
-                                    <span class="product-price">
-                                        <?php if($p_old_price!=''): ?>
-                                            <del><?php echo LANG_VALUE_1; ?><?php echo $p_old_price; ?></del>
-                                        <?php endif; ?> 
-                                        <span itemprop="price" content="<?php echo $p_current_price; ?>"><?php echo LANG_VALUE_1; ?><?php echo $p_current_price; ?></span>
-                                    </span>
-                                    <meta itemprop="priceCurrency" content="USD">
-                                    <link itemprop="availability" href="<?php echo $stock_url; ?>">
-                                    <link itemprop="itemCondition" href="https://schema.org/NewCondition">
-                                    <link itemprop="url" href="<?php echo $canonical_url; ?>">
-                                    <?php if($p_old_price != ''): ?>
-                                    <meta itemprop="priceValidUntil" content="<?php echo date('Y-m-d', strtotime('+1 year')); ?>">
-                                    <?php endif; ?>
-                                </div>
-                                
                                 <input type="hidden" name="p_current_price" value="<?php echo $p_current_price; ?>">
                                 <input type="hidden" name="p_name" value="<?php echo htmlspecialchars($p_name); ?>">
                                 <input type="hidden" name="p_featured_photo" value="<?php echo $p_featured_photo; ?>">
                                 
-                                <div class="p-quantity-wrapper" style="display:flex;align-items:flex-end;gap:15px;flex-wrap:wrap;">
+                                <!-- Quantity & Add to Cart -->
+                                <div class="p-quantity-wrapper">
                                     <div class="p-quantity">
-                                        <label for="p_qty"><?php echo LANG_VALUE_55; ?></label><br>
-                                        <input type="number" class="input-text qty" step="1" min="1" max="<?php echo $p_qty; ?>" name="p_qty" id="p_qty" value="1" title="Quantity" size="4" pattern="[0-9]*" inputmode="numeric" style="width:80px;" aria-label="Product quantity">
+                                        <label for="p_qty"><?php echo LANG_VALUE_55; ?></label>
+                                        <div class="qty-control">
+                                            <button type="button" class="qty-btn" onclick="changeQty(-1)" aria-label="Decrease quantity">−</button>
+                                            <input type="number" class="input-text qty" step="1" min="1" max="<?php echo $p_qty; ?>" name="p_qty" id="p_qty" value="1" title="Quantity" pattern="[0-9]*" inputmode="numeric" aria-label="Product quantity">
+                                            <button type="button" class="qty-btn" onclick="changeQty(1)" aria-label="Increase quantity">+</button>
+                                        </div>
                                     </div>
-                                    <div class="btn-cart btn-cart1" style="margin-top:0;">
+                                    <div class="btn-cart btn-cart1">
                                         <input type="submit" value="<?php echo LANG_VALUE_154; ?>" name="form_add_to_cart" <?php echo ($p_qty <= 0) ? 'disabled' : ''; ?>>
                                     </div>
                                 </div>
                                 
-                                <!-- Stock Status -->
-                                <div style="margin-top:10px;">
-                                    <?php if($p_qty > 0): ?>
-                                        <span style="color:#28a745;font-weight:600;"><i class="fa fa-check-circle"></i> In Stock (<?php echo $p_qty; ?> available)</span>
-                                    <?php else: ?>
-                                        <span style="color:#dc3545;font-weight:600;"><i class="fa fa-times-circle"></i> Out of Stock</span>
-                                    <?php endif; ?>
-                                </div>
+                                <script>
+                                function changeQty(delta) {
+                                    var input = document.getElementById('p_qty');
+                                    var val = parseInt(input.value) || 1;
+                                    var newVal = val + delta;
+                                    var max = parseInt(input.getAttribute('max')) || 999;
+                                    if(newVal < 1) newVal = 1;
+                                    if(newVal > max) newVal = max;
+                                    input.value = newVal;
+                                }
+                                </script>
                                 
-                                <!-- Fast Shipping Badge -->
-                                <div class="fast-shipping" style="display:flex;align-items:center;gap:10px;margin-top:15px;padding:10px 15px;background-color:#f8f9fa;border-radius:0;border-left:3px solid #28a745;">
-                                    <i class="fa fa-truck" style="font-size:24px;color:#28a745;" aria-hidden="true"></i>
-                                    <div>
-                                        <strong style="color:#28a745;">Fast Shipping</strong><br>
-                                        <span style="font-size:12px;color:#666;">Free delivery on orders over $50</span>
-                                    </div>
+                                <!-- Stock Status -->
+                                <div class="stock-status <?php echo ($p_qty > 0) ? 'in-stock' : 'out-of-stock'; ?>">
+                                    <?php if($p_qty > 0): ?>
+                                        <i class="fa fa-check-circle"></i> In Stock (<?php echo $p_qty; ?> available)
+                                    <?php else: ?>
+                                        <i class="fa fa-times-circle"></i> Out of Stock
+                                    <?php endif; ?>
                                 </div>
                             </form>
                             
+                            <!-- Shipping Badge -->
+                            <div class="fast-shipping-badge">
+                                <i class="fa fa-truck" aria-hidden="true"></i>
+                                <div class="shipping-text">
+                                    <strong>Fast Shipping</strong>
+                                    <span>Free delivery on orders over $50</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Product Guarantees -->
+                            <div class="product-guarantees">
+                                <div class="guarantee-item">
+                                    <i class="fa fa-shield" aria-hidden="true"></i>
+                                    <span>Secure Payment</span>
+                                </div>
+                                <div class="guarantee-item">
+                                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                                    <span>Easy Returns</span>
+                                </div>
+                                <div class="guarantee-item">
+                                    <i class="fa fa-headphones" aria-hidden="true"></i>
+                                    <span>24/7 Support</span>
+                                </div>
+                            </div>
+                            
                             <!-- Social Sharing -->
                             <div class="share">
-                                <?php echo LANG_VALUE_58; ?><br>
-                                <div class="sharethis-inline-share-buttons"></div>
+                                <?php echo LANG_VALUE_58; ?>
+                                <div class="sharethis-inline-share-buttons" style="margin-top:8px;"></div>
                             </div>
                         </div>
                     </div>
