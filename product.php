@@ -1083,7 +1083,8 @@ foreach ($page_result as $row) {
                                 }
                                 </script>
                                 
-                                <!-- Stock Status -->
+                                <!-- Stock Status (hidden) -->
+                                <!--
                                 <div class="stock-status <?php echo ($p_qty > 0) ? 'in-stock' : 'out-of-stock'; ?>">
                                     <?php if($p_qty > 0): ?>
                                         <i class="fa fa-check-circle"></i> In Stock (<?php echo $p_qty; ?> available)
@@ -1091,6 +1092,7 @@ foreach ($page_result as $row) {
                                         <i class="fa fa-times-circle"></i> Out of Stock
                                     <?php endif; ?>
                                 </div>
+                                -->
                             </form>
                             
                             <!-- Shipping Badge -->
