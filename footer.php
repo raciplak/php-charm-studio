@@ -906,6 +906,15 @@ function renderSideCart(data) {
 }
 </script>
 
+<?php
+// Check chat widget setting
+$stmt_chat = $pdo->prepare("SELECT chat_widget_on_off FROM tbl_settings WHERE id=1");
+$stmt_chat->execute();
+$chat_row = $stmt_chat->fetch(PDO::FETCH_ASSOC);
+$chat_widget_on_off = (isset($chat_row['chat_widget_on_off'])) ? $chat_row['chat_widget_on_off'] : 1;
+?>
+
+<?php if($chat_widget_on_off == 1): ?>
 <script>
 // Configure Tawk.to position BEFORE the script loads
 var Tawk_API = Tawk_API || {};
@@ -917,8 +926,6 @@ Tawk_API.customStyle = {
 };
 </script>
 
-<?php echo $before_body; ?>
-
 <script>
 // Hide attention grabber
 (function() {
@@ -927,5 +934,8 @@ Tawk_API.customStyle = {
     document.head.appendChild(style);
 })();
 </script>
+<?php endif; ?>
+
+<?php echo $before_body; ?>
 </body>
 </html>
