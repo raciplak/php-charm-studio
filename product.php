@@ -1099,8 +1099,8 @@ foreach ($page_result as $row) {
                             <div class="fast-shipping-badge">
                                 <i class="fa fa-truck" aria-hidden="true"></i>
                                 <div class="shipping-text">
-                                    <strong>Fast Shipping</strong>
-                                    <span>Free delivery on orders over $50</span>
+                                    <strong>Hızlı Kargo</strong>
+                                    <span>500 TL ve Alışverişinizde Ücretsiz Kargo</span>
                                 </div>
                             </div>
                             
@@ -1112,7 +1112,7 @@ foreach ($page_result as $row) {
                                 </div>
                                 <div class="guarantee-item">
                                     <i class="fa fa-refresh" aria-hidden="true"></i>
-                                    <span>Hızlı Kargo</span>
+                                    <span>Hızlı Teslimat</span>
                                 </div>
                                 <div class="guarantee-item">
                                     <i class="fa fa-headphones" aria-hidden="true"></i>
