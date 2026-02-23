@@ -231,9 +231,9 @@ foreach ($result as $row) {
                             
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab">About Us</a></li>
-                        <li><a href="#tab_2" data-toggle="tab">FAQ</a></li>
-                        <li><a href="#tab_4" data-toggle="tab">Contact</a></li>
+                        <li class="active"><a href="#tab_1" data-toggle="tab">Hakkımızda</a></li>
+                        <li><a href="#tab_2" data-toggle="tab">SSS</a></li>
+                        <li><a href="#tab_4" data-toggle="tab">İletişim</a></li>
 
                     </ul>
 
