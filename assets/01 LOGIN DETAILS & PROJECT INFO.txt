@@ -2,7 +2,7 @@
 
 **Database Name: ecommerceweb**
 
-**Developed by Hammad Hassan**
+**Tüm Hakları Saklıdır.**
 
 **Recommended PHP Version 5.6, 7.4**
 
