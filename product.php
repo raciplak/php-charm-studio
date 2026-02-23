@@ -1108,11 +1108,11 @@ foreach ($page_result as $row) {
                             <div class="product-guarantees">
                                 <div class="guarantee-item">
                                     <i class="fa fa-shield" aria-hidden="true"></i>
-                                    <span>Secure Payment</span>
+                                    <span>Güvenli Ödeme</span>
                                 </div>
                                 <div class="guarantee-item">
                                     <i class="fa fa-refresh" aria-hidden="true"></i>
-                                    <span>Easy Returns</span>
+                                    <span>Hızlı Kargo</span>
                                 </div>
                                 <div class="guarantee-item">
                                     <i class="fa fa-headphones" aria-hidden="true"></i>
