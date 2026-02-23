@@ -936,6 +936,14 @@ Tawk_API.customStyle = {
 </script>
 <?php endif; ?>
 
-<?php echo $before_body; ?>
+<?php 
+// If chat widget is off, strip any tawk.to scripts from before_body
+if($chat_widget_on_off == 0) {
+    $before_body_clean = preg_replace('/<script[^>]*>.*?tawk\.to.*?<\/script>/is', '', $before_body);
+    echo $before_body_clean;
+} else {
+    echo $before_body;
+}
+?>
 </body>
 </html>
