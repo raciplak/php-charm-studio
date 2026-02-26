@@ -110,7 +110,7 @@ if(!isset($_SESSION['user'])) {
 			          </a>
 			        </li>
 
-                    <li class="treeview <?php if( ($cur_page == 'size.php') || ($cur_page == 'size-add.php') || ($cur_page == 'size-edit.php') || ($cur_page == 'color.php') || ($cur_page == 'color-add.php') || ($cur_page == 'color-edit.php') || ($cur_page == 'country.php') || ($cur_page == 'country-add.php') || ($cur_page == 'country-edit.php') || ($cur_page == 'shipping-cost.php') || ($cur_page == 'shipping-cost-edit.php') || ($cur_page == 'top-category.php') || ($cur_page == 'top-category-add.php') || ($cur_page == 'top-category-edit.php') || ($cur_page == 'mid-category.php') || ($cur_page == 'mid-category-add.php') || ($cur_page == 'mid-category-edit.php') || ($cur_page == 'end-category.php') || ($cur_page == 'end-category-add.php') || ($cur_page == 'end-category-edit.php') ) {echo 'active';} ?>">
+                    <li class="treeview <?php if( ($cur_page == 'size.php') || ($cur_page == 'size-add.php') || ($cur_page == 'size-edit.php') || ($cur_page == 'color.php') || ($cur_page == 'color-add.php') || ($cur_page == 'color-edit.php') || ($cur_page == 'country.php') || ($cur_page == 'country-add.php') || ($cur_page == 'country-edit.php') || ($cur_page == 'shipping-cost.php') || ($cur_page == 'shipping-cost-edit.php') || ($cur_page == 'top-category.php') || ($cur_page == 'top-category-add.php') || ($cur_page == 'top-category-edit.php') || ($cur_page == 'mid-category.php') || ($cur_page == 'mid-category-add.php') || ($cur_page == 'mid-category-edit.php') || ($cur_page == 'end-category.php') || ($cur_page == 'end-category-add.php') || ($cur_page == 'end-category-edit.php') || ($cur_page == 'brand.php') || ($cur_page == 'brand-add.php') || ($cur_page == 'brand-edit.php') || ($cur_page == 'model.php') || ($cur_page == 'model-add.php') || ($cur_page == 'model-edit.php') ) {echo 'active';} ?>">
                         <a href="#">
                             <i class="fa fa-cogs"></i>
                             <span>Mağaza Ayarları</span>
@@ -126,6 +126,8 @@ if(!isset($_SESSION['user'])) {
                             <li><a href="top-category.php"><i class="fa fa-circle-o"></i> Üst Kategori</a></li>
                             <li><a href="mid-category.php"><i class="fa fa-circle-o"></i> Orta Kategori</a></li>
                             <li><a href="end-category.php"><i class="fa fa-circle-o"></i> Alt Kategori</a></li>
+                            <li><a href="brand.php"><i class="fa fa-circle-o"></i> Marka</a></li>
+                            <li><a href="model.php"><i class="fa fa-circle-o"></i> Model</a></li>
                         </ul>
                     </li>
 
