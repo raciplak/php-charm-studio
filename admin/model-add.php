@@ -20,8 +20,8 @@ if(isset($_POST['form1'])) {
     }
 
     if($valid == 1) {
-		$statement = $pdo->prepare("INSERT INTO tbl_models (model_code, model_name, brand_id) VALUES (?,?,?)");
-		$statement->execute(array($_POST['model_code'], $_POST['model_name'], $_POST['brand_id']));
+		$statement = $pdo->prepare("INSERT INTO tbl_models (model_code, model_name, brand_id, show_on_menu) VALUES (?,?,?,?)");
+		$statement->execute(array($_POST['model_code'], $_POST['model_name'], $_POST['brand_id'], $_POST['show_on_menu']));
 	
     	$success_message = 'Model is added successfully.';
     }
@@ -87,6 +87,15 @@ if(isset($_POST['form1'])) {
 							<label for="" class="col-sm-3 control-label">Model Name <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="model_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Menüde Göster? <span>*</span></label>
+							<div class="col-sm-4">
+								<select name="show_on_menu" class="form-control" style="width:auto;">
+									<option value="0">Hayır</option>
+									<option value="1">Evet</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
