@@ -101,7 +101,8 @@ if(isset($_POST['form1'])) {
         							p_return_policy=?,
         							p_is_featured=?,
         							p_is_active=?,
-        							ecat_id=?
+        							ecat_id=?,
+        							model_id=?
 
         							WHERE p_id=?");
         	$statement->execute(array(
@@ -118,6 +119,7 @@ if(isset($_POST['form1'])) {
         							$_POST['p_is_featured'],
         							$_POST['p_is_active'],
         							$_POST['ecat_id'],
+        							$_POST['model_id'],
         							$_REQUEST['id']
         						));
         } else {
@@ -142,7 +144,8 @@ if(isset($_POST['form1'])) {
         							p_return_policy=?,
         							p_is_featured=?,
         							p_is_active=?,
-        							ecat_id=?
+        							ecat_id=?,
+        							model_id=?
 
         							WHERE p_id=?");
         	$statement->execute(array(
@@ -160,6 +163,7 @@ if(isset($_POST['form1'])) {
         							$_POST['p_is_featured'],
         							$_POST['p_is_active'],
         							$_POST['ecat_id'],
+        							$_POST['model_id'],
         							$_REQUEST['id']
         						));
         }
@@ -243,6 +247,7 @@ foreach ($result as $row) {
 	$p_is_featured = $row['p_is_featured'];
 	$p_is_active = $row['p_is_active'];
 	$ecat_id = $row['ecat_id'];
+	$model_id = $row['model_id'];
 }
 
 $statement = $pdo->prepare("SELECT * 
@@ -353,6 +358,54 @@ foreach ($result as $row) {
 		                            }
 		                            ?>
 		                        </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Brand</label>
+							<div class="col-sm-4">
+								<?php
+								// Get current brand from model
+								$current_brand_id = 0;
+								if($model_id) {
+									$stmt_b = $pdo->prepare("SELECT brand_id FROM tbl_models WHERE model_id=?");
+									$stmt_b->execute(array($model_id));
+									$b_row = $stmt_b->fetch(PDO::FETCH_ASSOC);
+									if($b_row) $current_brand_id = $b_row['brand_id'];
+								}
+								?>
+								<select name="brand_id" class="form-control select2 brand-select">
+									<option value="">Select Brand</option>
+									<?php
+									$statement = $pdo->prepare("SELECT * FROM tbl_brands ORDER BY brand_name ASC");
+									$statement->execute();
+									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+									foreach ($result as $row) {
+										?>
+										<option value="<?php echo $row['brand_id']; ?>" <?php if($row['brand_id'] == $current_brand_id){echo 'selected';} ?>><?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)</option>
+										<?php
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Model</label>
+							<div class="col-sm-4">
+								<select name="model_id" class="form-control select2 model-select">
+									<option value="">Select Model</option>
+									<?php
+									if($current_brand_id) {
+										$statement = $pdo->prepare("SELECT * FROM tbl_models WHERE brand_id=? ORDER BY model_name ASC");
+										$statement->execute(array($current_brand_id));
+										$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+										foreach ($result as $row) {
+											?>
+											<option value="<?php echo $row['model_id']; ?>" <?php if($row['model_id'] == $model_id){echo 'selected';} ?>><?php echo $row['model_name']; ?> (<?php echo $row['model_code']; ?>)</option>
+											<?php
+										}
+									}
+									?>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">

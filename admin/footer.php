@@ -73,6 +73,21 @@
 				}
 			});			
 		});
+		$(".brand-select").on('change',function(){
+			var id=$(this).val();
+			var dataString = 'id='+ id;
+			$.ajax
+			({
+				type: "POST",
+				url: "get-models.php",
+				data: dataString,
+				cache: false,
+				success: function(html)
+				{
+					$(".model-select").html(html);
+				}
+			});			
+		});
 	</script>
 
 	<script>

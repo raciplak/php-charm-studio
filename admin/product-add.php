@@ -108,8 +108,9 @@ if(isset($_POST['form1'])) {
 										p_total_view,
 										p_is_featured,
 										p_is_active,
-										ecat_id
-									) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+										ecat_id,
+										model_id
+									) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		$statement->execute(array(
 										$_POST['p_name'],
 										$_POST['p_barcode'],
@@ -125,8 +126,9 @@ if(isset($_POST['form1'])) {
 										0,
 										$_POST['p_is_featured'],
 										$_POST['p_is_active'],
-										$_POST['ecat_id']
-									));
+										$_POST['ecat_id'],
+										$_POST['model_id']
+								));
 
 		
 
@@ -229,6 +231,32 @@ if(isset($_POST['form1'])) {
 								?>
 								<input type="text" class="form-control" value="<?php echo $next_product_id; ?>" disabled>
 								<span class="help-block" style="font-size:11px;color:#999;">Auto-assigned ID for the new product</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Brand</label>
+							<div class="col-sm-4">
+								<select name="brand_id" class="form-control select2 brand-select">
+									<option value="">Select Brand</option>
+									<?php
+									$statement = $pdo->prepare("SELECT * FROM tbl_brands ORDER BY brand_name ASC");
+									$statement->execute();
+									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+									foreach ($result as $row) {
+										?>
+										<option value="<?php echo $row['brand_id']; ?>"><?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)</option>
+										<?php
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Model</label>
+							<div class="col-sm-4">
+								<select name="model_id" class="form-control select2 model-select">
+									<option value="">Select Model</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
