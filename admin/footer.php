@@ -73,20 +73,9 @@
 				}
 			});			
 		});
-		$(".brand-select").on('change',function(){
-			var id=$(this).val();
-			var dataString = 'id='+ id;
-			$.ajax
-			({
-				type: "POST",
-				url: "get-models.php",
-				data: dataString,
-				cache: false,
-				success: function(html)
-				{
-					$(".model-select").html(html);
-				}
-			});			
+		$(".model-select").on('change',function(){
+			var brand = $(this).find(':selected').data('brand');
+			$(".brand-display").val(brand ? brand : '');
 		});
 	</script>
 

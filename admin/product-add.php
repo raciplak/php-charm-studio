@@ -234,17 +234,17 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Brand</label>
+							<label for="" class="col-sm-3 control-label">Model</label>
 							<div class="col-sm-4">
-								<select name="brand_id" class="form-control select2 brand-select">
-									<option value="">Select Brand</option>
+								<select name="model_id" class="form-control select2 model-select">
+									<option value="" data-brand="">Select Model</option>
 									<?php
-									$statement = $pdo->prepare("SELECT * FROM tbl_brands ORDER BY brand_name ASC");
+									$statement = $pdo->prepare("SELECT m.*, b.brand_name, b.brand_code FROM tbl_models m LEFT JOIN tbl_brands b ON m.brand_id = b.brand_id ORDER BY b.brand_name ASC, m.model_name ASC");
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 									foreach ($result as $row) {
 										?>
-										<option value="<?php echo $row['brand_id']; ?>"><?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)</option>
+										<option value="<?php echo $row['model_id']; ?>" data-brand="<?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)"><?php echo $row['brand_name']; ?> - <?php echo $row['model_name']; ?></option>
 										<?php
 									}
 									?>
@@ -252,11 +252,10 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Model</label>
+							<label for="" class="col-sm-3 control-label">Brand</label>
 							<div class="col-sm-4">
-								<select name="model_id" class="form-control select2 model-select">
-									<option value="">Select Model</option>
-								</select>
+								<input type="text" class="form-control brand-display" value="" readonly style="background-color:#eee;">
+								<span class="help-block" style="font-size:11px;color:#999;">Auto-filled from selected model</span>
 							</div>
 						</div>
 						<div class="form-group">

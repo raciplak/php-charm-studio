@@ -361,27 +361,23 @@ foreach ($result as $row) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Brand</label>
+							<label for="" class="col-sm-3 control-label">Model</label>
 							<div class="col-sm-4">
-								<?php
-								// Get current brand from model
-								$current_brand_id = 0;
-								if($model_id) {
-									$stmt_b = $pdo->prepare("SELECT brand_id FROM tbl_models WHERE model_id=?");
-									$stmt_b->execute(array($model_id));
-									$b_row = $stmt_b->fetch(PDO::FETCH_ASSOC);
-									if($b_row) $current_brand_id = $b_row['brand_id'];
-								}
-								?>
-								<select name="brand_id" class="form-control select2 brand-select">
-									<option value="">Select Brand</option>
+								<select name="model_id" class="form-control select2 model-select">
+									<option value="" data-brand="">Select Model</option>
 									<?php
-									$statement = $pdo->prepare("SELECT * FROM tbl_brands ORDER BY brand_name ASC");
+									$current_brand_name = '';
+									$statement = $pdo->prepare("SELECT m.*, b.brand_name, b.brand_code FROM tbl_models m LEFT JOIN tbl_brands b ON m.brand_id = b.brand_id ORDER BY b.brand_name ASC, m.model_name ASC");
 									$statement->execute();
 									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 									foreach ($result as $row) {
+										$selected = '';
+										if($row['model_id'] == $model_id) {
+											$selected = 'selected';
+											$current_brand_name = $row['brand_name'].' ('.$row['brand_code'].')';
+										}
 										?>
-										<option value="<?php echo $row['brand_id']; ?>" <?php if($row['brand_id'] == $current_brand_id){echo 'selected';} ?>><?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)</option>
+										<option value="<?php echo $row['model_id']; ?>" data-brand="<?php echo $row['brand_name']; ?> (<?php echo $row['brand_code']; ?>)" <?php echo $selected; ?>><?php echo $row['brand_name']; ?> - <?php echo $row['model_name']; ?></option>
 										<?php
 									}
 									?>
@@ -389,23 +385,10 @@ foreach ($result as $row) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Model</label>
+							<label for="" class="col-sm-3 control-label">Brand</label>
 							<div class="col-sm-4">
-								<select name="model_id" class="form-control select2 model-select">
-									<option value="">Select Model</option>
-									<?php
-									if($current_brand_id) {
-										$statement = $pdo->prepare("SELECT * FROM tbl_models WHERE brand_id=? ORDER BY model_name ASC");
-										$statement->execute(array($current_brand_id));
-										$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-										foreach ($result as $row) {
-											?>
-											<option value="<?php echo $row['model_id']; ?>" <?php if($row['model_id'] == $model_id){echo 'selected';} ?>><?php echo $row['model_name']; ?> (<?php echo $row['model_code']; ?>)</option>
-											<?php
-										}
-									}
-									?>
-								</select>
+								<input type="text" class="form-control brand-display" value="<?php echo $current_brand_name; ?>" readonly style="background-color:#eee;">
+								<span class="help-block" style="font-size:11px;color:#999;">Auto-filled from selected model</span>
 							</div>
 						</div>
 						<div class="form-group">
