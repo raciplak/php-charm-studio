@@ -43,35 +43,11 @@
 	        	height: 300
 	        });
 	    });
-		$(".top-cat").on('change',function(){
-			var id=$(this).val();
-			var dataString = 'id='+ id;
-			$.ajax
-			({
-				type: "POST",
-				url: "get-mid-category.php",
-				data: dataString,
-				cache: false,
-				success: function(html)
-				{
-					$(".mid-cat").html(html);
-				}
-			});			
-		});
-		$(".mid-cat").on('change',function(){
-			var id=$(this).val();
-			var dataString = 'id='+ id;
-			$.ajax
-			({
-				type: "POST",
-				url: "get-end-category.php",
-				data: dataString,
-				cache: false,
-				success: function(html)
-				{
-					$(".end-cat").html(html);
-				}
-			});			
+		$(".ecat-select").on('change',function(){
+			var tcat = $(this).find(':selected').data('tcat');
+			var mcat = $(this).find(':selected').data('mcat');
+			$(".tcat-display").val(tcat ? tcat : '');
+			$(".mcat-display").val(mcat ? mcat : '');
 		});
 		$(".model-select").on('change',function(){
 			var brand = $(this).find(':selected').data('brand');
