@@ -4,19 +4,9 @@
 if(isset($_POST['form1'])) {
 	$valid = 1;
 
-    if(empty($_POST['tcat_id'])) {
-        $valid = 0;
-        $error_message .= "You must have to select a top level category<br>";
-    }
-
-    if(empty($_POST['mcat_id'])) {
-        $valid = 0;
-        $error_message .= "You must have to select a mid level category<br>";
-    }
-
     if(empty($_POST['ecat_id'])) {
         $valid = 0;
-        $error_message .= "You must have to select an end level category<br>";
+        $error_message .= "You must have to select a category<br>";
     }
 
     if(empty($_POST['p_name'])) {
@@ -307,57 +297,46 @@ foreach ($result as $row) {
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Top Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Category <span>*</span></label>
 							<div class="col-sm-4">
-								<select name="tcat_id" class="form-control select2 top-cat">
-		                            <option value="">Select Top Level Category</option>
-		                            <?php
-		                            $statement = $pdo->prepare("SELECT * FROM tbl_top_category ORDER BY tcat_name ASC");
-		                            $statement->execute();
-		                            $result = $statement->fetchAll(PDO::FETCH_ASSOC);   
-		                            foreach ($result as $row) {
-		                                ?>
-		                                <option value="<?php echo $row['tcat_id']; ?>" <?php if($row['tcat_id'] == $tcat_id){echo 'selected';} ?>><?php echo $row['tcat_name']; ?></option>
-		                                <?php
-		                            }
-		                            ?>
-		                        </select>
+								<select name="ecat_id" class="form-control select2 ecat-select">
+									<option value="" data-tcat="" data-mcat="">Select Category</option>
+									<?php
+									$current_tcat_name = '';
+									$current_mcat_name = '';
+									$statement = $pdo->prepare("SELECT e.ecat_id, e.ecat_name, m.mcat_name, t.tcat_name 
+										FROM tbl_end_category e 
+										JOIN tbl_mid_category m ON e.mcat_id = m.mcat_id 
+										JOIN tbl_top_category t ON m.tcat_id = t.tcat_id 
+										ORDER BY t.tcat_name ASC, m.mcat_name ASC, e.ecat_name ASC");
+									$statement->execute();
+									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+									foreach ($result as $row) {
+										$selected = '';
+										if($row['ecat_id'] == $ecat_id) {
+											$selected = 'selected';
+											$current_tcat_name = $row['tcat_name'];
+											$current_mcat_name = $row['mcat_name'];
+										}
+										?>
+										<option value="<?php echo $row['ecat_id']; ?>" data-tcat="<?php echo $row['tcat_name']; ?>" data-mcat="<?php echo $row['mcat_name']; ?>" <?php echo $selected; ?>><?php echo $row['tcat_name']; ?> &gt; <?php echo $row['mcat_name']; ?> &gt; <?php echo $row['ecat_name']; ?></option>
+										<?php
+									}
+									?>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Mid Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Top Level Category</label>
 							<div class="col-sm-4">
-								<select name="mcat_id" class="form-control select2 mid-cat">
-		                            <option value="">Select Mid Level Category</option>
-		                            <?php
-		                            $statement = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id = ? ORDER BY mcat_name ASC");
-		                            $statement->execute(array($tcat_id));
-		                            $result = $statement->fetchAll(PDO::FETCH_ASSOC);   
-		                            foreach ($result as $row) {
-		                                ?>
-		                                <option value="<?php echo $row['mcat_id']; ?>" <?php if($row['mcat_id'] == $mcat_id){echo 'selected';} ?>><?php echo $row['mcat_name']; ?></option>
-		                                <?php
-		                            }
-		                            ?>
-		                        </select>
+								<input type="text" class="form-control tcat-display" value="<?php echo $current_tcat_name; ?>" readonly style="background-color:#eee;">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">End Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Mid Level Category</label>
 							<div class="col-sm-4">
-								<select name="ecat_id" class="form-control select2 end-cat">
-		                            <option value="">Select End Level Category</option>
-		                            <?php
-		                            $statement = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id = ? ORDER BY ecat_name ASC");
-		                            $statement->execute(array($mcat_id));
-		                            $result = $statement->fetchAll(PDO::FETCH_ASSOC);   
-		                            foreach ($result as $row) {
-		                                ?>
-		                                <option value="<?php echo $row['ecat_id']; ?>" <?php if($row['ecat_id'] == $ecat_id){echo 'selected';} ?>><?php echo $row['ecat_name']; ?></option>
-		                                <?php
-		                            }
-		                            ?>
-		                        </select>
+								<input type="text" class="form-control mcat-display" value="<?php echo $current_mcat_name; ?>" readonly style="background-color:#eee;">
+								<span class="help-block" style="font-size:11px;color:#999;">Auto-filled from selected category</span>
 							</div>
 						</div>
 						<div class="form-group">

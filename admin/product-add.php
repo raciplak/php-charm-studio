@@ -4,19 +4,9 @@
 if(isset($_POST['form1'])) {
 	$valid = 1;
 
-    if(empty($_POST['tcat_id'])) {
-        $valid = 0;
-        $error_message .= "You must have to select a top level category<br>";
-    }
-
-    if(empty($_POST['mcat_id'])) {
-        $valid = 0;
-        $error_message .= "You must have to select a mid level category<br>";
-    }
-
     if(empty($_POST['ecat_id'])) {
         $valid = 0;
-        $error_message .= "You must have to select an end level category<br>";
+        $error_message .= "You must have to select a category<br>";
     }
 
     if(empty($_POST['p_name'])) {
@@ -187,17 +177,21 @@ if(isset($_POST['form1'])) {
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Top Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Category <span>*</span></label>
 							<div class="col-sm-4">
-								<select name="tcat_id" class="form-control select2 top-cat">
-									<option value="">Select Top Level Category</option>
+								<select name="ecat_id" class="form-control select2 ecat-select">
+									<option value="" data-tcat="" data-mcat="">Select Category</option>
 									<?php
-									$statement = $pdo->prepare("SELECT * FROM tbl_top_category ORDER BY tcat_name ASC");
+									$statement = $pdo->prepare("SELECT e.ecat_id, e.ecat_name, m.mcat_name, t.tcat_name 
+										FROM tbl_end_category e 
+										JOIN tbl_mid_category m ON e.mcat_id = m.mcat_id 
+										JOIN tbl_top_category t ON m.tcat_id = t.tcat_id 
+										ORDER BY t.tcat_name ASC, m.mcat_name ASC, e.ecat_name ASC");
 									$statement->execute();
-									$result = $statement->fetchAll(PDO::FETCH_ASSOC);	
+									$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 									foreach ($result as $row) {
 										?>
-										<option value="<?php echo $row['tcat_id']; ?>"><?php echo $row['tcat_name']; ?></option>
+										<option value="<?php echo $row['ecat_id']; ?>" data-tcat="<?php echo $row['tcat_name']; ?>" data-mcat="<?php echo $row['mcat_name']; ?>"><?php echo $row['tcat_name']; ?> &gt; <?php echo $row['mcat_name']; ?> &gt; <?php echo $row['ecat_name']; ?></option>
 										<?php
 									}
 									?>
@@ -205,19 +199,16 @@ if(isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">Mid Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Top Level Category</label>
 							<div class="col-sm-4">
-								<select name="mcat_id" class="form-control select2 mid-cat">
-									<option value="">Select Mid Level Category</option>
-								</select>
+								<input type="text" class="form-control tcat-display" value="" readonly style="background-color:#eee;">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-3 control-label">End Level Category Name <span>*</span></label>
+							<label for="" class="col-sm-3 control-label">Mid Level Category</label>
 							<div class="col-sm-4">
-								<select name="ecat_id" class="form-control select2 end-cat">
-									<option value="">Select End Level Category</option>
-								</select>
+								<input type="text" class="form-control mcat-display" value="" readonly style="background-color:#eee;">
+								<span class="help-block" style="font-size:11px;color:#999;">Auto-filled from selected category</span>
 							</div>
 						</div>
 						<div class="form-group">
