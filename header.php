@@ -376,6 +376,69 @@ foreach ($result as $row) {
 							?>
 
 							<?php
+							// Show Brands with show_on_menu=1 and their models with associated categories
+							$statement = $pdo->prepare("SELECT * FROM tbl_brands WHERE show_on_menu=1 ORDER BY brand_name");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result as $row) {
+								?>
+								<li><a href="product-category.php?id=<?php echo $row['brand_id']; ?>&type=brand"><?php echo $row['brand_name']; ?></a>
+									<ul>
+										<?php
+										// Get models under this brand
+										$statement_mod = $pdo->prepare("SELECT * FROM tbl_models WHERE brand_id=? ORDER BY model_name");
+										$statement_mod->execute(array($row['brand_id']));
+										$result_mod = $statement_mod->fetchAll(PDO::FETCH_ASSOC);
+										foreach ($result_mod as $row_mod) {
+											// Get distinct mid categories from products of this model
+											$statement_mcat = $pdo->prepare("
+												SELECT DISTINCT mc.mcat_id, mc.mcat_name 
+												FROM tbl_product p 
+												INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+												INNER JOIN tbl_mid_category mc ON ec.mcat_id = mc.mcat_id 
+												WHERE p.model_id=?
+											");
+											$statement_mcat->execute(array($row_mod['model_id']));
+											$result_mcat = $statement_mcat->fetchAll(PDO::FETCH_ASSOC);
+											?>
+											<li><a href="product-category.php?id=<?php echo $row_mod['model_id']; ?>&type=model"><?php echo $row_mod['model_name']; ?></a>
+												<?php if(count($result_mcat) > 0): ?>
+												<ul>
+													<?php foreach ($result_mcat as $row_mcat) { ?>
+														<li><a href="product-category.php?id=<?php echo $row_mcat['mcat_id']; ?>&type=mid-category"><?php echo $row_mcat['mcat_name']; ?></a>
+															<ul>
+																<?php
+																// Get end categories under this mid category for this model's products
+																$statement_ecat = $pdo->prepare("
+																	SELECT DISTINCT ec.ecat_id, ec.ecat_name 
+																	FROM tbl_product p 
+																	INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+																	WHERE p.model_id=? AND ec.mcat_id=?
+																");
+																$statement_ecat->execute(array($row_mod['model_id'], $row_mcat['mcat_id']));
+																$result_ecat = $statement_ecat->fetchAll(PDO::FETCH_ASSOC);
+																foreach ($result_ecat as $row_ecat) {
+																	?>
+																	<li><a href="product-category.php?id=<?php echo $row_ecat['ecat_id']; ?>&type=end-category"><?php echo $row_ecat['ecat_name']; ?></a></li>
+																	<?php
+																}
+																?>
+															</ul>
+														</li>
+													<?php } ?>
+												</ul>
+												<?php endif; ?>
+											</li>
+											<?php
+										}
+										?>
+									</ul>
+								</li>
+								<?php
+							}
+							?>
+
+							<?php
 							$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
 							$statement->execute();
 							$result = $statement->fetchAll(PDO::FETCH_ASSOC);		
