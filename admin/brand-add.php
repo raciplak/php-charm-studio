@@ -23,8 +23,8 @@ if(isset($_POST['form1'])) {
     }
 
     if($valid == 1) {
-		$statement = $pdo->prepare("INSERT INTO tbl_brands (brand_code, brand_name) VALUES (?,?)");
-		$statement->execute(array($_POST['brand_code'], $_POST['brand_name']));
+		$statement = $pdo->prepare("INSERT INTO tbl_brands (brand_code, brand_name, show_on_menu) VALUES (?,?,?)");
+		$statement->execute(array($_POST['brand_code'], $_POST['brand_name'], $_POST['show_on_menu']));
 	
     	$success_message = 'Brand is added successfully.';
     }
@@ -72,6 +72,15 @@ if(isset($_POST['form1'])) {
 							<label for="" class="col-sm-3 control-label">Brand Name <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="brand_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Menüde Göster? <span>*</span></label>
+							<div class="col-sm-4">
+								<select name="show_on_menu" class="form-control" style="width:auto;">
+									<option value="0">Hayır</option>
+									<option value="1">Evet</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">

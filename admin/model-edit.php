@@ -20,8 +20,8 @@ if(isset($_POST['form1'])) {
     }
 
     if($valid == 1) {    	
-		$statement = $pdo->prepare("UPDATE tbl_models SET model_code=?, model_name=?, brand_id=? WHERE model_id=?");
-		$statement->execute(array($_POST['model_code'], $_POST['model_name'], $_POST['brand_id'], $_REQUEST['id']));
+		$statement = $pdo->prepare("UPDATE tbl_models SET model_code=?, model_name=?, brand_id=?, show_on_menu=? WHERE model_id=?");
+		$statement->execute(array($_POST['model_code'], $_POST['model_name'], $_POST['brand_id'], $_POST['show_on_menu'], $_REQUEST['id']));
 
     	$success_message = 'Model is updated successfully.';
     }
@@ -58,6 +58,7 @@ foreach ($result as $row) {
 	$model_code = $row['model_code'];
 	$model_name = $row['model_name'];
 	$brand_id = $row['brand_id'];
+	$show_on_menu = $row['show_on_menu'];
 }
 ?>
 
@@ -111,6 +112,15 @@ foreach ($result as $row) {
                     <label for="" class="col-sm-3 control-label">Model Name <span>*</span></label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" name="model_name" value="<?php echo $model_name; ?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">Menüde Göster? <span>*</span></label>
+                    <div class="col-sm-4">
+                        <select name="show_on_menu" class="form-control" style="width:auto;">
+                            <option value="0" <?php if($show_on_menu == 0) {echo 'selected';} ?>>Hayır</option>
+                            <option value="1" <?php if($show_on_menu == 1) {echo 'selected';} ?>>Evet</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
