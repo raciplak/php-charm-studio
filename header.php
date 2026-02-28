@@ -440,7 +440,7 @@ foreach ($result as $row) {
 								SELECT m.*, b.brand_name 
 								FROM tbl_models m 
 								INNER JOIN tbl_brands b ON m.brand_id = b.brand_id 
-								WHERE m.show_on_menu=1 AND b.show_on_menu=0 
+								WHERE m.show_on_menu=1 
 								ORDER BY b.brand_name, m.model_name
 							");
 							$statement->execute();
