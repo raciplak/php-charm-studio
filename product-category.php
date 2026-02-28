@@ -54,7 +54,8 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
     exit;
 } else {
 
-    if( ($_REQUEST['type'] != 'top-category') && ($_REQUEST['type'] != 'mid-category') && ($_REQUEST['type'] != 'end-category') ) {
+    $valid_types = array('top-category','mid-category','end-category','brand','model');
+    if( !in_array($_REQUEST['type'], $valid_types) ) {
         header('location: index.php');
         exit;
     } else {
@@ -153,6 +154,50 @@ if( !isset($_REQUEST['id']) || !isset($_REQUEST['type']) ) {
                     }
                 }
                 $final_ecat_ids = array($_REQUEST['id']);
+            }
+        }
+
+        // Brand type - show all products of models under this brand
+        if($_REQUEST['type'] == 'brand') {
+            $statement_b = $pdo->prepare("SELECT * FROM tbl_brands WHERE brand_id=?");
+            $statement_b->execute(array($_REQUEST['id']));
+            $result_b = $statement_b->fetchAll(PDO::FETCH_ASSOC);
+            if(count($result_b) == 0) {
+                header('location: index.php');
+                exit;
+            } else {
+                $title = $result_b[0]['brand_name'];
+                // Get all model ids under this brand
+                $statement_m = $pdo->prepare("SELECT model_id FROM tbl_models WHERE brand_id=?");
+                $statement_m->execute(array($_REQUEST['id']));
+                $model_ids = $statement_m->fetchAll(PDO::FETCH_COLUMN);
+                // Get all ecat_ids of products with these model_ids
+                $final_ecat_ids = array();
+                if(count($model_ids) > 0) {
+                    $placeholders = implode(',', array_fill(0, count($model_ids), '?'));
+                    $statement_p = $pdo->prepare("SELECT DISTINCT ecat_id FROM tbl_product WHERE model_id IN ($placeholders)");
+                    $statement_p->execute($model_ids);
+                    $final_ecat_ids = $statement_p->fetchAll(PDO::FETCH_COLUMN);
+                }
+                if(empty($final_ecat_ids)) $final_ecat_ids = array(0);
+            }
+        }
+
+        // Model type - show all products of this model
+        if($_REQUEST['type'] == 'model') {
+            $statement_m = $pdo->prepare("SELECT m.*, b.brand_name FROM tbl_models m LEFT JOIN tbl_brands b ON m.brand_id=b.brand_id WHERE m.model_id=?");
+            $statement_m->execute(array($_REQUEST['id']));
+            $result_m = $statement_m->fetchAll(PDO::FETCH_ASSOC);
+            if(count($result_m) == 0) {
+                header('location: index.php');
+                exit;
+            } else {
+                $title = $result_m[0]['brand_name'] . ' - ' . $result_m[0]['model_name'];
+                // Get all ecat_ids of products with this model_id
+                $statement_p = $pdo->prepare("SELECT DISTINCT ecat_id FROM tbl_product WHERE model_id=?");
+                $statement_p->execute(array($_REQUEST['id']));
+                $final_ecat_ids = $statement_p->fetchAll(PDO::FETCH_COLUMN);
+                if(empty($final_ecat_ids)) $final_ecat_ids = array(0);
             }
         }
         
