@@ -8,26 +8,33 @@ on:
 jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
+    permissions: # Yetki sorununu kökten çözmek için bu blok önemli
+      contents: write
     steps:
-      # 1. Kendi deponu bilgisayara (GitHub sunucusuna) çek
       - name: 🔍 Checkout My Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 2. Orijinal repoyu "upstream" olarak ekle ve değişiklikleri çek
       - name: 🔄 Sync from Original Repo
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
+          
+          # Orijinal repoyu ekle
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
-          git fetch upstream master
-          git checkout master
+          git fetch upstream
+          
+          # Sizin reponuz 'main' olduğu için main dalına geçiş yapıyoruz
+          git checkout main
+          
+          # Orijinal deponun 'master' dalından çekip sizin 'main' dalınıza birleştiriyoruz
           git merge upstream/master --allow-unrelated-histories -X theirs
-          git push origin master
+          
+          # Değişiklikleri kendi reponuza geri yükleyin
+          git push origin main
 
-      # 3. Dosyaları FTP sunucuna gönder
       - name: 🚀 FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -38,4 +45,3 @@ jobs:
           exclude: |
             **/.git*
             **/.github*
-            **/node_modules/**
