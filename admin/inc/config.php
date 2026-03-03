@@ -9,16 +9,16 @@ date_default_timezone_set('America/Los_Angeles');
 $dbhost = 'localhost';
 
 // Database Name
-$dbname = 'ecommerceweb';
+$dbname = 'merpamot_test';
 
 // Database Username
-$dbuser = 'root';
+$dbuser = 'merpamot_admin';
 
 // Database Password
-$dbpass = '';
+$dbpass = 'tGxOxKlFlT78';
 
 // Defining base url
-define("BASE_URL", "http://localhost/php-charm-studio/");
+define("BASE_URL", "https://merpamotor.com.tr/eticaret/php-charm-studio-main/");
 
 // Getting Admin url
 define("ADMIN_URL", BASE_URL . "admin" . "/");
