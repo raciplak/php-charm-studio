@@ -1,24 +1,39 @@
-name: Auto Sync Upstream
+name: Auto Sync and FTP Deploy
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight
-  workflow_dispatch: # Allows you to run it manually for testing
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch: # Allows manual trigger for testing
 
 jobs:
-  sync:
+  sync-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout target repo
+      # 1. Checkout your repository
+      - name: 🔍 Checkout Repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0 # Fetches all history for all branches and tags
+          fetch-depth: 0
 
-      - name: Sync with Upstream
+      # 2. Pull changes from the original source (Upstream)
+      - name: 🔄 Sync with Upstream
         uses: a202029/sync-upstream-repo@v1.0.0
         with:
-          upstream_repo: "https://github.com/ORIGINAL_OWNER/ORIGINAL_REPO.git"
-          upstream_branch: "main"
-          target_branch: "main"
-          force: false # Set to true only if you want to overwrite local changes
+          upstream_repo: "https://github.com/raciplak/php-charm-studio.git"
+          upstream_branch: "master"
+          target_branch: "master"
+          force: false
+
+      # 3. Upload the updated files to your hosting via FTP
+      - name: 🚀 FTP Deploy to Hosting
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Path updated to your specific directory
+          server-dir: ./public_html/eticaret/php-charm-studio-main/
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
