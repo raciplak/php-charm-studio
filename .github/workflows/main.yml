@@ -1,0 +1,24 @@
+name: Auto Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Fetches all history for all branches and tags
+
+      - name: Sync with Upstream
+        uses: a202029/sync-upstream-repo@v1.0.0
+        with:
+          upstream_repo: "https://github.com/ORIGINAL_OWNER/ORIGINAL_REPO.git"
+          upstream_branch: "main"
+          target_branch: "main"
+          force: false # Set to true only if you want to overwrite local changes
