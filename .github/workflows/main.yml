@@ -2,36 +2,38 @@ name: Auto Sync and FTP Deploy
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight
-  workflow_dispatch: # Allows manual trigger for testing
+    - cron: '0 0 * * *' 
+  workflow_dispatch: 
 
 jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout your repository
-      - name: 🔍 Checkout Repository
+      # 1. Kendi deponu bilgisayara (GitHub sunucusuna) çek
+      - name: 🔍 Checkout My Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 2. Pull changes from the original source (Upstream)
-      - name: 🔄 Sync with Upstream
-        uses: a202029/sync-upstream-repo@v1.0.0
-        with:
-          upstream_repo: "https://github.com/raciplak/php-charm-studio.git"
-          upstream_branch: "master"
-          target_branch: "master"
-          force: false
+      # 2. Orijinal repoyu "upstream" olarak ekle ve değişiklikleri çek
+      - name: 🔄 Sync from Original Repo
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git remote add upstream https://github.com/raciplak/php-charm-studio.git
+          git fetch upstream master
+          git checkout master
+          git merge upstream/master --allow-unrelated-histories -X theirs
+          git push origin master
 
-      # 3. Upload the updated files to your hosting via FTP
+      # 3. Dosyaları FTP sunucuna gönder
       - name: 🚀 FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # Path updated to your specific directory
           server-dir: ./public_html/eticaret/php-charm-studio-main/
           exclude: |
             **/.git*
