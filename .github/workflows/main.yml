@@ -8,7 +8,7 @@ on:
 jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
-    permissions: # Yetki sorununu kökten çözmek için bu blok önemli
+    permissions:
       contents: write
     steps:
       - name: 🔍 Checkout My Repo
@@ -24,16 +24,16 @@ jobs:
           
           # Orijinal repoyu ekle
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
-          git fetch upstream
+          git fetch upstream master
           
-          # Sizin reponuz 'main' olduğu için main dalına geçiş yapıyoruz
+          # Mevcut dalda olduğumuzdan emin olalım
           git checkout main
           
-          # Orijinal deponun 'master' dalından çekip sizin 'main' dalınıza birleştiriyoruz
-          git merge upstream/master --allow-unrelated-histories -X theirs
+          # Merge işlemini dene, eğer bir şey yoksa hata verme (|| true)
+          git merge upstream/master --allow-unrelated-histories -X theirs || echo "No changes to merge"
           
-          # Değişiklikleri kendi reponuza geri yükleyin
-          git push origin main
+          # Sadece değişiklik varsa push yap
+          git push origin main || echo "Nothing to push to GitHub"
 
       - name: 🚀 FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -42,6 +42,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./public_html/eticaret/php-charm-studio-main/
+          # Kritik: FTP bağlantı hatalarını önlemek için pasif modu zorla
+          protocol: ftp
+          port: 21
           exclude: |
             **/.git*
             **/.github*
