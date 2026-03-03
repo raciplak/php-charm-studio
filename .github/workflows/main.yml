@@ -15,28 +15,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔄 Sync from Original Repo
         run: |
+          # Git güvenliği için sahiplik ayarı (Exit 128 çözümü)
+          git config --global --add safe.directory /github/workspace
+          
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Orijinal repoyu ekle ve çek
+          # Orijinal repoyu (upstream) ekle
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           git fetch upstream master
           
-          # Force Merge (Zorlayarak Birleştirme)
-          # Bu komut, senin main dalını upstream/master ile tamamen eşitler
+          # Kendi 'main' dalına geç ve orijinal 'master' ile eşitle
           git checkout main
           git reset --hard upstream/master
           
-          # Kendi repona zorla gönder (Permission hatasını bu aşar)
+          # Kendi repona (origin) zorla gönder
           git push origin main --force
 
       - name: 🚀 FTP Deploy to Hosting
-        # Sürüm numarasını v4.3.5 yerine v4 kullanarak daha stabil hale getirdik
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        # Sürüm numarasını tam ve doğru büyük/küçük harfle yazdık
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
