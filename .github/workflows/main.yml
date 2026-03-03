@@ -10,39 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - name: 🔍 Checkout My Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Kendi token'ını kullanarak yazma yetkisini garantiye alıyoruz
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: 🔄 Sync from Original Repo
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Uzak sunucuyu (upstream) ayarla
+          # Orijinal repoyu ekle ve çek
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           git fetch upstream master
           
-          # Ana dala geç ve birleştir
+          # Force Merge (Zorlayarak Birleştirme)
+          # Bu komut, senin main dalını upstream/master ile tamamen eşitler
           git checkout main
+          git reset --hard upstream/master
           
-          # Çakışmaları otomatik çöz ve birleştir
-          git merge upstream/master --allow-unrelated-histories -X theirs || echo "No changes to merge"
-          
-          # Kendi repona gönder (origin)
-          # Uzak adresi token ile güncelleyerek yetki hatasını bypass ediyoruz
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git push origin main
-          
+          # Kendi repona zorla gönder (Permission hatasını bu aşar)
+          git push origin main --force
+
       - name: 🚀 FTP Deploy to Hosting
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        # Sürüm numarasını v4.3.5 yerine v4 kullanarak daha stabil hale getirdik
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
