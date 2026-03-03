@@ -3,7 +3,7 @@
  * E-Ticaret Image Upload API
  * 
  * This PHP backend handles image uploads to the e-commerce website hosting.
- * Images are stored in: assets/uploads/product_photos/
+ * Images are stored in: eticaret/php-charm-studio-main/assets/uploads/product_photos/
  * 
  * Actions:
  * - test_connection: Tests if the API is reachable and writable
@@ -57,7 +57,7 @@ if (empty($config_secret) || $api_secret !== $config_secret) {
 }
 
 $action = $input['action'] ?? '';
-$upload_dir = __DIR__ . '/assets/uploads/product_photos/';
+$upload_dir = __DIR__ . '/eticaret/php-charm-studio-main/assets/uploads/product_photos/';
 
 switch ($action) {
     case 'test_connection':
@@ -102,7 +102,7 @@ function handleTestConnection($upload_dir) {
     echo json_encode([
         'success' => true,
         'message' => 'Bağlantı başarılı! Sunucu erişilebilir ve yükleme dizini hazır.',
-        'upload_path' => 'assets/uploads/product_photos/'
+        'upload_path' => 'eticaret/php-charm-studio-main/assets/uploads/product_photos/'
     ]);
 }
 
@@ -164,7 +164,7 @@ function handleUploadImage($input, $upload_dir) {
     // Build public URL
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    $public_url = $protocol . '://' . $host . '/assets/uploads/product_photos/' . $file_name;
+    $public_url = $protocol . '://' . $host . '/eticaret/php-charm-studio-main/assets/uploads/product_photos/' . $file_name;
 
     echo json_encode([
         'success' => true,
@@ -172,7 +172,7 @@ function handleUploadImage($input, $upload_dir) {
         'file_name' => $file_name,
         'file_size' => $result,
         'image_url' => $public_url,
-        'upload_path' => 'assets/uploads/product_photos/' . $file_name
+        'upload_path' => 'eticaret/php-charm-studio-main/assets/uploads/product_photos/' . $file_name
     ]);
 }
 
