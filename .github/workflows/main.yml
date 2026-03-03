@@ -10,31 +10,37 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: 🔍 Checkout My Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Kendi token'ını kullanarak yazma yetkisini garantiye alıyoruz
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔄 Sync from Original Repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Orijinal repoyu ekle
+          # Uzak sunucuyu (upstream) ayarla
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           git fetch upstream master
           
-          # Mevcut dalda olduğumuzdan emin olalım
+          # Ana dala geç ve birleştir
           git checkout main
           
-          # Merge işlemini dene, eğer bir şey yoksa hata verme (|| true)
+          # Çakışmaları otomatik çöz ve birleştir
           git merge upstream/master --allow-unrelated-histories -X theirs || echo "No changes to merge"
           
-          # Sadece değişiklik varsa push yap
-          git push origin main || echo "Nothing to push to GitHub"
-
+          # Kendi repona gönder (origin)
+          # Uzak adresi token ile güncelleyerek yetki hatasını bypass ediyoruz
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin main
+          
       - name: 🚀 FTP Deploy to Hosting
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -42,7 +48,6 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./public_html/eticaret/php-charm-studio-main/
-          # Kritik: FTP bağlantı hatalarını önlemek için pasif modu zorla
           protocol: ftp
           port: 21
           exclude: |
