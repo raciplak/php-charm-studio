@@ -2613,7 +2613,7 @@ div.pagination span.disabled {
   margin-bottom: 5px;
 }
 .footer-simple-links li a {
-  color: #95a5a6;
+  color: #bdc3c7;
   font-size: 13px;
   text-decoration: none;
   transition: color 0.2s;
@@ -2622,6 +2622,25 @@ div.pagination span.disabled {
 }
 .footer-simple-links li a:hover {
   color: #fff;
+}
+
+/* Footer row no-wrap on desktop */
+.footer-row-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.footer-row-nowrap > .footer-col {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 767px) {
+  .footer-row-nowrap {
+    flex-wrap: wrap;
+  }
+  .footer-row-nowrap > .footer-col {
+    width: 100%;
+  }
 }
 
 /* Move ShareThis buttons to left */
