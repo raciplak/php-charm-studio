@@ -334,6 +334,14 @@ foreach ($result as $row) {
 		<div class="row">
 			<div class="col-md-12 pl_0 pr_0">
 				<div class="menu-container">
+					<!-- Hamburger Toggle Button -->
+					<button class="hamburger-btn" id="hamburgerBtn" aria-label="Menüyü aç/kapat">
+						<span class="hamburger-line"></span>
+						<span class="hamburger-line"></span>
+						<span class="hamburger-line"></span>
+					</button>
+					<!-- Mobile Overlay -->
+					<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 					<div class="menu">
 						<ul>
 							<li><a href="index.php">Ana Sayfa</a></li>
