@@ -8,6 +8,8 @@ on:
 jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: 🔍 Checkout
         uses: actions/checkout@v4
@@ -16,25 +18,31 @@ jobs:
           token: ${{ secrets.MY_SYNC_TOKEN }}
 
       - name: 🔄 Sync From Upstream
+        env:
+          MY_TOKEN: ${{ secrets.MY_SYNC_TOKEN }}
         run: |
-          # Güvenli dizin ayarı
+          # 1. Temel Ayarlar
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          
-          # Kimlik bilgilerini ayarla
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Orijinal repoyu ekle ve çek
+          # 2. Uzak Depoları Kontrol Et ve Temizle
+          git remote remove upstream || true
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
+          
+          # 3. Veriyi Çek
+          echo "Orijinal repodan veri çekiliyor..."
           git fetch upstream master
           
-          # 'main' dalına geç ve orijinal 'master' ile eşitle
+          # 4. Main Dalını Güncelle
+          echo "Main dalı güncelleniyor..."
           git checkout main
           git reset --hard upstream/master
           
-          # YETKİ SORUNUNU AŞAN GÜNCEL PUSH KOMUTU:
-          # 'raciplak' kısmını kendi GitHub kullanıcı adınızla değiştirmeyi unutmayın!
-          git push https://raciplak:${{ secrets.MY_SYNC_TOKEN }}@github.com/raciplak/php-charm-studio.git main --force
+          # 5. Push Denemesi (Hata verirse URL'yi temizle)
+          echo "Kendi reponuza yükleniyor..."
+          # Kullanıcı adını ve tokenı dinamik olarak ekliyoruz
+          git push "https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git" main --force
 
       - name: 🚀 FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
