@@ -891,6 +891,7 @@ foreach ($result as $row) {
   //  $home_testimonial_on_off         = $row['home_testimonial_on_off'];
    // $home_blog_on_off                = $row['home_blog_on_off'];
     $newsletter_on_off               = $row['newsletter_on_off'];
+    $working_days                    = isset($row['working_days']) ? $row['working_days'] : 'Pazartesi - Cumartesi: 09:00 - 18:00\nPazar: Kapalı';
   //  $ads_above_welcome_on_off           = $row['ads_above_welcome_on_off'];
   //  $ads_above_featured_product_on_off  = $row['ads_above_featured_product_on_off'];
   //  $ads_above_latest_product_on_off    = $row['ads_above_latest_product_on_off'];
@@ -1052,6 +1053,13 @@ foreach ($result as $row) {
                                         <label for="" class="col-sm-2 control-label">Contact Map iFrame </label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" name="contact_map_iframe" style="height:200px;"><?php echo $contact_map_iframe; ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label">Çalışma Günleri / Saatleri </label>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control" name="working_days" style="height:120px;" placeholder="Pazartesi - Cumartesi: 09:00 - 18:00&#10;Pazar: Kapalı"><?php echo $working_days; ?></textarea>
+                                            <span class="help-block">Her satıra bir gün/saat bilgisi yazın.</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
