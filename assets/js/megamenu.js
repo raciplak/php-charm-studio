@@ -28,7 +28,8 @@ $(document).ready(function () {
             if ($sub.length) {
                 e.preventDefault();
                 e.stopPropagation();
-                $(this).siblings().children("ul").slideUp(200);
+                $(this).siblings().removeClass('open').children("ul").slideUp(200);
+                $(this).toggleClass('open');
                 $sub.slideToggle(250);
             }
         }
