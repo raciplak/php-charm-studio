@@ -524,7 +524,6 @@ if(count($category_banners) > 0):
     .category-banner-card {
         height: 180px;
     }
-    }
     .category-banners-section .section-header h2 {
         font-size: 28px;
     }
@@ -578,13 +577,17 @@ $brand_banners = $statement->fetchAll(PDO::FETCH_ASSOC);
 $brand_banner_columns = 4;
 $brand_banner_title = 'Marka Bannerları';
 $brand_banner_subtitle = '';
-$stmt_bb = $pdo->prepare("SELECT brand_banner_columns, brand_banner_title, brand_banner_subtitle FROM tbl_settings WHERE id=1");
-$stmt_bb->execute();
-$bb_settings = $stmt_bb->fetch(PDO::FETCH_ASSOC);
-if($bb_settings) {
-    $brand_banner_columns = isset($bb_settings['brand_banner_columns']) ? intval($bb_settings['brand_banner_columns']) : 4;
-    $brand_banner_title = isset($bb_settings['brand_banner_title']) ? $bb_settings['brand_banner_title'] : 'Marka Bannerları';
-    $brand_banner_subtitle = isset($bb_settings['brand_banner_subtitle']) ? $bb_settings['brand_banner_subtitle'] : '';
+try {
+    $stmt_bb = $pdo->prepare("SELECT brand_banner_columns, brand_banner_title, brand_banner_subtitle FROM tbl_settings WHERE id=1");
+    $stmt_bb->execute();
+    $bb_settings = $stmt_bb->fetch(PDO::FETCH_ASSOC);
+    if($bb_settings) {
+        $brand_banner_columns = isset($bb_settings['brand_banner_columns']) ? intval($bb_settings['brand_banner_columns']) : 4;
+        $brand_banner_title = isset($bb_settings['brand_banner_title']) ? $bb_settings['brand_banner_title'] : 'Marka Bannerları';
+        $brand_banner_subtitle = isset($bb_settings['brand_banner_subtitle']) ? $bb_settings['brand_banner_subtitle'] : '';
+    }
+} catch(Exception $e) {
+    // Columns not yet added to tbl_settings - use defaults
 }
 
 if(count($brand_banners) > 0):
