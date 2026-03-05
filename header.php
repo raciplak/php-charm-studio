@@ -104,6 +104,43 @@ foreach ($result as $row) {
 	<link rel="stylesheet" href="assets/css/side-cart.css">
 
 	<?php
+	// Site Color Settings - CSS Variables injection
+	$site_colors_defaults = array(
+		'top-bar-bg' => '#131921',
+		'navbar-bg' => '#232f3e',
+		'search-btn-color' => '#ff6b35',
+		'header-icon-color' => '#131921',
+		'primary-color' => '#0d1452',
+		'accent-color' => '#e4144d',
+		'cart-btn-color' => '#e7a340',
+		'btn-hover-color' => '#333333',
+		'discount-color' => '#e74c3c',
+		'footer-bg' => '#2c3e50',
+		'footer-bottom-bg' => '#1a252f',
+		'footer-text-color' => '#bdc3c7',
+		'footer-accent-color' => '#e4144d',
+		'page-overlay-bg' => '#131921',
+		'mobile-menu-bg' => '#1a252f',
+		'newsletter-bg' => '#232f3e'
+	);
+	try {
+		$stmt_colors = $pdo->prepare("SELECT color_key, color_value FROM tbl_site_colors");
+		$stmt_colors->execute();
+		$db_colors = $stmt_colors->fetchAll(PDO::FETCH_KEY_PAIR);
+		$site_colors = array_merge($site_colors_defaults, $db_colors);
+	} catch(Exception $e) {
+		$site_colors = $site_colors_defaults;
+	}
+	?>
+	<style>
+	:root {
+		<?php foreach($site_colors as $key => $val): ?>
+		--<?php echo $key; ?>: <?php echo $val; ?>;
+		<?php endforeach; ?>
+	}
+	</style>
+
+	<?php
 
 	$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
 	$statement->execute();
