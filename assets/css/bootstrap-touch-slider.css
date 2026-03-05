@@ -262,7 +262,7 @@
     padding: 17px 30px;
     white-space: nowrap;
     letter-spacing: 1px;
-    background: #e4144d;
+    background: var(--slider-btn-color, #e4144d);
     display: inline-block;
     text-decoration: none;
     text-transform: uppercase;
