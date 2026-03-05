@@ -27,4 +27,5 @@ INSERT INTO `tbl_site_colors` (`color_key`, `color_value`, `color_label`, `color
 ('footer-accent-color', '#e4144d', 'Footer Vurgu Rengi', 'Footer', 33),
 ('page-overlay-bg', '#131921', 'Sayfa Banner Overlay', 'Genel', 12),
 ('mobile-menu-bg', '#1a252f', 'Mobil Menü Arka Plan', 'Header', 5),
-('newsletter-bg', '#232f3e', 'Bülten Bölümü Arka Plan', 'Genel', 13);
+('newsletter-bg', '#232f3e', 'Bülten Bölümü Arka Plan', 'Genel', 13),
+('slider-btn-color', '#e4144d', 'Slider Tıkla Butonu', 'Slider', 40);
