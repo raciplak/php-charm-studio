@@ -24,8 +24,9 @@ define("BASE_URL", "https://merpamotor.com.tr/eticaret/php-charm-studio-main/");
 define("ADMIN_URL", BASE_URL . "admin" . "/");
 
 try {
-	$pdo = new PDO("mysql:host={$dbhost};dbname={$dbname}", $dbuser, $dbpass);
+	$pdo = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=utf8mb4", $dbuser, $dbpass);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$pdo->exec("SET NAMES 'utf8mb4'");
 }
 catch( PDOException $exception ) {
 	echo "Connection error :" . $exception->getMessage();
