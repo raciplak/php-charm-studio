@@ -121,7 +121,8 @@ foreach ($result as $row) {
 		'footer-accent-color' => '#e4144d',
 		'page-overlay-bg' => '#131921',
 		'mobile-menu-bg' => '#1a252f',
-		'newsletter-bg' => '#232f3e'
+		'newsletter-bg' => '#232f3e',
+		'slider-btn-color' => '#e4144d'
 	);
 	try {
 		$stmt_colors = $pdo->prepare("SELECT color_key, color_value FROM tbl_site_colors");
