@@ -2624,6 +2624,25 @@ div.pagination span.disabled {
   color: #fff;
 }
 
+/* Footer row no-wrap on desktop */
+.footer-row-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.footer-row-nowrap > .footer-col {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 767px) {
+  .footer-row-nowrap {
+    flex-wrap: wrap;
+  }
+  .footer-row-nowrap > .footer-col {
+    width: 100%;
+  }
+}
+
 /* Move ShareThis buttons to left */
 .st-sticky-share-buttons {
     left: 0 !important;
