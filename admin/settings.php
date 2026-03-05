@@ -385,6 +385,18 @@ if(isset($_POST['form_cat_banner_cols'])) {
     $success_message = 'Category Banner Section updated successfully.';
 }
 
+if(isset($_POST['form_brand_banner_cols'])) {
+    $bb_cols = intval($_POST['brand_banner_columns']);
+    if($bb_cols < 1 || $bb_cols > 6) $bb_cols = 4;
+    $bb_title = strip_tags($_POST['brand_banner_title']);
+    $bb_subtitle = strip_tags($_POST['brand_banner_subtitle']);
+    
+    $statement = $pdo->prepare("UPDATE tbl_settings SET brand_banner_columns=?, brand_banner_title=?, brand_banner_subtitle=? WHERE id=1");
+    $statement->execute(array($bb_cols, $bb_title, $bb_subtitle));
+    
+    $success_message = 'Brand Banner Section updated successfully.';
+}
+
 if(isset($_POST['form_cat_product_cols'])) {
     $cp_cols = intval($_POST['category_product_columns']);
     if($cp_cols < 1 || $cp_cols > 6) $cp_cols = 3;
@@ -868,6 +880,9 @@ foreach ($result as $row) {
     $category_banner_title           = isset($row['category_banner_title']) ? $row['category_banner_title'] : 'Kategori Bannerları';
     $category_banner_subtitle        = isset($row['category_banner_subtitle']) ? $row['category_banner_subtitle'] : '';
     $category_product_columns        = isset($row['category_product_columns']) ? intval($row['category_product_columns']) : 3;
+    $brand_banner_columns            = isset($row['brand_banner_columns']) ? intval($row['brand_banner_columns']) : 4;
+    $brand_banner_title              = isset($row['brand_banner_title']) ? $row['brand_banner_title'] : 'Marka Bannerları';
+    $brand_banner_subtitle           = isset($row['brand_banner_subtitle']) ? $row['brand_banner_subtitle'] : '';
    // $testimonial_title               = $row['testimonial_title'];
    // $testimonial_subtitle            = $row['testimonial_subtitle'];
   //  $testimonial_photo               = $row['testimonial_photo'];
@@ -1500,6 +1515,43 @@ foreach ($result as $row) {
                                         <label for="" class="col-sm-3 control-label"></label>
                                         <div class="col-sm-6">
                                             <button type="submit" class="btn btn-success pull-left" name="form_cat_banner_cols">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+
+
+                            <h3>Brand Banner Section</h3>
+                            <form class="form-horizontal" action="" method="post">
+                            <div class="box box-info">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Section Title<span>*</span></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="brand_banner_title" value="<?php echo $brand_banner_title; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Section Subtitle</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="brand_banner_subtitle" value="<?php echo $brand_banner_subtitle; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Columns Per Row<span>*</span></label>
+                                        <div class="col-sm-2">
+                                            <select name="brand_banner_columns" class="form-control">
+                                                <?php for($c=1;$c<=6;$c++): ?>
+                                                <option value="<?php echo $c; ?>" <?php if($brand_banner_columns == $c) echo 'selected'; ?>><?php echo $c; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <button type="submit" class="btn btn-success pull-left" name="form_brand_banner_cols">Update</button>
                                         </div>
                                     </div>
                                 </div>
