@@ -312,7 +312,7 @@ foreach ($result as $row) {
 						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user"></i><span class="icon-label"><?php echo $_SESSION['customer']['cust_name']; ?></span></a></li>
 					<?php else: ?>
 						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-sign-in"></i><span class="icon-label"><?php echo LANG_VALUE_9; ?></span></a></li>
-						<li><a href="registration.php" class="header-icon-link" title="<?php echo LANG_VALUE_15; ?>"><i class="fa fa-user-plus"></i><span class="icon-label"><?php echo LANG_VALUE_15; ?></span></a></li>
+						
 					<?php endif; ?>
 					<li>
 						<a href="javascript:void(0);" onclick="toggleSideCart()" class="header-icon-link cart-trigger" title="Sepet">
