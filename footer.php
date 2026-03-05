@@ -120,9 +120,15 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 
 <div class="footer-info-section" style="background:#2c3e50;color:#ecf0f1;padding:40px 0 20px;">
 	<div class="container">
-		<div class="row">
+		<div class="row footer-row-nowrap">
+			<!-- Hakkımızda -->
+			<div class="col-md-3 col-sm-6 footer-col">
+				<h4 class="footer-section-title">Hakkımızda</h4>
+				<p style="color:#bdc3c7;font-size:12px;line-height:1.8;margin:0;"><?php echo $footer_about; ?></p>
+			</div>
+
 			<!-- Hızlı Menü -->
-			<div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+			<div class="col-md-2 col-sm-6 footer-col">
 				<h4 class="footer-section-title">Menü</h4>
 				<ul class="footer-simple-links">
 					<li><a href="index.php">Ana Sayfa</a></li>
@@ -147,7 +153,7 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 			</div>
 
 			<!-- Kategoriler -->
-			<div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+			<div class="col-md-2 col-sm-6 footer-col">
 				<?php
 				$ft_cb_statement = $pdo->prepare("SELECT * FROM tbl_category_banner WHERE is_active = 1 ORDER BY display_order ASC");
 				$ft_cb_statement->execute();
@@ -164,7 +170,7 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 			</div>
 
 			<!-- Çalışma Saatleri -->
-			<div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+			<div class="col-md-2 col-sm-6 footer-col">
 				<h4 class="footer-section-title"><i class="fa fa-clock-o"></i> Çalışma Saatleri</h4>
 				<div style="color:#bdc3c7;font-size:13px;line-height:2;">
 					<?php echo nl2br(htmlspecialchars($working_days)); ?>
@@ -172,7 +178,7 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 			</div>
 
 			<!-- İletişim Bilgileri -->
-			<div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+			<div class="col-md-3 col-sm-6 footer-col">
 				<h4 class="footer-section-title"><i class="fa fa-envelope-o"></i> İletişim</h4>
 				<ul style="list-style:none;padding:0;margin:0;">
 					<?php if(!empty($contact_address)): ?>
@@ -194,13 +200,6 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 					</li>
 					<?php endif; ?>
 				</ul>
-			</div>
-		</div>
-
-		<!-- Hakkımızda - alt satır -->
-		<div class="row" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:15px;margin-top:10px;">
-			<div class="col-md-12">
-				<p style="color:#7f8c8d;font-size:12px;line-height:1.7;margin:0;"><?php echo $footer_about; ?></p>
 			</div>
 		</div>
 	</div>
