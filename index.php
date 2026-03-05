@@ -135,23 +135,23 @@ foreach ($result as $row)
 .flip-cube-content .cube-btn {
     display: inline-block;
     padding: 10px 25px;
-    background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+    background: var(--slider-btn-color, #e4144d);
     color: white;
     text-decoration: none;
     border-radius: 0;
     font-size: 13px;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .flip-cube-content .cube-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .flip-cube-back {
-    background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+    background: var(--slider-btn-color, #e4144d);
     transform: rotateY(180deg);
     display: flex;
     align-items: center;
