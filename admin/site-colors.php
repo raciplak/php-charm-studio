@@ -3,17 +3,21 @@
 <?php
 // Update colors
 if(isset($_POST['form_site_colors'])) {
-    $csrf->check_valid('error');
-    
-    if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
-        for($i=0; $i < count($_POST['color_id']); $i++) {
-            $id = $_POST['color_id'][$i];
-            $value = '#' . ltrim($_POST['color_value'][$i], '#');
-            
-            $statement = $pdo->prepare("UPDATE tbl_site_colors SET color_value=? WHERE id=?");
-            $statement->execute(array($value, $id));
+    try {
+        $csrf->check_valid('error');
+        
+        if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
+            for($i=0; $i < count($_POST['color_id']); $i++) {
+                $id = intval($_POST['color_id'][$i]);
+                $value = '#' . ltrim($_POST['color_value'][$i], '#');
+                
+                $statement = $pdo->prepare("UPDATE tbl_site_colors SET color_value=? WHERE id=?");
+                $statement->execute(array($value, $id));
+            }
+            $success_message = 'Site renkleri başarıyla güncellendi!';
         }
-        $success_message = 'Site renkleri başarıyla güncellendi!';
+    } catch(Exception $e) {
+        $error_message = 'Hata: ' . $e->getMessage();
     }
 }
 
@@ -60,11 +64,12 @@ foreach($all_colors as $color) {
                             </label>
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <input type="hidden" name="color_id[]" value="<?php echo $color['id']; ?>">
-                                <input class="jscolor {hash:true, borderColor:'#ccc', backgroundColor:'#fff', padding:8, borderRadius:4}" 
+                                <input class="color-picker" 
                                        name="color_value[]" 
                                        value="<?php echo htmlspecialchars(ltrim($color['color_value'], '#')); ?>" 
-                                       style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;">
-                                <div style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
+                                       style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;"
+                                       data-preview="preview-<?php echo $color['id']; ?>">
+                                <div id="preview-<?php echo $color['id']; ?>" style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
                             </div>
                             <div style="margin-top:6px;font-size:11px;color:#888;">
                                 <code style="background:#eee;padding:2px 6px;border-radius:3px;">--<?php echo htmlspecialchars($color['color_key']); ?></code>
@@ -104,5 +109,36 @@ foreach($all_colors as $color) {
 </section>
 
 <script src="js/jscolor.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize jscolor on all color-picker inputs
+    var pickers = document.querySelectorAll('.color-picker');
+    pickers.forEach(function(input) {
+        var picker = new jscolor(input, {
+            hash: true,
+            borderColor: '#ccc',
+            backgroundColor: '#fff',
+            padding: 8,
+            borderRadius: 4,
+            onFineChange: function() {
+                var previewId = input.getAttribute('data-preview');
+                if(previewId) {
+                    document.getElementById(previewId).style.background = this.toHEXString();
+                }
+            }
+        });
+        // Also listen for manual text input
+        input.addEventListener('input', function() {
+            var val = this.value.replace(/^#/, '');
+            if(/^[0-9a-fA-F]{6}$/.test(val)) {
+                var previewId = this.getAttribute('data-preview');
+                if(previewId) {
+                    document.getElementById(previewId).style.background = '#' + val;
+                }
+            }
+        });
+    });
+});
+</script>
 
 <?php include("footer.php"); ?>
