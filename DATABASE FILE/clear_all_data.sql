@@ -34,6 +34,9 @@ TRUNCATE TABLE tbl_photo;
 -- Kategori Bannerları
 TRUNCATE TABLE tbl_category_banner;
 
+-- Marka Bannerları
+TRUNCATE TABLE tbl_brand_banner;
+
 -- FAQ
 TRUNCATE TABLE tbl_faq;
 
