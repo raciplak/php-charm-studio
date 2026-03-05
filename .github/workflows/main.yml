@@ -1,9 +1,12 @@
 name: Auto Sync and FTP Deploy
 
 on:
+  push:
+    branches:
+      - main  # Herhangi bir dosya güncellendiğinde (push) otomatik çalışır
   schedule:
-    - cron: '0 0 * * *' 
-  workflow_dispatch: 
+    - cron: '0 0 * * *' # Günde bir kez gece yarısı otomatik kontrol eder
+  workflow_dispatch: # Hala manuel çalıştırma butonunu korur
 
 jobs:
   sync-and-deploy:
@@ -21,23 +24,17 @@ jobs:
         env:
           MY_TOKEN: ${{ secrets.MY_SYNC_TOKEN }}
         run: |
-          # Git kimlik ayarları
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Upstream bağlantısını temizle ve yeniden ekle
           git remote remove upstream || true
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           
-          # Tüm dalları çek
           git fetch upstream main
-          
-          # Main dalına geç ve orijinal main ile eşitle
           git checkout main
           git reset --hard upstream/main
           
-          # Kendi repona zorla gönder (PAT kullanarak)
           git push "https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git" main --force
 
       - name: 🚀 FTP Deploy
