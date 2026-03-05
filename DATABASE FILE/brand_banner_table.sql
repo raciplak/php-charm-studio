@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS `tbl_brand_banner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Settings columns for brand banner section
-ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `brand_banner_columns` INT NOT NULL DEFAULT 4;
-ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `brand_banner_title` VARCHAR(255) NOT NULL DEFAULT 'Marka Bannerları';
-ALTER TABLE `tbl_settings` ADD COLUMN IF NOT EXISTS `brand_banner_subtitle` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE `tbl_settings` ADD COLUMN `brand_banner_columns` INT NOT NULL DEFAULT 4;
+ALTER TABLE `tbl_settings` ADD COLUMN `brand_banner_title` VARCHAR(255) NOT NULL DEFAULT 'Marka Bannerları';
+ALTER TABLE `tbl_settings` ADD COLUMN `brand_banner_subtitle` VARCHAR(255) NOT NULL DEFAULT '';
