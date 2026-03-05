@@ -569,6 +569,164 @@ if(count($category_banners) > 0):
 </section>
 <?php endif; ?>
 
+<!-- Brand Banners Section -->
+<?php
+$statement = $pdo->prepare("SELECT * FROM tbl_brand_banner WHERE is_active = 1 ORDER BY display_order ASC");
+$statement->execute();
+$brand_banners = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$brand_banner_columns = 4;
+$brand_banner_title = 'Marka Bannerları';
+$brand_banner_subtitle = '';
+$stmt_bb = $pdo->prepare("SELECT brand_banner_columns, brand_banner_title, brand_banner_subtitle FROM tbl_settings WHERE id=1");
+$stmt_bb->execute();
+$bb_settings = $stmt_bb->fetch(PDO::FETCH_ASSOC);
+if($bb_settings) {
+    $brand_banner_columns = isset($bb_settings['brand_banner_columns']) ? intval($bb_settings['brand_banner_columns']) : 4;
+    $brand_banner_title = isset($bb_settings['brand_banner_title']) ? $bb_settings['brand_banner_title'] : 'Marka Bannerları';
+    $brand_banner_subtitle = isset($bb_settings['brand_banner_subtitle']) ? $bb_settings['brand_banner_subtitle'] : '';
+}
+
+if(count($brand_banners) > 0):
+?>
+<style>
+.brand-banners-section {
+    padding: 50px 0;
+    background: #f2f3f3;
+    position: relative;
+    overflow: hidden;
+}
+.brand-banners-section .section-header {
+    text-align: center;
+    margin-bottom: 25px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+}
+.brand-banners-section .section-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0;
+}
+.brand-banner-grid {
+    display: grid;
+    grid-template-columns: repeat(<?php echo $brand_banner_columns; ?>, 1fr);
+    gap: 15px;
+    padding: 0 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.brand-banner-card {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+}
+.brand-banner-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+.brand-banner-card:hover .brand-banner-inner {
+    transform: scale(1.02);
+}
+.brand-banner-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+.brand-banner-face::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, transparent 50%, rgba(0,0,0,0.4) 100%);
+    transition: all 0.3s ease;
+}
+.brand-banner-card:hover .brand-banner-face::before {
+    background: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(0,0,0,0.5) 100%);
+}
+.brand-banner-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 15px;
+    z-index: 3;
+}
+.brand-banner-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+.brand-banner-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #2196F3;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+@media (max-width: 900px) {
+    .brand-banner-grid { grid-template-columns: repeat(2, 1fr); }
+    .brand-banner-card { height: 200px; }
+}
+@media (max-width: 600px) {
+    .brand-banners-section { padding: 40px 0; }
+    .brand-banner-grid { grid-template-columns: 1fr; }
+    .brand-banner-card { height: 180px; }
+}
+</style>
+
+<section class="brand-banners-section" aria-label="Brand Banners" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="<?php echo htmlspecialchars($brand_banner_title, ENT_QUOTES, 'UTF-8'); ?>">
+    <div class="section-header">
+        <h2><?php echo htmlspecialchars($brand_banner_title, ENT_QUOTES, 'UTF-8'); ?></h2>
+        <?php if(!empty($brand_banner_subtitle)): ?>
+        <p style="color:#777; margin-top:5px; font-size:15px;"><?php echo htmlspecialchars($brand_banner_subtitle, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
+    </div>
+    
+    <div class="brand-banner-grid">
+        <?php
+        $bb_position = 0;
+        foreach ($brand_banners as $bb) {
+            $bb_position++;
+            $bb_title = htmlspecialchars($bb['title'], ENT_QUOTES, 'UTF-8');
+            $bb_subtitle = htmlspecialchars($bb['subtitle'], ENT_QUOTES, 'UTF-8');
+            $bb_image = 'assets/uploads/' . $bb['photo'];
+            $bb_btn_url = htmlspecialchars($bb['button_url'], ENT_QUOTES, 'UTF-8');
+        ?>
+        <a href="<?php echo $bb_btn_url; ?>" class="brand-banner-card" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" title="<?php echo $bb_title; ?>">
+            <meta itemprop="position" content="<?php echo $bb_position; ?>">
+            <div class="brand-banner-inner">
+                <div class="brand-banner-face" style="background-image: url(<?php echo $bb_image; ?>);">
+                    <img src="<?php echo $bb_image; ?>" alt="<?php echo $bb_title; ?>" loading="lazy" style="display:none;" itemprop="image">
+                    <div class="brand-banner-content">
+                        <h3 class="brand-banner-title" itemprop="name"><?php echo $bb_title; ?></h3>
+                        <?php if(!empty($bb_subtitle)): ?>
+                        <span class="brand-banner-tag" itemprop="description"><?php echo $bb_subtitle; ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <?php } ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php if($home_featured_product_on_off == 1): ?>
 <div class="product pt_70 pb_70">
     <div class="container">
