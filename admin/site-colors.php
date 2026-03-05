@@ -1,6 +1,9 @@
 <?php include("header.php"); ?>
 
 <?php
+$error_message = '';
+$success_message = '';
+
 // Update colors
 if(isset($_POST['form_site_colors'])) {
     try {
@@ -9,7 +12,15 @@ if(isset($_POST['form_site_colors'])) {
         if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
             for($i=0; $i < count($_POST['color_id']); $i++) {
                 $id = intval($_POST['color_id'][$i]);
-                $value = '#' . ltrim($_POST['color_value'][$i], '#');
+                $value = trim($_POST['color_value'][$i]);
+                // Ensure # prefix
+                if(substr($value, 0, 1) !== '#') {
+                    $value = '#' . $value;
+                }
+                // Validate hex
+                if(!preg_match('/^#[0-9a-fA-F]{6}$/', $value)) {
+                    continue;
+                }
                 
                 $statement = $pdo->prepare("UPDATE tbl_site_colors SET color_value=? WHERE id=?");
                 $statement->execute(array($value, $id));
@@ -63,15 +74,21 @@ foreach($all_colors as $color) {
                                 <?php echo htmlspecialchars($color['color_label']); ?>
                             </label>
                             <div style="display:flex;align-items:center;gap:10px;">
-                                <input type="hidden" name="color_id[]" value="<?php echo $color['id']; ?>">
-                                <input class="jscolor {hash:true, borderColor:'#ccc', backgroundColor:'#fff'}" 
+                                <input type="hidden" name="color_id[]" value="<?php echo intval($color['id']); ?>">
+                                <input type="color" 
+                                       class="color-picker-input"
+                                       value="<?php echo htmlspecialchars($color['color_value']); ?>" 
+                                       data-hex="hex-<?php echo $color['id']; ?>"
+                                       oninput="syncFromPicker(this)"
+                                       style="width:50px;height:40px;border:1px solid #ccc;border-radius:4px;padding:2px;cursor:pointer;background:transparent;">
+                                <input type="text" 
                                        name="color_value[]" 
-                                       id="colorinput-<?php echo $color['id']; ?>"
-                                       value="<?php echo htmlspecialchars(ltrim($color['color_value'], '#')); ?>" 
-                                       style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;"
-                                       data-preview="preview-<?php echo $color['id']; ?>"
-                                       onchange="updatePreview(this)">
-                                <div id="preview-<?php echo $color['id']; ?>" style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
+                                       id="hex-<?php echo $color['id']; ?>"
+                                       value="<?php echo htmlspecialchars($color['color_value']); ?>" 
+                                       data-picker="picker-<?php echo $color['id']; ?>"
+                                       oninput="syncFromHex(this)"
+                                       maxlength="7"
+                                       style="width:100px;height:40px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;text-transform:uppercase;">
                             </div>
                             <div style="margin-top:6px;font-size:11px;color:#888;">
                                 <code style="background:#eee;padding:2px 6px;border-radius:3px;">--<?php echo htmlspecialchars($color['color_key']); ?></code>
@@ -103,35 +120,35 @@ foreach($all_colors as $color) {
             <ul>
                 <li>Renk kutucuğuna tıklayarak renk seçici açılır.</li>
                 <li>Değişiklikler kaydedildikten sonra tüm sitede anında geçerli olur.</li>
-                <li>Gelecekte eklenen yeni renkli alanlar da bu merkezden beslenecektir.</li>
             </ul>
         </div>
     </div>
 
 </section>
 
-<script src="js/jscolor.js"></script>
 <script>
-function updatePreview(el) {
-    var val = el.value.replace(/^#/, '');
-    var previewId = el.getAttribute('data-preview');
-    if(previewId && /^[0-9a-fA-F]{6}$/.test(val)) {
-        document.getElementById(previewId).style.backgroundColor = '#' + val;
+function syncFromPicker(picker) {
+    var hexId = picker.getAttribute('data-hex');
+    var hexInput = document.getElementById(hexId);
+    if(hexInput) {
+        hexInput.value = picker.value.toUpperCase();
     }
 }
 
-// Periodically sync preview colors with jscolor pickers
-setInterval(function() {
-    var inputs = document.querySelectorAll('input[data-preview]');
-    for(var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        var val = input.value.replace(/^#/, '');
-        var previewId = input.getAttribute('data-preview');
-        if(previewId && /^[0-9a-fA-F]{6}$/.test(val)) {
-            document.getElementById(previewId).style.backgroundColor = '#' + val;
+function syncFromHex(hexInput) {
+    var val = hexInput.value.trim();
+    if(/^#[0-9a-fA-F]{6}$/.test(val)) {
+        // Find the corresponding color picker
+        var id = hexInput.id;
+        var pickers = document.querySelectorAll('input[type="color"]');
+        for(var i = 0; i < pickers.length; i++) {
+            if(pickers[i].getAttribute('data-hex') === id) {
+                pickers[i].value = val;
+                break;
+            }
         }
     }
-}, 200);
+}
 </script>
 
 <?php include("footer.php"); ?>
