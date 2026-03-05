@@ -13,23 +13,28 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Kendi oluşturduğun anahtarı kullanıyoruz
           token: ${{ secrets.MY_SYNC_TOKEN }}
 
       - name: 🔄 Sync From Upstream
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Güvenli dizin ayarı
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           
+          # Kimlik bilgilerini ayarla
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Orijinal repoyu ekle ve çek
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           git fetch upstream master
           
+          # 'main' dalına geç ve orijinal 'master' ile eşitle
           git checkout main
           git reset --hard upstream/master
           
-          # Kendi özel anahtarınla (PAT) zorlayarak yaz
-          git push https://${{ secrets.MY_SYNC_TOKEN }}@github.com/${{ github.repository }}.git main --force
+          # YETKİ SORUNUNU AŞAN GÜNCEL PUSH KOMUTU:
+          # 'raciplak' kısmını kendi GitHub kullanıcı adınızla değiştirmeyi unutmayın!
+          git push https://raciplak:${{ secrets.MY_SYNC_TOKEN }}@github.com/raciplak/php-charm-studio.git main --force
 
       - name: 🚀 FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
