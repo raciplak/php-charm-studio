@@ -650,12 +650,11 @@ if(count($brand_banners) > 0):
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(35deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.05) 70%, transparent 100%);
+    background: linear-gradient(180deg, transparent 0%, transparent 50%, rgba(0,0,0,0.4) 100%);
     transition: all 0.3s ease;
-    z-index: 1;
 }
 .brand-banner-card:hover .brand-banner-face::before {
-    background: linear-gradient(35deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.1) 70%, transparent 100%);
+    background: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(0,0,0,0.5) 100%);
 }
 .brand-banner-content {
     position: absolute;
