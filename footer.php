@@ -13,6 +13,7 @@ foreach ($result as $row)
     $total_popular_post_footer = $row['total_popular_post_footer'];
     $newsletter_on_off = $row['newsletter_on_off'];
     $before_body = $row['before_body'];
+    $working_days = isset($row['working_days']) ? $row['working_days'] : 'Pazartesi - Cumartesi: 09:00 - 18:00\nPazar: Kapalı';
 }
 ?>
 
@@ -117,13 +118,56 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 </section>
 <?php endif; ?>
 
-
-
-
-<div class="footer-bottom">
+<!-- Footer Info Section -->
+<div class="footer-info-section" style="background:#2c3e50;color:#ecf0f1;padding:40px 0 20px;">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12 copyright">
+			<!-- Hakkımızda -->
+			<div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+				<h4 style="color:#fff;font-size:16px;font-weight:600;margin-bottom:15px;border-bottom:2px solid #e4144d;padding-bottom:8px;display:inline-block;">Hakkımızda</h4>
+				<p style="color:#bdc3c7;font-size:13px;line-height:1.8;"><?php echo $footer_about; ?></p>
+			</div>
+
+			<!-- Çalışma Saatleri -->
+			<div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+				<h4 style="color:#fff;font-size:16px;font-weight:600;margin-bottom:15px;border-bottom:2px solid #e4144d;padding-bottom:8px;display:inline-block;"><i class="fa fa-clock-o"></i> Çalışma Saatleri</h4>
+				<div style="color:#bdc3c7;font-size:13px;line-height:2;">
+					<?php echo nl2br(htmlspecialchars($working_days)); ?>
+				</div>
+			</div>
+
+			<!-- İletişim Bilgileri -->
+			<div class="col-md-4 col-sm-12" style="margin-bottom:20px;">
+				<h4 style="color:#fff;font-size:16px;font-weight:600;margin-bottom:15px;border-bottom:2px solid #e4144d;padding-bottom:8px;display:inline-block;"><i class="fa fa-envelope-o"></i> İletişim</h4>
+				<ul style="list-style:none;padding:0;margin:0;">
+					<?php if(!empty($contact_address)): ?>
+					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:flex-start;">
+						<i class="fa fa-map-marker" style="color:#e4144d;font-size:16px;margin-right:10px;margin-top:3px;min-width:16px;"></i>
+						<span><?php echo nl2br(htmlspecialchars($contact_address)); ?></span>
+					</li>
+					<?php endif; ?>
+					<?php if(!empty($contact_phone)): ?>
+					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
+						<i class="fa fa-phone" style="color:#e4144d;font-size:16px;margin-right:10px;min-width:16px;"></i>
+						<a href="tel:<?php echo $contact_phone; ?>" style="color:#bdc3c7;text-decoration:none;"><?php echo $contact_phone; ?></a>
+					</li>
+					<?php endif; ?>
+					<?php if(!empty($contact_email)): ?>
+					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
+						<i class="fa fa-envelope" style="color:#e4144d;font-size:16px;margin-right:10px;min-width:16px;"></i>
+						<a href="mailto:<?php echo $contact_email; ?>" style="color:#bdc3c7;text-decoration:none;"><?php echo $contact_email; ?></a>
+					</li>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="footer-bottom" style="background:#1a252f;padding:15px 0;">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 copyright" style="color:#7f8c8d;text-align:center;font-size:13px;">
 				<?php echo $footer_copyright; ?>
 			</div>
 		</div>
