@@ -164,6 +164,65 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 	</div>
 </div>
 
+<!-- Footer Navigation & Category Banners -->
+<div class="footer-nav-section" style="background:#243342;padding:30px 0 20px;border-top:1px solid rgba(255,255,255,0.05);">
+	<div class="container">
+		<div class="row">
+			<!-- Hızlı Menü -->
+			<div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+				<h4 class="footer-nav-title"><i class="fa fa-compass"></i> Hızlı Menü</h4>
+				<ul class="footer-nav-links">
+					<li><a href="index.php"><i class="fa fa-angle-right"></i> Ana Sayfa</a></li>
+					<?php
+					$ft_statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
+					$ft_statement->execute();
+					$ft_cats = $ft_statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach ($ft_cats as $ft_row) {
+						echo '<li><a href="product-category.php?id='.$ft_row['tcat_id'].'&type=top-category"><i class="fa fa-angle-right"></i> '.htmlspecialchars($ft_row['tcat_name']).'</a></li>';
+					}
+					
+					$ft_statement = $pdo->prepare("SELECT * FROM tbl_brands WHERE show_on_menu=1 ORDER BY brand_name");
+					$ft_statement->execute();
+					$ft_brands = $ft_statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach ($ft_brands as $ft_row) {
+						echo '<li><a href="product-category.php?id='.$ft_row['brand_id'].'&type=brand"><i class="fa fa-angle-right"></i> '.htmlspecialchars($ft_row['brand_name']).'</a></li>';
+					}
+					?>
+					<li><a href="about.php"><i class="fa fa-angle-right"></i> <?php echo $about_title; ?></a></li>
+					<li><a href="faq.php"><i class="fa fa-angle-right"></i> <?php echo $faq_title; ?></a></li>
+					<li><a href="contact.php"><i class="fa fa-angle-right"></i> <?php echo $contact_title; ?></a></li>
+				</ul>
+			</div>
+
+			<!-- Kategori Bannerları -->
+			<div class="col-md-8 col-sm-6" style="margin-bottom:20px;">
+				<h4 class="footer-nav-title"><i class="fa fa-th-large"></i> Kategoriler</h4>
+				<?php
+				$ft_cb_statement = $pdo->prepare("SELECT * FROM tbl_category_banner WHERE is_active = 1 ORDER BY display_order ASC");
+				$ft_cb_statement->execute();
+				$ft_banners = $ft_cb_statement->fetchAll(PDO::FETCH_ASSOC);
+				?>
+				<?php if(count($ft_banners) > 0): ?>
+				<div class="footer-banner-grid">
+					<?php foreach ($ft_banners as $ft_b): ?>
+					<?php 
+					$ft_b_link = !empty($ft_b['button_url']) ? $ft_b['button_url'] : '#';
+					$ft_b_title = htmlspecialchars($ft_b['title']);
+					?>
+					<a href="<?php echo $ft_b_link; ?>" class="footer-banner-card" title="<?php echo $ft_b_title; ?>">
+						<div class="footer-banner-img">
+							<img src="assets/uploads/<?php echo $ft_b['photo']; ?>" alt="<?php echo $ft_b_title; ?>" loading="lazy">
+						</div>
+						<span class="footer-banner-label"><?php echo $ft_b_title; ?></span>
+					</a>
+					<?php endforeach; ?>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="footer-bottom" style="background:#1a252f;padding:15px 0;">
 	<div class="container">
 		<div class="row">
