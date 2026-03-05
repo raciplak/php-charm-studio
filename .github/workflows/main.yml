@@ -21,25 +21,23 @@ jobs:
         env:
           MY_TOKEN: ${{ secrets.MY_SYNC_TOKEN }}
         run: |
-          # 1. Git Ayarları
+          # Git kimlik ayarları
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 2. Upstream Ayarı
+          # Upstream bağlantısını temizle ve yeniden ekle
           git remote remove upstream || true
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           
-          # 3. Veriyi Çek (Artık main olduğunu biliyoruz)
+          # Tüm dalları çek
           git fetch upstream main
           
-          # 4. Kendi dalını güncelle
+          # Main dalına geç ve orijinal main ile eşitle
           git checkout main
-          
-          # HATA ÇÖZÜMÜ: Komutu sadeleştirdik, artık '>' hatası vermeyecek
           git reset --hard upstream/main
           
-          # 5. Kendi repona yükle
+          # Kendi repona zorla gönder (PAT kullanarak)
           git push "https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git" main --force
 
       - name: 🚀 FTP Deploy
@@ -51,4 +49,7 @@ jobs:
           server-dir: ./public_html/eticaret/php-charm-studio-main/
           exclude: |
             **/.git*
-            **/.github*
+            **/.git/**
+            **/.github/**
+            **/node_modules/**
+            .ftp-deploy-sync-state.json
