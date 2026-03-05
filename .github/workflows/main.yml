@@ -8,36 +8,28 @@ on:
 jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: 🔍 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Token'ı burada açıkça tanımlıyoruz
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Kendi oluşturduğun anahtarı kullanıyoruz
+          token: ${{ secrets.MY_SYNC_TOKEN }}
 
       - name: 🔄 Sync From Upstream
         run: |
-          # Git kimlik bilgilerini ayarla
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Hata 128'i önlemek için güvenli dizin onayı
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           
-          # Orijinal repoyu ekle
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           git fetch upstream master
           
-          # Main dalına geç ve upstream/master ile üzerine yaz
           git checkout main
           git reset --hard upstream/master
           
-          # YETKİ SORUNUNU ÇÖZEN KRİTİK SATIR:
-          # Kendi deponuza token ile kimlik doğrulaması yaparak push yapın
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" main --force
+          # Kendi özel anahtarınla (PAT) zorlayarak yaz
+          git push https://${{ secrets.MY_SYNC_TOKEN }}@github.com/${{ github.repository }}.git main --force
 
       - name: 🚀 FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
