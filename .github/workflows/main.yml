@@ -21,26 +21,25 @@ jobs:
         env:
           MY_TOKEN: ${{ secrets.MY_SYNC_TOKEN }}
         run: |
-          # Git kimlik ayarları
+          # 1. Git Ayarları
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Upstream bağlantısını temizle ve yeniden ekle
+          # 2. Upstream Ayarı
           git remote remove upstream || true
           git remote add upstream https://github.com/raciplak/php-charm-studio.git
           
-          # Tüm dalları çek (Hangi dalın olduğunu otomatik bulmak için)
-          git fetch upstream
+          # 3. Veriyi Çek (Artık main olduğunu biliyoruz)
+          git fetch upstream main
           
-          # HATA ÇÖZÜMÜ: Eğer master yoksa main dalını kullanmayı dene
-          UPSTREAM_BRANCH=$(git branch -r | grep 'upstream/main' && echo "main" || echo "master")
-          echo "Hedef dal olarak $UPSTREAM_BRANCH seçildi."
-          
+          # 4. Kendi dalını güncelle
           git checkout main
-          git reset --hard upstream/$UPSTREAM_BRANCH
           
-          # Push denemesi
+          # HATA ÇÖZÜMÜ: Komutu sadeleştirdik, artık '>' hatası vermeyecek
+          git reset --hard upstream/main
+          
+          # 5. Kendi repona yükle
           git push "https://x-access-token:${MY_TOKEN}@github.com/${{ github.repository }}.git" main --force
 
       - name: 🚀 FTP Deploy
