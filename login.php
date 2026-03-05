@@ -87,6 +87,10 @@ if(isset($_POST['form1'])) {
                                     <input type="submit" class="btn btn-success" value="<?php echo LANG_VALUE_4; ?>" name="form1">
                                 </div>
                                 <a href="forget-password.php" style="color:#e4144d;">Şifrenizi mi unuttunuz?</a>
+                                <div style="margin-top:20px;padding-top:15px;border-top:1px solid #eee;text-align:center;">
+                                    <p style="margin-bottom:5px;color:#666;">Hesabınız yok mu?</p>
+                                    <a href="registration.php" class="btn btn-primary" style="width:100%;">Hemen Kayıt Olun</a>
+                                </div>
                             </div>
                         </div>                        
                     </form>
