@@ -105,5 +105,36 @@ foreach($all_colors as $color) {
 </section>
 
 <script src="js/jscolor.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize jscolor on all color-picker inputs
+    var pickers = document.querySelectorAll('.color-picker');
+    pickers.forEach(function(input) {
+        var picker = new jscolor(input, {
+            hash: true,
+            borderColor: '#ccc',
+            backgroundColor: '#fff',
+            padding: 8,
+            borderRadius: 4,
+            onFineChange: function() {
+                var previewId = input.getAttribute('data-preview');
+                if(previewId) {
+                    document.getElementById(previewId).style.background = this.toHEXString();
+                }
+            }
+        });
+        // Also listen for manual text input
+        input.addEventListener('input', function() {
+            var val = this.value.replace(/^#/, '');
+            if(/^[0-9a-fA-F]{6}$/.test(val)) {
+                var previewId = this.getAttribute('data-preview');
+                if(previewId) {
+                    document.getElementById(previewId).style.background = '#' + val;
+                }
+            }
+        });
+    });
+});
+</script>
 
 <?php include("footer.php"); ?>
