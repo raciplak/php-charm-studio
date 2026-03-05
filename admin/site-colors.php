@@ -3,17 +3,21 @@
 <?php
 // Update colors
 if(isset($_POST['form_site_colors'])) {
-    $csrf->check_valid('error');
-    
-    if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
-        for($i=0; $i < count($_POST['color_id']); $i++) {
-            $id = $_POST['color_id'][$i];
-            $value = '#' . ltrim($_POST['color_value'][$i], '#');
-            
-            $statement = $pdo->prepare("UPDATE tbl_site_colors SET color_value=? WHERE id=?");
-            $statement->execute(array($value, $id));
+    try {
+        $csrf->check_valid('error');
+        
+        if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
+            for($i=0; $i < count($_POST['color_id']); $i++) {
+                $id = intval($_POST['color_id'][$i]);
+                $value = '#' . ltrim($_POST['color_value'][$i], '#');
+                
+                $statement = $pdo->prepare("UPDATE tbl_site_colors SET color_value=? WHERE id=?");
+                $statement->execute(array($value, $id));
+            }
+            $success_message = 'Site renkleri başarıyla güncellendi!';
         }
-        $success_message = 'Site renkleri başarıyla güncellendi!';
+    } catch(Exception $e) {
+        $error_message = 'Hata: ' . $e->getMessage();
     }
 }
 
