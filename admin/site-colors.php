@@ -4,7 +4,7 @@
 // Update colors
 if(isset($_POST['form_site_colors'])) {
     try {
-        $csrf->check_valid('error');
+        $csrf->verifyRequest();
         
         if(isset($_POST['color_id']) && is_array($_POST['color_id'])) {
             for($i=0; $i < count($_POST['color_id']); $i++) {
@@ -64,11 +64,13 @@ foreach($all_colors as $color) {
                             </label>
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <input type="hidden" name="color_id[]" value="<?php echo $color['id']; ?>">
-                                <input class="color-picker" 
+                                <input class="jscolor {hash:true, borderColor:'#ccc', backgroundColor:'#fff'}" 
                                        name="color_value[]" 
+                                       id="colorinput-<?php echo $color['id']; ?>"
                                        value="<?php echo htmlspecialchars(ltrim($color['color_value'], '#')); ?>" 
                                        style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;"
-                                       data-preview="preview-<?php echo $color['id']; ?>">
+                                       data-preview="preview-<?php echo $color['id']; ?>"
+                                       onchange="updatePreview(this)">
                                 <div id="preview-<?php echo $color['id']; ?>" style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
                             </div>
                             <div style="margin-top:6px;font-size:11px;color:#888;">
@@ -110,35 +112,26 @@ foreach($all_colors as $color) {
 
 <script src="js/jscolor.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize jscolor on all color-picker inputs
-    var pickers = document.querySelectorAll('.color-picker');
-    pickers.forEach(function(input) {
-        var picker = new jscolor(input, {
-            hash: true,
-            borderColor: '#ccc',
-            backgroundColor: '#fff',
-            padding: 8,
-            borderRadius: 4,
-            onFineChange: function() {
-                var previewId = input.getAttribute('data-preview');
-                if(previewId) {
-                    document.getElementById(previewId).style.background = this.toHEXString();
-                }
-            }
-        });
-        // Also listen for manual text input
-        input.addEventListener('input', function() {
-            var val = this.value.replace(/^#/, '');
-            if(/^[0-9a-fA-F]{6}$/.test(val)) {
-                var previewId = this.getAttribute('data-preview');
-                if(previewId) {
-                    document.getElementById(previewId).style.background = '#' + val;
-                }
-            }
-        });
-    });
-});
+function updatePreview(el) {
+    var val = el.value.replace(/^#/, '');
+    var previewId = el.getAttribute('data-preview');
+    if(previewId && /^[0-9a-fA-F]{6}$/.test(val)) {
+        document.getElementById(previewId).style.backgroundColor = '#' + val;
+    }
+}
+
+// Periodically sync preview colors with jscolor pickers
+setInterval(function() {
+    var inputs = document.querySelectorAll('input[data-preview]');
+    for(var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        var val = input.value.replace(/^#/, '');
+        var previewId = input.getAttribute('data-preview');
+        if(previewId && /^[0-9a-fA-F]{6}$/.test(val)) {
+            document.getElementById(previewId).style.backgroundColor = '#' + val;
+        }
+    }
+}, 200);
 </script>
 
 <?php include("footer.php"); ?>
