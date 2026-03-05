@@ -164,6 +164,12 @@ if(!isset($_SESSION['user'])) {
 			          </a>
 			        </li>
 
+			        <li class="treeview <?php if( ($cur_page == 'brand-banner.php') || ($cur_page == 'brand-banner-add.php') || ($cur_page == 'brand-banner-edit.php') ) {echo 'active';} ?>">
+			          <a href="brand-banner.php">
+			            <i class="fa fa-bookmark"></i> <span>Marka Bannerları</span>
+			          </a>
+			        </li>
+
 			      			        <li class="treeview <?php if( ($cur_page == 'faq.php') ) {echo 'active';} ?>">
 			          <a href="faq.php">
 			            <i class="fa fa-question-circle"></i> <span>SSS</span>
