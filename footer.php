@@ -118,13 +118,13 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 </section>
 <?php endif; ?>
 
-<div class="footer-info-section" style="background:#2c3e50;color:#ecf0f1;padding:40px 0 20px;">
+<div class="footer-info-section" style="background:var(--footer-bg);color:var(--footer-text-color);padding:40px 0 20px;">
 	<div class="container">
 		<div class="row footer-row-nowrap">
 			<!-- Hakkımızda -->
 			<div class="col-md-3 col-sm-6 footer-col">
 				<h4 class="footer-section-title">Hakkımızda</h4>
-				<p style="color:#bdc3c7;font-size:12px;line-height:1.8;margin:0;"><?php echo $footer_about; ?></p>
+				<p style="color:var(--footer-text-color);font-size:12px;line-height:1.8;margin:0;"><?php echo $footer_about; ?></p>
 			</div>
 
 			<!-- Hızlı Menü -->
@@ -172,7 +172,7 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 			<!-- Çalışma Saatleri -->
 			<div class="col-md-2 col-sm-6 footer-col">
 				<h4 class="footer-section-title"><i class="fa fa-clock-o"></i> Çalışma Saatleri</h4>
-				<div style="color:#bdc3c7;font-size:13px;line-height:2;">
+				<div style="color:var(--footer-text-color);font-size:13px;line-height:2;">
 					<?php echo nl2br(htmlspecialchars($working_days)); ?>
 				</div>
 			</div>
@@ -182,21 +182,21 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 				<h4 class="footer-section-title"><i class="fa fa-envelope-o"></i> İletişim</h4>
 				<ul style="list-style:none;padding:0;margin:0;">
 					<?php if(!empty($contact_address)): ?>
-					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:flex-start;">
-						<i class="fa fa-map-marker" style="color:#e4144d;font-size:16px;margin-right:10px;margin-top:3px;min-width:16px;"></i>
+					<li style="color:var(--footer-text-color);font-size:13px;margin-bottom:12px;display:flex;align-items:flex-start;">
+						<i class="fa fa-map-marker" style="color:var(--footer-accent-color);font-size:16px;margin-right:10px;margin-top:3px;min-width:16px;"></i>
 						<span><?php echo nl2br(htmlspecialchars($contact_address)); ?></span>
 					</li>
 					<?php endif; ?>
 					<?php if(!empty($contact_phone)): ?>
-					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
-						<i class="fa fa-phone" style="color:#e4144d;font-size:16px;margin-right:10px;min-width:16px;"></i>
-						<a href="tel:<?php echo $contact_phone; ?>" style="color:#bdc3c7;text-decoration:none;"><?php echo $contact_phone; ?></a>
+					<li style="color:var(--footer-text-color);font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
+						<i class="fa fa-phone" style="color:var(--footer-accent-color);font-size:16px;margin-right:10px;min-width:16px;"></i>
+						<a href="tel:<?php echo $contact_phone; ?>" style="color:var(--footer-text-color);text-decoration:none;"><?php echo $contact_phone; ?></a>
 					</li>
 					<?php endif; ?>
 					<?php if(!empty($contact_email)): ?>
-					<li style="color:#bdc3c7;font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
-						<i class="fa fa-envelope" style="color:#e4144d;font-size:16px;margin-right:10px;min-width:16px;"></i>
-						<a href="mailto:<?php echo $contact_email; ?>" style="color:#bdc3c7;text-decoration:none;"><?php echo $contact_email; ?></a>
+					<li style="color:var(--footer-text-color);font-size:13px;margin-bottom:12px;display:flex;align-items:center;">
+						<i class="fa fa-envelope" style="color:var(--footer-accent-color);font-size:16px;margin-right:10px;min-width:16px;"></i>
+						<a href="mailto:<?php echo $contact_email; ?>" style="color:var(--footer-text-color);text-decoration:none;"><?php echo $contact_email; ?></a>
 					</li>
 					<?php endif; ?>
 				</ul>
@@ -205,10 +205,10 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 	</div>
 </div>
 
-<div class="footer-bottom" style="background:#1a252f;padding:15px 0;">
+<div class="footer-bottom" style="background:var(--footer-bottom-bg);padding:15px 0;">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12 copyright" style="color:#7f8c8d;text-align:center;font-size:13px;">
+			<div class="col-md-12 copyright" style="color:var(--footer-text-color);text-align:center;font-size:13px;">
 				<?php echo $footer_copyright; ?>
 			</div>
 		</div>

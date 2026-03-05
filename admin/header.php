@@ -104,6 +104,12 @@ if(!isset($_SESSION['user'])) {
 			          </a>
 			        </li>
 
+			        <li class="treeview <?php if( ($cur_page == 'site-colors.php') ) {echo 'active';} ?>">
+			          <a href="site-colors.php">
+			            <i class="fa fa-paint-brush"></i> <span>Site Renk Ayarları</span>
+			          </a>
+			        </li>
+
 			        <li class="treeview <?php if( ($cur_page == 'paratika-settings.php') ) {echo 'active';} ?>">
 			          <a href="paratika-settings.php">
 			            <i class="fa fa-credit-card"></i> <span>Sanal Pos Ayarları</span>

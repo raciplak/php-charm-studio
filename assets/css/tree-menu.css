@@ -3,7 +3,7 @@
 /* layout */
 #left ul.nav {
     margin-bottom: 2px;
-    font-size: 12px; /* to change font-size, please change instead .lbl */
+    font-size: 12px;
 }
 #left ul.nav ul li {
 
@@ -29,10 +29,6 @@
 #left ul.nav li a:hover {
     text-decoration: none;
 }
-
-/*#left ul.nav li a:hover .lbl {
-    color: #999!important;
-}*/
 
 #left ul.nav li.current>a .lbl {
     background-color: #999;
@@ -109,23 +105,23 @@
     margin-bottom: 10px;
 }
 #left ul.nav>li.cat-level-1.parent>a {
-    border: solid 1px #e4144d;
-    background: #e4144d;
+    border: solid 1px var(--accent-color);
+    background: var(--accent-color);
     color: #fff;
 }
 #left ul.nav>li.cat-level-1.parent>a>.sign,
 #left ul.nav>li.cat-level-1 li.parent>a>.sign{
     margin-left: 0px;
-    background-color: #e4144d;
+    background-color: var(--accent-color);
 }
 #left ul.nav>li.cat-level-1 .lbl {
     color: #fff;
 }
 #left ul.nav>li.cat-level-1 .lbl1 {
-    color: #e4144d;
+    color: var(--accent-color);
 }
 #left ul.nav>li.cat-level-1 li.current>a .lbl {
-    background-color: #e4144d;
+    background-color: var(--accent-color);
     color: #fff!important;
 }
 

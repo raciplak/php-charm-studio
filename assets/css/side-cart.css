@@ -50,7 +50,7 @@
     justify-content: space-between;
     padding: 20px 24px;
     border-bottom: 1px solid #eee;
-    background: #131921;
+    background: var(--top-bar-bg);
     flex-shrink: 0;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .side-cart-header .cart-item-count {
-    background: #ff6b35;
+    background: var(--search-btn-color);
     color: #fff;
     font-size: 12px;
     font-weight: 700;
@@ -139,7 +139,7 @@
 .side-cart-empty .btn-continue {
     display: inline-block;
     padding: 12px 28px;
-    background: #131921;
+    background: var(--top-bar-bg);
     color: #fff;
     text-decoration: none;
     font-size: 14px;
@@ -150,7 +150,7 @@
 }
 
 .side-cart-empty .btn-continue:hover {
-    background: #232f3e;
+    background: var(--navbar-bg);
     color: #fff;
 }
 
@@ -223,7 +223,7 @@
 .side-cart-item-total {
     font-size: 14px;
     font-weight: 700;
-    color: #131921;
+    color: var(--top-bar-bg);
     margin-left: 10px;
 }
 
@@ -232,7 +232,7 @@
     margin-left: 10px;
     font-size: 14px;
     font-weight: 700;
-    color: #131921;
+    color: var(--top-bar-bg);
 }
 
 .side-cart-item-original-price {
@@ -270,9 +270,9 @@
 }
 
 .side-cart-item-qty .qty-btn:hover {
-    background: #131921;
+    background: var(--top-bar-bg);
     color: #fff;
-    border-color: #131921;
+    border-color: var(--top-bar-bg);
     text-decoration: none;
 }
 
@@ -316,12 +316,12 @@
 }
 
 .side-cart-item-remove:hover {
-    color: #e74c3c;
+    color: var(--discount-color);
 }
 
 /* Footer */
 .side-cart-footer {
-    border-top: 2px solid #131921;
+    border-top: 2px solid var(--top-bar-bg);
     padding: 20px 24px;
     background: #fafafa;
     flex-shrink: 0;
@@ -343,7 +343,7 @@
     justify-content: center;
     width: 100%;
     padding: 14px 20px;
-    background: #ff6b35;
+    background: var(--search-btn-color);
     color: #fff;
     text-align: center;
     font-size: 15px;
@@ -470,7 +470,7 @@
     position: absolute;
     top: -8px;
     right: -10px;
-    background: #ff6b35;
+    background: var(--search-btn-color);
     color: #fff;
     font-size: 10px;
     font-weight: 700;
@@ -528,7 +528,7 @@
 
 .sc-addr-title i {
     margin-right: 6px;
-    color: #ff6b35;
+    color: var(--search-btn-color);
 }
 
 .sc-addr-preview {
@@ -611,7 +611,7 @@
 
 .sc-addr-form-row input:focus,
 .sc-addr-form-row select:focus {
-    border-color: #ff6b35;
+    border-color: var(--search-btn-color);
     outline: none;
     background: #fff;
 }
@@ -631,7 +631,7 @@
 
 .sc-addr-save-btn {
     padding: 8px 18px;
-    background: #131921;
+    background: var(--top-bar-bg);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -642,7 +642,7 @@
 }
 
 .sc-addr-save-btn:hover {
-    background: #ff6b35;
+    background: var(--search-btn-color);
 }
 
 .sc-addr-save-btn:disabled {
@@ -671,7 +671,7 @@
 }
 
 .sc-addr-copy-label input[type="checkbox"] {
-    accent-color: #ff6b35;
+    accent-color: var(--search-btn-color);
 }
 
 .sc-login-prompt {
@@ -683,12 +683,12 @@
 }
 
 .sc-login-prompt i {
-    color: #ff6b35;
+    color: var(--search-btn-color);
     margin-right: 4px;
 }
 
 .sc-login-prompt a {
-    color: #ff6b35;
+    color: var(--search-btn-color);
     font-weight: 600;
     text-decoration: underline;
 }
@@ -745,7 +745,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 18px 24px;
-    background: #131921;
+    background: var(--top-bar-bg);
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
 }
@@ -759,7 +759,7 @@
 
 .sc-payment-header h3 i {
     margin-right: 8px;
-    color: #ff6b35;
+    color: var(--search-btn-color);
 }
 
 .sc-payment-close {
@@ -826,12 +826,12 @@
 }
 
 .sc-payment-option:hover {
-    border-color: #ff6b35;
+    border-color: var(--search-btn-color);
     background: #fff8f4;
 }
 
 .sc-payment-option input[type="radio"] {
-    accent-color: #ff6b35;
+    accent-color: var(--search-btn-color);
     margin: 0;
 }
 
@@ -843,7 +843,7 @@
 
 .sc-payment-option-label i {
     margin-right: 6px;
-    color: #ff6b35;
+    color: var(--search-btn-color);
     width: 18px;
     text-align: center;
 }
@@ -889,7 +889,7 @@
 .sc-pay-field input:focus,
 .sc-pay-field select:focus,
 .sc-pay-field textarea:focus {
-    border-color: #ff6b35;
+    border-color: var(--search-btn-color);
     outline: none;
     background: #fff;
 }
@@ -904,7 +904,7 @@
     display: block;
     width: 100%;
     padding: 14px;
-    background: #ff6b35;
+    background: var(--search-btn-color);
     color: #fff;
     border: none;
     border-radius: 8px;
