@@ -60,11 +60,12 @@ foreach($all_colors as $color) {
                             </label>
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <input type="hidden" name="color_id[]" value="<?php echo $color['id']; ?>">
-                                <input class="jscolor {hash:true, borderColor:'#ccc', backgroundColor:'#fff', padding:8, borderRadius:4}" 
+                                <input class="color-picker" 
                                        name="color_value[]" 
                                        value="<?php echo htmlspecialchars(ltrim($color['color_value'], '#')); ?>" 
-                                       style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;">
-                                <div style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
+                                       style="width:120px;height:36px;border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:14px;font-family:monospace;"
+                                       data-preview="preview-<?php echo $color['id']; ?>">
+                                <div id="preview-<?php echo $color['id']; ?>" style="width:36px;height:36px;border-radius:4px;border:1px solid #ccc;background:<?php echo htmlspecialchars($color['color_value']); ?>;flex-shrink:0;"></div>
                             </div>
                             <div style="margin-top:6px;font-size:11px;color:#888;">
                                 <code style="background:#eee;padding:2px 6px;border-radius:3px;">--<?php echo htmlspecialchars($color['color_key']); ?></code>
