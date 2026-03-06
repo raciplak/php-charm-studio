@@ -72,13 +72,8 @@
                     </div>
                 </div>
             <?php else: ?>
-                <form method="POST" action="cart-add-form.php" class="cart-form-ajax" data-pid="<?php echo $row['p_id']; ?>">
-                    <input type="hidden" name="p_id" value="<?php echo $row['p_id']; ?>">
-                    <input type="hidden" name="ajax" value="1">
-                    <button type="submit" class="btn-quick-add-cart" data-pid="<?php echo $row['p_id']; ?>">
-                        <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?>
-                    </button>
-                </form>
+                <p><button type="button" class="btn-quick-add-cart" data-pid="<?php echo $row['p_id']; ?>" onclick="addToCartDirect(<?php echo $row['p_id']; ?>, this)">
+                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></button></p>
             <?php endif; ?>
         </div>
     </div>
