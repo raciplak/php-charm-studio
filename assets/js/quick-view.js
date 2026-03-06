@@ -74,7 +74,7 @@
         $("body").css("overflow", "hidden");
 
         // Prevent immediate close from event bubbling
-        setTimeout(function() { isOpening = false; }, 300);
+        setTimeout(function() { isOpening = false; }, 500);
 
         // Fetch product data
         $.getJSON("quick-view-ajax.php", { id: productId }, function(data) {
