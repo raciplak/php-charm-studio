@@ -1087,8 +1087,8 @@ document.addEventListener('submit', function(e) {
             }
         }
     };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(new URLSearchParams(formData).toString());
-    xhr.setRequestHeader && xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 });
 
 // Also handle direct clicks (fallback for cloned elements where form might not exist)
