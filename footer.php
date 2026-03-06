@@ -1041,7 +1041,27 @@ Tawk_API.customStyle = {
     100% { transform: scale(0.7); opacity: 0; }
 }
 </style>
+<!-- Cart Toast (shared across all pages) -->
+<div id="cart-toast-global" style="display:none;position:fixed;top:20px;right:20px;z-index:99999;padding:14px 22px;color:#fff;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:320px;border-radius:6px;transition:opacity 0.3s ease;">
+    <span id="cart-toast-global-msg"></span>
+</div>
 <script>
+function showCartToastGlobal(msg, isSuccess) {
+    var toast = document.getElementById('cart-toast-global');
+    var msgEl = document.getElementById('cart-toast-global-msg');
+    if(!toast) return;
+    msgEl.textContent = msg;
+    toast.style.background = isSuccess ? '#28a745' : '#dc3545';
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    clearTimeout(window._cartToastTimer);
+    clearTimeout(window._cartToastTimer2);
+    window._cartToastTimer = setTimeout(function() {
+        toast.style.opacity = '0';
+        window._cartToastTimer2 = setTimeout(function() { toast.style.display = 'none'; }, 300);
+    }, 3000);
+}
+
 function addToCartXHR(btn, pId) {
     btn.disabled = true;
     var origHTML = btn.innerHTML;
@@ -1058,38 +1078,25 @@ function addToCartXHR(btn, pId) {
                 try {
                     var res = JSON.parse(xhr.responseText);
                     if(res.status === 'success') {
-                        // Update cart count badges
                         var badges = document.querySelectorAll('.cart-count-badge');
                         for(var i=0; i<badges.length; i++) {
                             badges[i].textContent = res.cart_count;
                             badges[i].style.display = res.cart_count > 0 ? '' : 'none';
                         }
-                        // Update cart total labels
                         var currency = '<?php echo LANG_VALUE_1; ?>';
                         var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
                         for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + res.cart_total;
-                        showCartOverlay();
+                        showCartToastGlobal(res.message, true);
                     } else if(res.status === 'already') {
-                        alert(res.message);
+                        showCartToastGlobal(res.message, false);
                     } else {
-                        alert(res.message);
+                        showCartToastGlobal(res.message, false);
                     }
-                } catch(e) { alert('Bir hata oluştu'); }
-            } else { alert('Bağlantı hatası'); }
+                } catch(e) { showCartToastGlobal('Bir hata oluştu', false); }
+            } else { showCartToastGlobal('Bağlantı hatası', false); }
         }
     };
     xhr.send('p_id=' + pId + '&ajax=2');
-}
-
-function showCartOverlay() {
-    var ov = document.getElementById('cart-added-overlay');
-    var inner = ov.querySelector(':scope > div');
-    ov.style.display = 'flex';
-    inner.style.animation = 'cartPopIn 0.3s ease';
-    setTimeout(function() {
-        inner.style.animation = 'cartPopOut 0.3s ease forwards';
-        setTimeout(function() { ov.style.display = 'none'; }, 300);
-    }, 1200);
 }
 </script>
 
