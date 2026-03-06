@@ -6,29 +6,32 @@ $(document).ready(function () {
     $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
     $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
 
-    // Desktop: hover dropdowns
-    $(".menu > ul > li").hover(
+    // Mark all nested items that have sub-menus
+    $('.menu ul li:has( > ul)').addClass('has-sub');
+
+    // Desktop: hover dropdowns (all levels)
+    $(".menu ul li").hover(
         function (e) {
             if ($(window).width() > 959) {
-                $(this).children("ul").fadeIn(150);
-                e.preventDefault();
+                $(this).children("ul").stop(true, true).fadeIn(150);
             }
         }, function (e) {
             if ($(window).width() > 959) {
-                $(this).children("ul").fadeOut(150);
-                e.preventDefault();
+                $(this).children("ul").stop(true, true).fadeOut(150);
             }
         }
     );
 
-    // Mobile: click to toggle sub-menus
-    $(".menu > ul > li").click(function(e) {
+    // Mobile: click to toggle sub-menus (ALL levels, not just first)
+    $(".menu").on("click", "li", function(e) {
         if ($(window).width() <= 959) {
             var $sub = $(this).children("ul");
             if ($sub.length) {
                 e.preventDefault();
                 e.stopPropagation();
+                // Close siblings at the same level
                 $(this).siblings().removeClass('open').children("ul").slideUp(200);
+                // Toggle current
                 $(this).toggleClass('open');
                 $sub.slideToggle(250);
             }
