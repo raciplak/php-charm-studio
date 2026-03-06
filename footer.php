@@ -1042,13 +1042,70 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function addToCartAjax(pId) {
-    // Disable clicked button
-    var btns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
-    for(var i=0;i<btns.length;i++) {
-        btns[i].style.pointerEvents='none';
-        btns[i].innerHTML='<i class="fa fa-spinner fa-spin"></i> ...';
+// Event delegation - works on ALL elements including Owl Carousel clones
+document.addEventListener('submit', function(e) {
+    var form = e.target;
+    if(!form.classList || !form.classList.contains('cart-form-ajax')) return;
+    e.preventDefault();
+    
+    var pId = form.getAttribute('data-pid');
+    var formData = new FormData(form);
+    var btn = form.querySelector('.btn-quick-add-cart');
+    if(btn) {
+        btn.style.pointerEvents = 'none';
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ...';
     }
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-add-form.php', true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            var resetLabel = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
+            try {
+                var res = JSON.parse(xhr.responseText);
+                if(res.status === 'success') {
+                    var badges = document.querySelectorAll('.cart-count-badge');
+                    for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
+                    var currency = '<?php echo LANG_VALUE_1; ?>';
+                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                    for(var j=0;j<iconLabels.length;j++) iconLabels[j].textContent = currency + res.cart_total;
+                    showCartOverlay(res.message);
+                } else if(res.status === 'already') {
+                    showCartOverlay(res.message, true);
+                } else {
+                    showCartOverlay(res.message || 'Hata oluştu', true);
+                }
+            } catch(ex) {
+                console.log('Cart AJAX error:', xhr.responseText);
+                showCartOverlay('Bir hata oluştu', true);
+            }
+            // Re-enable ALL matching buttons (originals + clones)
+            var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
+            for(var j=0;j<allBtns.length;j++) {
+                allBtns[j].style.pointerEvents = '';
+                allBtns[j].innerHTML = resetLabel;
+            }
+        }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(new URLSearchParams(formData).toString());
+});
+
+// Also handle direct clicks (fallback for cloned elements where form might not exist)
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-quick-add-cart');
+    if(!btn) return;
+    var form = btn.closest('.cart-form-ajax');
+    if(form) return; // Let form submit handler deal with it
+    
+    // Cloned button without form - do direct AJAX
+    var pId = btn.getAttribute('data-pid');
+    if(!pId) return;
+    e.preventDefault();
+    
+    btn.style.pointerEvents = 'none';
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ...';
+    
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'cart-add-form.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -1058,35 +1115,31 @@ function addToCartAjax(pId) {
             try {
                 var res = JSON.parse(xhr.responseText);
                 if(res.status === 'success') {
-                    // Update header cart count badges
                     var badges = document.querySelectorAll('.cart-count-badge');
                     for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
-                    // Update header cart total
-                    var currency = '<?php echo LANG_VALUE_1; ?>';
-                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-                    for(var j=0;j<iconLabels.length;j++) iconLabels[j].textContent = currency + res.cart_total;
                     showCartOverlay(res.message);
                 } else if(res.status === 'already') {
                     showCartOverlay(res.message, true);
                 } else {
-                    alert(res.message);
+                    showCartOverlay(res.message || 'Hata', true);
                 }
-            } catch(e) {
-                alert('Bir hata oluştu');
+            } catch(ex) {
+                console.log('Cart click error:', xhr.responseText);
+                showCartOverlay('Bir hata oluştu', true);
             }
-            // Re-enable buttons
             var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
             for(var j=0;j<allBtns.length;j++) {
-                allBtns[j].style.pointerEvents='';
+                allBtns[j].style.pointerEvents = '';
                 allBtns[j].innerHTML = resetLabel;
             }
         }
     };
     xhr.send('p_id='+pId+'&ajax=1');
-}
+});
 
 function showCartOverlay(msg, isWarning) {
     var ov = document.getElementById('cart-added-overlay');
+    if(!ov) return;
     var inner = ov.querySelector(':scope > div');
     var icon = ov.querySelector('.cart-overlay-icon');
     var txt = ov.querySelector('.cart-overlay-msg');
@@ -1096,9 +1149,9 @@ function showCartOverlay(msg, isWarning) {
         icon.innerHTML = isWarning ? '<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>' : '<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>';
     }
     ov.style.display = 'flex';
-    inner.style.animation = 'cartPopIn 0.3s ease';
+    if(inner) inner.style.animation = 'cartPopIn 0.3s ease';
     setTimeout(function() {
-        inner.style.animation = 'cartPopOut 0.3s ease forwards';
+        if(inner) inner.style.animation = 'cartPopOut 0.3s ease forwards';
         setTimeout(function() { ov.style.display = 'none'; }, 300);
     }, 1200);
 }
