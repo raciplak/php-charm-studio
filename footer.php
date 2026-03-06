@@ -1022,6 +1022,70 @@ Tawk_API.customStyle = {
 </script>
 <?php endif; ?>
 
+<!-- Quick Add to Cart Overlay -->
+<div id="cart-added-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:cartPopIn 0.3s ease;">
+        <div style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check" style="color:#fff;font-size:28px;"></i>
+        </div>
+        <h3 style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
+    </div>
+</div>
+<style>
+@keyframes cartPopIn {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+@keyframes cartPopOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.7); opacity: 0; }
+}
+</style>
+<script>
+$(document).on('click', '.btn-quick-add-cart', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var btn = $(this);
+    var data = {
+        p_id: btn.data('id'),
+        p_qty: 1,
+        size_id: 0,
+        color_id: 0,
+        p_current_price: btn.data('price'),
+        p_name: btn.data('name'),
+        p_featured_photo: btn.data('photo')
+    };
+    $.ajax({
+        url: 'cart-add-ajax.php',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        success: function(resp) {
+            if(resp.status === 'success') {
+                // Update header cart
+                if(resp.cart_count !== undefined) {
+                    $('.cart-count-badge').text(resp.cart_count);
+                    $('.header-cart-total').text(resp.cart_total);
+                }
+                // Show overlay
+                var ov = $('#cart-added-overlay');
+                ov.css('display','flex');
+                ov.find('div > div').css('animation','cartPopIn 0.3s ease');
+                setTimeout(function() {
+                    ov.find('div > div').css('animation','cartPopOut 0.3s ease forwards');
+                    setTimeout(function() { ov.css('display','none'); }, 300);
+                }, 1200);
+            } else {
+                alert(resp.message || 'Hata oluştu');
+            }
+        },
+        error: function() {
+            alert('Bağlantı hatası');
+        }
+    });
+});
+</script>
+
 <?php 
 // If chat widget is off, strip any tawk.to scripts from before_body
 if($chat_widget_on_off == 0) {

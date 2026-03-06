@@ -72,7 +72,12 @@
                     </div>
                 </div>
             <?php else: ?>
-                <p><a href="product.php?id=<?php echo $row['p_id']; ?>"><i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
+                <p><a href="javascript:void(0);" class="btn-quick-add-cart" 
+                    data-id="<?php echo $row['p_id']; ?>" 
+                    data-name="<?php echo htmlspecialchars($row['p_name'], ENT_QUOTES); ?>" 
+                    data-price="<?php echo $row['p_current_price']; ?>" 
+                    data-photo="<?php echo $row['p_featured_photo']; ?>">
+                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
             <?php endif; ?>
         </div>
     </div>
