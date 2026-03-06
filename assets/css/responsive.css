@@ -38,26 +38,39 @@
 	/* Hide breadcrumb on mobile */
 	.page .breadcrumb { display: none; }
 
-	/* Compact container - no extra left padding */
-	.page > .container { padding-left: 0; padding-right: 0; }
-	.page .col-md-6, .page .col-md-12 { padding-left: 8px; padding-right: 8px; }
+	/* Compact container - proper padding */
+	.page > .container { padding-left: 10px; padding-right: 10px; }
+	.page .col-md-6, .page .col-md-12 { padding-left: 5px; padding-right: 5px; }
 
-	/* Gallery wrapper - full width, no thumbnails on left */
+	/* Gallery wrapper - thumbnails on left */
 	.gallery-wrapper {
-		display: block;
-	}
-
-	/* Thumbnails - horizontal row below image */
-	.prod-pager-vertical {
 		display: flex !important;
 		flex-direction: row;
-		flex-wrap: wrap;
 		gap: 4px;
-		margin-top: 6px !important;
+	}
+
+	/* Thumbnails - vertical column on left */
+	.prod-pager-vertical {
+		display: flex !important;
+		flex-direction: column;
+		gap: 4px;
+		margin-top: 0 !important;
+		flex-shrink: 0;
+		width: 46px;
+		max-height: 260px;
+		overflow-y: auto;
 	}
 	.prod-pager-vertical .prod-pager-thumb {
-		width: 46px;
-		height: 46px;
+		width: 44px;
+		height: 44px;
+		flex-shrink: 0;
+	}
+
+	/* Main image fills remaining space */
+	.gallery-main {
+		position: relative;
+		flex: 1;
+		min-width: 0;
 	}
 
 	/* Main image area */
