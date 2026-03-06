@@ -11,7 +11,7 @@
     <div class="inner">
         <div class="thumb">
             <a href="product.php?id=<?php echo $row['p_id']; ?>" class="thumb-link">
-                <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy"> loading="lazy">
+                <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                 <div class="overlay"></div>
             </a>
             <button class="quick-view-btn" data-product-id="<?php echo $row['p_id']; ?>" title="Hızlı Bakış">
@@ -77,7 +77,7 @@
                     data-name="<?php echo htmlspecialchars($row['p_name'], ENT_QUOTES, 'UTF-8'); ?>" 
                     data-price="<?php echo $row['p_current_price']; ?>" 
                     data-photo="<?php echo $row['p_featured_photo']; ?>">
-                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
+                    <i class="fa fa-shopping-cart"></i> Sepete Ekle</a></p>
             <?php endif; ?>
         </div>
     </div>
