@@ -252,7 +252,7 @@ a:hover {
   background: var(--navbar-bg);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 99998;
   overflow: visible;
   /* Override Bootstrap .nav resets */
   padding-left: 0;
