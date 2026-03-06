@@ -575,9 +575,10 @@ Mobile style's
 
   .menu > ul > li > ul > li > ul {
     position: relative;
-    display: block;
+    display: none;
     padding: 0;
     margin: 0;
+    background: rgba(0, 0, 0, 0.2);
   }
 
   .menu > ul > li > ul > li > ul > li {
@@ -588,11 +589,52 @@ Mobile style's
   .menu > ul > li > ul > li > ul > li a {
     padding-left: 50px;
     font-size: 12px;
-    color: #888;
+    color: #999;
   }
 
   .menu > ul > li > ul > li > ul > li a:hover {
     padding-left: 58px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Arrow indicator for ALL has-sub items at every level */
+  .menu li.has-sub > a {
+    position: relative;
+    padding-right: 40px !important;
+  }
+  .menu li.has-sub > a::after {
+    content: "\f054";
+    font-family: "FontAwesome";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  .menu li.has-sub.open > a::after {
+    transform: translateY(-50%) rotate(90deg);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Submenu open background — dark, not white */
+  .menu > ul > li.open {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+  .menu > ul > li > ul > li.open {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+  .menu > ul > li > ul {
+    background: rgba(0, 0, 0, 0.15) !important;
+  }
+  .menu > ul > li > ul > li a {
+    color: #bbb;
+    background: transparent !important;
+  }
+  .menu > ul > li > ul > li a:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
     color: #fff;
   }
 

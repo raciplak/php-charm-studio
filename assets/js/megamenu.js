@@ -6,35 +6,51 @@ $(document).ready(function () {
     $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
     $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
 
-    // Mark all nested items that have sub-menus
+    // Mark ALL items that have sub-menus (all levels)
     $('.menu ul li:has( > ul)').addClass('has-sub');
 
     // Desktop: hover dropdowns (all levels)
     $(".menu ul li").hover(
-        function (e) {
+        function () {
             if ($(window).width() > 959) {
                 $(this).children("ul").stop(true, true).fadeIn(150);
             }
-        }, function (e) {
+        }, function () {
             if ($(window).width() > 959) {
                 $(this).children("ul").stop(true, true).fadeOut(150);
             }
         }
     );
 
-    // Mobile: click to toggle sub-menus (ALL levels, not just first)
-    $(".menu").on("click", "li", function(e) {
+    // Mobile: click to toggle sub-menus (ALL levels)
+    $(".menu").on("click", "li.has-sub", function(e) {
         if ($(window).width() <= 959) {
+            e.preventDefault();
+            e.stopPropagation();
+
             var $sub = $(this).children("ul");
-            if ($sub.length) {
-                e.preventDefault();
-                e.stopPropagation();
-                // Close siblings at the same level
-                $(this).siblings().removeClass('open').children("ul").slideUp(200);
-                // Toggle current
-                $(this).toggleClass('open');
-                $sub.slideToggle(250);
+
+            // Close siblings at the same level
+            $(this).siblings(".has-sub").removeClass('open').children("ul").slideUp(200);
+            $(this).siblings(".has-sub").find('.has-sub').removeClass('open').children("ul").slideUp(200);
+
+            // Toggle current
+            if ($(this).hasClass('open')) {
+                $(this).removeClass('open');
+                $(this).find('.has-sub').removeClass('open').children("ul").slideUp(200);
+                $sub.slideUp(250);
+            } else {
+                $(this).addClass('open');
+                $sub.slideDown(250);
             }
+        }
+    });
+
+    // Mobile: clicking a LEAF item (no sub-menu) — navigate normally
+    $(".menu").on("click", "li:not(.has-sub)", function(e) {
+        if ($(window).width() <= 959) {
+            // Allow default link behavior — don't prevent
+            e.stopPropagation();
         }
     });
 
