@@ -817,12 +817,24 @@ Mobile style's
   margin-bottom: 14px;
 }
 
-.product .text p a {
+.product .text p a,
+.product .text p .btn-quick-add-cart,
+.item-product-cat .text p .btn-quick-add-cart {
   background: var(--cart-btn-color);
   color: #fff;
   font-size: 14px;
   padding: 6px 10px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
   transition: all 0.4s ease;
+}
+.product .text p a:hover,
+.product .text p .btn-quick-add-cart:hover,
+.item-product-cat .text p .btn-quick-add-cart:hover {
+  background: var(--btn-hover-color);
+  color: #fff;
 }
 .product .out-of-stock {
   width: 100%;
