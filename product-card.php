@@ -10,8 +10,10 @@
 <div class="item item-product-cat">
     <div class="inner">
         <div class="thumb">
-            <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name']); ?>" loading="lazy">
-            <div class="overlay"></div>
+            <a href="product.php?id=<?php echo $row['p_id']; ?>" class="thumb-link">
+                <img class="photo-img" src="assets/uploads/product_photos/<?php echo $row['p_featured_photo']; ?>" alt="<?php echo htmlspecialchars($row['p_name']); ?>" loading="lazy">
+                <div class="overlay"></div>
+            </a>
             <button class="quick-view-btn" data-product-id="<?php echo $row['p_id']; ?>" title="Hızlı Bakış">
                 <i class="fa fa-search-plus"></i>
             </button>
