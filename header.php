@@ -2,6 +2,8 @@
 <?php
 ob_start();
 session_start();
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 include("admin/inc/config.php");
 include("admin/inc/functions.php");
 include("admin/inc/CSRF_Protect.php");

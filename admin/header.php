@@ -1,6 +1,8 @@
 <?php
 ob_start();
 session_start();
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
 include("inc/config.php");
 include("inc/functions.php");
 include("inc/CSRF_Protect.php");
