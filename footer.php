@@ -1105,33 +1105,6 @@ Tawk_API.customStyle = {
     }
 })();
 </script>
-        data: data,
-        dataType: 'json',
-        success: function(resp) {
-            if(resp.status === 'success') {
-                // Update header cart
-                if(resp.cart_count !== undefined) {
-                    $('.cart-count-badge').text(resp.cart_count);
-                    $('.header-cart-total').text(resp.cart_total);
-                }
-                // Show overlay
-                var ov = $('#cart-added-overlay');
-                ov.css('display','flex');
-                ov.find('div > div').css('animation','cartPopIn 0.3s ease');
-                setTimeout(function() {
-                    ov.find('div > div').css('animation','cartPopOut 0.3s ease forwards');
-                    setTimeout(function() { ov.css('display','none'); }, 300);
-                }, 1200);
-            } else {
-                alert(resp.message || 'Hata oluştu');
-            }
-        },
-        error: function() {
-            alert('Bağlantı hatası');
-        }
-    });
-});
-</script>
 
 <?php 
 // If chat widget is off, strip any tawk.to scripts from before_body
