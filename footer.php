@@ -1042,37 +1042,59 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function handleCartForm(form, pId) {
-    // Form submits to hidden iframe, no page reload
-    var btn = form.querySelector('button[type="submit"]');
-    if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...'; }
+function addToCartAjax(pId) {
+    // Disable clicked button
+    var btns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
+    for(var i=0;i<btns.length;i++) {
+        btns[i].style.pointerEvents='none';
+        btns[i].innerHTML='<i class="fa fa-spinner fa-spin"></i> ...';
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-add-form.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            var resetLabel = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
+            try {
+                var res = JSON.parse(xhr.responseText);
+                if(res.status === 'success') {
+                    // Update header cart count badges
+                    var badges = document.querySelectorAll('.cart-count-badge');
+                    for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
+                    // Update header cart total
+                    var currency = '<?php echo LANG_VALUE_1; ?>';
+                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                    for(var j=0;j<iconLabels.length;j++) iconLabels[j].textContent = currency + res.cart_total;
+                    showCartOverlay(res.message);
+                } else if(res.status === 'already') {
+                    showCartOverlay(res.message, true);
+                } else {
+                    alert(res.message);
+                }
+            } catch(e) {
+                alert('Bir hata oluştu');
+            }
+            // Re-enable buttons
+            var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
+            for(var j=0;j<allBtns.length;j++) {
+                allBtns[j].style.pointerEvents='';
+                allBtns[j].innerHTML = resetLabel;
+            }
+        }
+    };
+    xhr.send('p_id='+pId+'&ajax=1');
 }
 
-function cartResult(status, message, cartCount, cartTotal) {
-    if(status === 'success') {
-        // Update header badges
-        var badges = document.querySelectorAll('.cart-count-badge');
-        for(var i=0; i<badges.length; i++) badges[i].textContent = cartCount;
-        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-        var currency = '<?php echo LANG_VALUE_1; ?>';
-        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + cartTotal;
-        showCartOverlay();
-    } else if(status === 'already') {
-        alert(message);
-    } else {
-        alert(message);
-    }
-    // Re-enable all cart buttons
-    var allBtns = document.querySelectorAll('.btn-quick-add-cart');
-    for(var i=0; i<allBtns.length; i++) {
-        allBtns[i].disabled = false;
-        allBtns[i].innerHTML = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
-    }
-}
-
-function showCartOverlay() {
+function showCartOverlay(msg, isWarning) {
     var ov = document.getElementById('cart-added-overlay');
     var inner = ov.querySelector(':scope > div');
+    var icon = ov.querySelector('.cart-overlay-icon');
+    var txt = ov.querySelector('.cart-overlay-msg');
+    if(txt) txt.textContent = msg || 'Sepetinize Eklendi';
+    if(icon) {
+        icon.style.background = isWarning ? '#ff9800' : '#4CAF50';
+        icon.innerHTML = isWarning ? '<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>' : '<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>';
+    }
     ov.style.display = 'flex';
     inner.style.animation = 'cartPopIn 0.3s ease';
     setTimeout(function() {
