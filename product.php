@@ -1581,4 +1581,22 @@ function ajaxAddToCart(e) {
 }
 </script>
 
+<script>
+// Mobile: Auto-scroll to product gallery top
+(function() {
+    if(window.innerWidth <= 767) {
+        window.addEventListener('load', function() {
+            var gallery = document.querySelector('ul.prod-slider');
+            if(gallery) {
+                setTimeout(function() {
+                    var rect = gallery.getBoundingClientRect();
+                    var scrollTo = window.pageYOffset + rect.top;
+                    window.scrollTo({ top: scrollTo, behavior: 'auto' });
+                }, 300);
+            }
+        });
+    }
+})();
+</script>
+
 <?php require_once('footer.php'); ?>
