@@ -72,8 +72,8 @@
                     </div>
                 </div>
             <?php else: ?>
-                <p><button type="button" class="btn-quick-add-cart" data-pid="<?php echo $row['p_id']; ?>" onclick="addToCartDirect(<?php echo $row['p_id']; ?>, this)">
-                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></button></p>
+                <p><a href="javascript:void(0);" class="btn-quick-add-cart" data-pid="<?php echo $row['p_id']; ?>" style="display:inline-block;width:100%;text-align:center;padding:8px 15px;border:none;cursor:pointer;color:#fff;background:var(--cart-btn-color, #e7a340);border-radius:4px;text-decoration:none;transition:opacity 0.2s;">
+                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
             <?php endif; ?>
         </div>
     </div>
