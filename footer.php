@@ -1091,6 +1091,16 @@ function showCartOverlay() {
     }, 1200);
 }
 </script>
+<?php if(isset($_SESSION['cart_flash']) && $_SESSION['cart_flash'] === 'added'): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() { showCartOverlay(); });
+</script>
+<?php unset($_SESSION['cart_flash']); endif; ?>
+<?php if(isset($_SESSION['cart_flash']) && $_SESSION['cart_flash'] === 'already'): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() { alert('Bu ürün zaten sepetinizde!'); });
+</script>
+<?php unset($_SESSION['cart_flash']); endif; ?>
 
 <?php 
 // If chat widget is off, strip any tawk.to scripts from before_body
