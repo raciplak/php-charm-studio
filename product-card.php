@@ -72,8 +72,8 @@
                     </div>
                 </div>
             <?php else: ?>
-                <p><button type="button" onclick="addToCartQuick(<?php echo $row['p_id']; ?>, '<?php echo htmlspecialchars($row['p_name'], ENT_QUOTES); ?>', '<?php echo $row['p_current_price']; ?>', '<?php echo $row['p_featured_photo']; ?>')" class="btn-quick-add-cart" style="border:none;cursor:pointer;background:inherit;color:inherit;font:inherit;padding:0;">
-                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></button></p>
+                <p><a href="javascript:void(0);" onclick="addToCartQuick(<?php echo $row['p_id']; ?>, '<?php echo addslashes(htmlspecialchars($row['p_name'], ENT_QUOTES)); ?>', '<?php echo $row['p_current_price']; ?>', '<?php echo $row['p_featured_photo']; ?>'); return false;" class="btn-quick-add-cart">
+                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
             <?php endif; ?>
         </div>
     </div>
