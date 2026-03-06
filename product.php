@@ -1592,16 +1592,17 @@ function ajaxAddToCart(e) {
 </script>
 
 <script>
-// Mobile: Auto-scroll to product gallery top
+// Mobile: Auto-scroll so gallery top aligns with page top (below sticky navbar)
 (function() {
     if(window.innerWidth <= 767) {
         window.addEventListener('load', function() {
-            var gallery = document.querySelector('ul.prod-slider');
+            var gallery = document.querySelector('.gallery-wrapper');
             if(gallery) {
                 setTimeout(function() {
                     var rect = gallery.getBoundingClientRect();
-                    var scrollTo = window.pageYOffset + rect.top;
-                    window.scrollTo({ top: scrollTo, behavior: 'auto' });
+                    var navbarHeight = 50; // approximate sticky navbar height
+                    var scrollTo = window.pageYOffset + rect.top - navbarHeight;
+                    window.scrollTo({ top: Math.max(0, scrollTo), behavior: 'auto' });
                 }, 300);
             }
         });

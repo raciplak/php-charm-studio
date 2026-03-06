@@ -38,25 +38,22 @@
 	/* Hide breadcrumb on mobile */
 	.page .breadcrumb { display: none; }
 
-	/* Compact container */
-	.page > .container { padding-left: 8px; padding-right: 8px; }
+	/* Compact container - no extra left padding */
+	.page > .container { padding-left: 0; padding-right: 0; }
+	.page .col-md-6, .page .col-md-12 { padding-left: 8px; padding-right: 8px; }
 
-	/* Gallery wrapper - flex row: thumbs left, main right */
+	/* Gallery wrapper - full width, no thumbnails on left */
 	.gallery-wrapper {
-		display: flex;
-		flex-direction: row;
-		gap: 6px;
+		display: block;
 	}
 
-	/* Thumbnails - vertical strip on left */
+	/* Thumbnails - horizontal row below image */
 	.prod-pager-vertical {
 		display: flex !important;
-		flex-direction: column;
+		flex-direction: row;
+		flex-wrap: wrap;
 		gap: 4px;
-		width: 50px;
-		flex-shrink: 0;
-		order: 0;
-		margin-top: 0 !important;
+		margin-top: 6px !important;
 	}
 	.prod-pager-vertical .prod-pager-thumb {
 		width: 46px;
@@ -65,45 +62,16 @@
 
 	/* Main image area */
 	.gallery-main {
-		flex: 1;
 		position: relative;
-		min-width: 0;
 	}
 	ul.prod-slider li {
-		height: 240px !important;
+		height: 260px !important;
 	}
 
-	/* Mobile social share overlay - top-right of image */
+	/* Hide social share overlay on mobile */
 	.mobile-share-overlay {
-		position: absolute;
-		top: 6px;
-		right: 6px;
-		z-index: 10;
-		display: flex !important;
+		display: none !important;
 	}
-	.mobile-share-overlay .sharethis-inline-share-buttons {
-		display: flex !important;
-		flex-direction: column !important;
-		gap: 2px;
-	}
-	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn {
-		width: 28px !important;
-		height: 28px !important;
-		min-width: 28px !important;
-		padding: 0 !important;
-		margin: 1px 0 !important;
-		display: flex !important;
-		align-items: center;
-		justify-content: center;
-		border-radius: 4px !important;
-	}
-	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn img,
-	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn svg {
-		width: 14px !important;
-		height: 14px !important;
-	}
-	.mobile-share-overlay .st-label { display: none !important; }
-	.mobile-share-overlay .st-total { display: none !important; }
 
 	/* Hide desktop share on mobile */
 	.desktop-share { display: none !important; }
