@@ -1042,22 +1042,69 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-$(document).on('click', '.btn-quick-add-cart', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    var btn = $(this);
-    var data = {
-        p_id: btn.data('id'),
-        p_qty: 1,
-        size_id: 0,
-        color_id: 0,
-        p_current_price: btn.data('price'),
-        p_name: btn.data('name'),
-        p_featured_photo: btn.data('photo')
-    };
-    $.ajax({
-        url: 'cart-add-ajax.php',
-        type: 'POST',
+(function() {
+    // Use native event delegation to handle clicks even on Owl Carousel cloned items
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.btn-quick-add-cart');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var pId = btn.getAttribute('data-id');
+        var pName = btn.getAttribute('data-name');
+        var pPrice = btn.getAttribute('data-price');
+        var pPhoto = btn.getAttribute('data-photo');
+        
+        if (!pId) return;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'cart-add-ajax.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        var resp = JSON.parse(xhr.responseText);
+                        if (resp.status === 'success') {
+                            // Update header cart badge
+                            var badges = document.querySelectorAll('.cart-count-badge');
+                            badges.forEach(function(b) { b.textContent = resp.cart_count; });
+                            var totals = document.querySelectorAll('.header-cart-total');
+                            totals.forEach(function(t) { t.textContent = resp.cart_total; });
+                            // Show overlay
+                            showCartAddedOverlay();
+                        } else {
+                            alert(resp.message || 'Hata oluştu');
+                        }
+                    } catch(ex) {
+                        alert('Sunucu yanıtı okunamadı');
+                    }
+                } else {
+                    alert('Bağlantı hatası');
+                }
+            }
+        };
+        var params = 'p_id=' + encodeURIComponent(pId) +
+                     '&p_qty=1&size_id=0&color_id=0' +
+                     '&p_current_price=' + encodeURIComponent(pPrice) +
+                     '&p_name=' + encodeURIComponent(pName) +
+                     '&p_featured_photo=' + encodeURIComponent(pPhoto);
+        xhr.send(params);
+    }, true);
+    
+    function showCartAddedOverlay() {
+        var ov = document.getElementById('cart-added-overlay');
+        if (!ov) return;
+        ov.style.display = 'flex';
+        var inner = ov.querySelector('div');
+        if (inner) inner.style.animation = 'cartPopIn 0.3s ease';
+        setTimeout(function() {
+            if (inner) inner.style.animation = 'cartPopOut 0.3s ease forwards';
+            setTimeout(function() { ov.style.display = 'none'; }, 300);
+        }, 1200);
+    }
+})();
+</script>
         data: data,
         dataType: 'json',
         success: function(resp) {
