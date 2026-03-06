@@ -1,0 +1,339 @@
+/* ============================================
+   Quick View - Zoom Button & Modal
+   ============================================ */
+
+/* Zoom button on product card thumbnail */
+.quick-view-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    outline: none;
+}
+
+.item-product-cat .thumb:hover .quick-view-btn {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.quick-view-btn:hover {
+    background: var(--accent-color, #e4144d);
+    border-color: #fff;
+    transform: translate(-50%, -50%) scale(1.15) !important;
+}
+
+/* ============================================
+   Quick View Modal Overlay
+   ============================================ */
+.qv-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.qv-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Modal Container */
+.qv-modal {
+    background: #fff;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.qv-overlay.active .qv-modal {
+    transform: scale(1);
+}
+
+/* Close button */
+.qv-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.qv-close:hover {
+    background: var(--accent-color, #e4144d);
+}
+
+/* ============================================
+   Image Section (Left)
+   ============================================ */
+.qv-image-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+    min-width: 0;
+}
+
+/* Main Image Area */
+.qv-main-image-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 350px;
+}
+
+.qv-main-image {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+/* Navigation Arrows */
+.qv-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.qv-nav-arrow:hover {
+    background: var(--accent-color, #e4144d);
+    opacity: 1;
+}
+
+.qv-nav-prev {
+    left: 10px;
+}
+
+.qv-nav-next {
+    right: 10px;
+}
+
+.qv-nav-arrow.hidden {
+    display: none;
+}
+
+/* Thumbnails Strip */
+.qv-thumbnails {
+    display: flex;
+    gap: 8px;
+    padding: 10px 15px;
+    overflow-x: auto;
+    background: #eee;
+    justify-content: center;
+}
+
+.qv-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+    transition: border-color 0.2s, opacity 0.2s;
+    opacity: 0.6;
+}
+
+.qv-thumb.active {
+    border-color: var(--accent-color, #e4144d);
+    opacity: 1;
+}
+
+.qv-thumb:hover {
+    opacity: 1;
+}
+
+.qv-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ============================================
+   Info Section (Right)
+   ============================================ */
+.qv-info-section {
+    width: 320px;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.qv-product-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 15px;
+    line-height: 1.3;
+}
+
+.qv-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-color, #e4144d);
+    margin-bottom: 5px;
+}
+
+.qv-old-price {
+    font-size: 16px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 15px;
+}
+
+.qv-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.qv-detail-link {
+    display: inline-block;
+    padding: 12px 25px;
+    background: var(--accent-color, #e4144d);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.qv-detail-link:hover {
+    background: var(--btn-hover-color, #333);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Loading spinner */
+.qv-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+}
+
+.qv-loading i {
+    font-size: 40px;
+    color: #999;
+    animation: qv-spin 1s linear infinite;
+}
+
+@keyframes qv-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Photo counter */
+.qv-photo-counter {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .qv-modal {
+        flex-direction: column;
+        max-height: 95vh;
+        width: 95%;
+    }
+
+    .qv-info-section {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .qv-main-image-wrapper {
+        min-height: 250px;
+        padding: 15px;
+    }
+
+    .qv-main-image {
+        max-height: 280px;
+    }
+
+    .qv-product-name {
+        font-size: 17px;
+    }
+
+    .qv-price {
+        font-size: 20px;
+    }
+
+    .qv-thumb {
+        width: 50px;
+        height: 50px;
+    }
+}
