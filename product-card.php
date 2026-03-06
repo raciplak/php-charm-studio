@@ -72,15 +72,13 @@
                     </div>
                 </div>
             <?php else: ?>
-                <p><a href="product.php?id=<?php echo $row['p_id']; ?>" class="btn-quick-add-cart">
-                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
-                <form method="POST" action="cart-add-form.php" style="margin-top:5px;">
+                <form method="POST" action="cart-add-form.php" target="cart-iframe-<?php echo $row['p_id']; ?>" onsubmit="handleCartForm(this, <?php echo $row['p_id']; ?>); return true;">
                     <input type="hidden" name="p_id" value="<?php echo $row['p_id']; ?>">
-                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-                    <button type="submit" class="btn-quick-add-cart" style="width:100%;border:none;cursor:pointer;display:inline-block;">
-                        <i class="fa fa-cart-plus"></i> Sepete Ekle
-                    </button>
+                    <input type="hidden" name="ajax" value="1">
+                    <p><button type="submit" class="btn-quick-add-cart" style="width:100%;border:none;cursor:pointer;display:inline-block;">
+                        <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></button></p>
                 </form>
+                <iframe name="cart-iframe-<?php echo $row['p_id']; ?>" style="display:none;"></iframe>
             <?php endif; ?>
         </div>
     </div>
