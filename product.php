@@ -994,55 +994,65 @@ foreach ($page_result as $row) {
                     <div class="row">
                         <!-- Product Gallery -->
                         <div class="col-md-6">
-                            <ul class="prod-slider">
-                                <li style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>);">
-                                    <a class="popup" href="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> full size image">
-                                        <img src="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>"
-                                             alt="<?php echo htmlspecialchars($p_name); ?> - Main Product Image" 
-                                             itemprop="image"
-                                             width="500" height="500"
-                                             fetchpriority="high"
-                                             style="opacity:0;position:absolute;">
+                            <div class="gallery-wrapper">
+                                <!-- Thumbnails (moves to left on mobile) -->
+                                <div id="prod-pager" class="prod-pager-vertical">
+                                    <a data-slide-index="0" href="" aria-label="View main image">
+                                        <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>)"></div>
                                     </a>
-                                </li>
-                                <?php
-                                $img_index = 2;
-                                $statement = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=?");
-                                $statement->execute(array($_REQUEST['id']));
-                                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($result as $row) {
-                                    ?>
-                                    <li style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>);">
-                                        <a class="popup" href="assets/uploads/product_photos/<?php echo $row['photo']; ?>" aria-label="View image <?php echo $img_index; ?>">
-                                            <img src="assets/uploads/product_photos/<?php echo $row['photo']; ?>"
-                                                 alt="<?php echo htmlspecialchars($p_name); ?> - Photo <?php echo $img_index; ?>" 
-                                                 loading="lazy" width="500" height="500"
-                                                 style="opacity:0;position:absolute;">
+                                    <?php
+                                    $i=1;
+                                    $statement = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=?");
+                                    $statement->execute(array($_REQUEST['id']));
+                                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($result as $row) {
+                                        ?>
+                                        <a data-slide-index="<?php echo $i; ?>" href="" aria-label="View image <?php echo $i+1; ?>">
+                                            <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>)"></div>
                                         </a>
-                                    </li>
-                                    <?php
-                                    $img_index++;
-                                }
-                                ?>
-                            </ul>
-                            <div id="prod-pager">
-                                <a data-slide-index="0" href="" aria-label="View main image">
-                                    <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>)"></div>
-                                </a>
-                                <?php
-                                $i=1;
-                                $statement = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=?");
-                                $statement->execute(array($_REQUEST['id']));
-                                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($result as $row) {
+                                        <?php
+                                        $i++;
+                                    }
                                     ?>
-                                    <a data-slide-index="<?php echo $i; ?>" href="" aria-label="View image <?php echo $i+1; ?>">
-                                        <div class="prod-pager-thumb" style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>)"></div>
-                                    </a>
-                                    <?php
-                                    $i++;
-                                }
-                                ?>
+                                </div>
+                                <!-- Main Image -->
+                                <div class="gallery-main">
+                                    <ul class="prod-slider">
+                                        <li style="background-image: url(assets/uploads/product_photos/<?php echo $p_featured_photo; ?>);">
+                                            <a class="popup" href="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>" aria-label="View <?php echo htmlspecialchars($p_name); ?> full size image">
+                                                <img src="assets/uploads/product_photos/<?php echo $p_featured_photo; ?>"
+                                                     alt="<?php echo htmlspecialchars($p_name); ?> - Main Product Image" 
+                                                     itemprop="image"
+                                                     width="500" height="500"
+                                                     fetchpriority="high"
+                                                     style="opacity:0;position:absolute;">
+                                            </a>
+                                        </li>
+                                        <?php
+                                        $img_index = 2;
+                                        $statement = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=?");
+                                        $statement->execute(array($_REQUEST['id']));
+                                        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach ($result as $row) {
+                                            ?>
+                                            <li style="background-image: url(assets/uploads/product_photos/<?php echo $row['photo']; ?>);">
+                                                <a class="popup" href="assets/uploads/product_photos/<?php echo $row['photo']; ?>" aria-label="View image <?php echo $img_index; ?>">
+                                                    <img src="assets/uploads/product_photos/<?php echo $row['photo']; ?>"
+                                                         alt="<?php echo htmlspecialchars($p_name); ?> - Photo <?php echo $img_index; ?>" 
+                                                         loading="lazy" width="500" height="500"
+                                                         style="opacity:0;position:absolute;">
+                                                </a>
+                                            </li>
+                                            <?php
+                                            $img_index++;
+                                        }
+                                        ?>
+                                    </ul>
+                                    <!-- Social Share - floats top-right on mobile -->
+                                    <div class="mobile-share-overlay">
+                                        <div class="sharethis-inline-share-buttons" data-description="<?php echo htmlspecialchars($p_name); ?>"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -1274,8 +1284,8 @@ foreach ($page_result as $row) {
                                 </div>
                             </div>
                             
-                            <!-- Social Sharing -->
-                            <div class="share">
+                            <!-- Social Sharing (desktop only - mobile version is in gallery overlay) -->
+                            <div class="share desktop-share">
                                 <?php echo LANG_VALUE_58; ?>
                                 <div class="sharethis-inline-share-buttons" style="margin-top:8px;"></div>
                             </div>

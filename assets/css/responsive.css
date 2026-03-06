@@ -35,179 +35,180 @@
 
 	/* ===== PRODUCT DETAIL - MOBILE COMPACT ===== */
 
-	/* Hide breadcrumb on mobile for compact view */
-	.page .breadcrumb {
-		display: none;
+	/* Hide breadcrumb on mobile */
+	.page .breadcrumb { display: none; }
+
+	/* Compact container */
+	.page > .container { padding-left: 8px; padding-right: 8px; }
+
+	/* Gallery wrapper - flex row: thumbs left, main right */
+	.gallery-wrapper {
+		display: flex;
+		flex-direction: row;
+		gap: 6px;
 	}
 
-	/* Compact container padding */
-	.page > .container {
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-
-	/* Gallery - compact height */
-	ul.prod-slider li {
-		height: 280px !important;
-	}
-
-	/* Thumbnail pager - smaller */
-	.prod-pager-thumb {
+	/* Thumbnails - vertical strip on left */
+	.prod-pager-vertical {
+		display: flex !important;
+		flex-direction: column;
+		gap: 4px;
 		width: 50px;
-		height: 50px;
+		flex-shrink: 0;
+		order: 0;
+		margin-top: 0 !important;
 	}
-	#prod-pager {
-		margin-top: 8px;
-		gap: 5px;
+	.prod-pager-vertical .prod-pager-thumb {
+		width: 46px;
+		height: 46px;
 	}
 
-	/* Product info - no top margin, compact spacing */
+	/* Main image area */
+	.gallery-main {
+		flex: 1;
+		position: relative;
+		min-width: 0;
+	}
+	ul.prod-slider li {
+		height: 240px !important;
+	}
+
+	/* Mobile social share overlay - top-right of image */
+	.mobile-share-overlay {
+		position: absolute;
+		top: 6px;
+		right: 6px;
+		z-index: 10;
+		display: flex !important;
+	}
+	.mobile-share-overlay .sharethis-inline-share-buttons {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 2px;
+	}
+	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn {
+		width: 28px !important;
+		height: 28px !important;
+		min-width: 28px !important;
+		padding: 0 !important;
+		margin: 1px 0 !important;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		border-radius: 4px !important;
+	}
+	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn img,
+	.mobile-share-overlay .sharethis-inline-share-buttons .st-btn svg {
+		width: 14px !important;
+		height: 14px !important;
+	}
+	.mobile-share-overlay .st-label { display: none !important; }
+	.mobile-share-overlay .st-total { display: none !important; }
+
+	/* Hide desktop share on mobile */
+	.desktop-share { display: none !important; }
+
+	/* Product info - compact */
 	.product-detail-info {
 		padding-left: 0 !important;
-		margin-top: 10px !important;
+		margin-top: 8px !important;
 	}
 
-	/* Product title - smaller */
+	/* Product title */
 	.product .p-title h1,
 	.product .p-title h2 {
-		font-size: 18px !important;
-		margin-bottom: 6px !important;
-		line-height: 1.25;
+		font-size: 16px !important;
+		margin-bottom: 4px !important;
+		line-height: 1.2;
 	}
 
-	/* Rating - compact */
+	/* Rating */
 	.product .p-review {
-		margin-bottom: 8px;
-		padding-bottom: 8px;
+		margin-bottom: 5px;
+		padding-bottom: 5px;
 	}
 
-	/* Short description - compact */
+	/* Short description */
 	.product .p-short-des {
-		margin-bottom: 10px;
-		font-size: 13px;
-		line-height: 1.4;
+		margin-bottom: 6px;
+		font-size: 12px;
+		line-height: 1.3;
 	}
-	.product .p-short-des p {
-		margin-bottom: 0;
-	}
+	.product .p-short-des p { margin-bottom: 0; }
 
 	/* Price - compact */
 	.product .p-price {
-		margin-bottom: 12px;
-		padding: 10px 12px;
+		margin-bottom: 8px;
+		padding: 6px 10px;
 	}
-	.product .p-price .current-price {
-		font-size: 24px !important;
-	}
-	.product .p-price del {
-		font-size: 14px !important;
-	}
+	.product .p-price .current-price { font-size: 22px !important; }
+	.product .p-price del { font-size: 13px !important; }
 	.product .p-price .price-label {
-		margin-bottom: 3px;
-		font-size: 11px;
+		margin-bottom: 2px;
+		font-size: 10px;
 	}
 
-	/* Size/Color selectors - compact */
-	.product .p-options {
-		margin-bottom: 10px;
-	}
-	.product .p-options .mb_20 {
-		margin-bottom: 8px !important;
-	}
+	/* Size/Color selectors */
+	.product .p-options { margin-bottom: 6px; }
+	.product .p-options .mb_20 { margin-bottom: 5px !important; }
 	.size-cube {
-		width: 38px !important;
-		height: 38px !important;
-		font-size: 12px !important;
+		width: 34px !important;
+		height: 34px !important;
+		font-size: 11px !important;
 	}
 	.color-cube {
-		width: 32px !important;
-		height: 32px !important;
+		width: 28px !important;
+		height: 28px !important;
 	}
 	.selection-label {
-		font-size: 11px !important;
-		margin-bottom: 4px !important;
+		font-size: 10px !important;
+		margin-bottom: 3px !important;
 	}
 
-	/* Quantity & Cart button - compact */
+	/* Quantity & Cart */
 	.product .p-quantity-wrapper {
-		margin-bottom: 12px;
-		gap: 8px;
+		margin-bottom: 8px;
+		gap: 6px;
 	}
-	.qty-control {
-		height: 40px;
-	}
-	.qty-control .qty-btn {
-		width: 34px;
-		font-size: 16px;
-	}
-	.qty-control input[type="number"] {
-		width: 44px;
-		font-size: 14px;
-	}
+	.qty-control { height: 36px; }
+	.qty-control .qty-btn { width: 30px; font-size: 14px; }
+	.qty-control input[type="number"] { width: 40px; font-size: 13px; }
 	.product .btn-cart1 input[type="submit"] {
-		padding: 10px 20px;
-		font-size: 13px;
-		height: 40px;
+		padding: 8px 16px;
+		font-size: 12px;
+		height: 36px;
 	}
 
-	/* Shipping badge - compact */
+	/* Shipping badge */
 	.fast-shipping-badge {
-		padding: 10px 12px;
-		margin-bottom: 10px;
-		gap: 8px;
+		padding: 6px 10px;
+		margin-bottom: 6px;
+		gap: 6px;
 	}
-	.fast-shipping-badge i {
-		font-size: 18px;
-	}
-	.fast-shipping-badge .shipping-text strong {
-		font-size: 12px;
-	}
-	.fast-shipping-badge .shipping-text span {
-		font-size: 11px;
-	}
+	.fast-shipping-badge i { font-size: 16px; }
+	.fast-shipping-badge .shipping-text strong { font-size: 11px; }
+	.fast-shipping-badge .shipping-text span { font-size: 10px; }
 
-	/* Guarantees - compact, wrap on very small screens */
-	.product-guarantees {
-		margin-bottom: 12px;
-	}
+	/* Guarantees - single row */
+	.product-guarantees { margin-bottom: 8px; }
 	.product-guarantees .guarantee-item {
-		padding: 8px 6px;
-		font-size: 10px;
-		gap: 5px;
-		flex-direction: column;
-		text-align: center;
+		padding: 5px 4px;
+		font-size: 9px;
+		gap: 3px;
 	}
-	.product-guarantees .guarantee-item i {
-		font-size: 16px;
-	}
+	.product-guarantees .guarantee-item i { font-size: 14px; }
 
-	/* Share section - compact */
-	.product .share {
-		margin-top: 10px;
-		padding-top: 10px;
-		font-size: 12px;
-	}
+	/* Tabs */
+	.nav-tabs > li > a { padding: 6px 8px; font-size: 11px; }
+	.tab-content { padding: 8px 0; }
 
-	/* Tabs - compact */
-	.nav-tabs > li > a {
-		padding: 8px 10px;
-		font-size: 12px;
-	}
-	.tab-content {
-		padding: 10px 0;
-	}
-
-	/* Related products section - less padding */
+	/* Related products */
 	.product.bg-gray.pt_70.pb_70 {
-		padding-top: 30px !important;
-		padding-bottom: 30px !important;
+		padding-top: 20px !important;
+		padding-bottom: 20px !important;
 	}
-	.product.bg-gray .headline {
-		margin-bottom: 20px;
-	}
-	.product.bg-gray .headline h2 {
-		font-size: 20px;
-	}
+	.product.bg-gray .headline { margin-bottom: 15px; }
+	.product.bg-gray .headline h2 { font-size: 18px; }
 }
 
 @media only screen and (max-width: 991px) {
@@ -256,6 +257,28 @@
 	ul.bxslider li .text .inner h3 {font-size: 16px;}
 	.bx-controls a.bx-prev, .bx-controls a.bx-next {padding-top: 100px!important;}
 }
+@media only screen and (min-width: 768px) {
+	/* Desktop: gallery wrapper is just normal flow */
+	.gallery-wrapper {
+		display: block;
+	}
+	.gallery-main {
+		position: relative;
+	}
+	/* Hide mobile share overlay on desktop */
+	.mobile-share-overlay {
+		display: none !important;
+	}
+	/* Thumbnails below image on desktop */
+	.prod-pager-vertical {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+	}
+}
+
 @media only screen and (min-width: 992px) {
 	.product .text {
 		min-height: 190px;
