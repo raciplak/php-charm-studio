@@ -1022,10 +1022,29 @@ Tawk_API.customStyle = {
 </script>
 <?php endif; ?>
 
-<!-- Cart overlay created dynamically by JS -->
+<!-- Quick Add to Cart Overlay -->
+<div id="cart-added-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div class="cart-overlay-icon" style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check" style="color:#fff;font-size:28px;"></i>
+        </div>
+        <h3 class="cart-overlay-msg" style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
+    </div>
+</div>
+<style>
+@keyframes cartPopIn {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+@keyframes cartPopOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.7); opacity: 0; }
+}
+</style>
 <script>
 function addToCartAjax(pId) {
-    var btns = document.querySelectorAll('[data-pid="'+pId+'"]');
+    // Disable clicked button
+    var btns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
     for(var i=0;i<btns.length;i++) {
         btns[i].style.pointerEvents='none';
         btns[i].innerHTML='<i class="fa fa-spinner fa-spin"></i> ...';
@@ -1039,21 +1058,24 @@ function addToCartAjax(pId) {
             try {
                 var res = JSON.parse(xhr.responseText);
                 if(res.status === 'success') {
+                    // Update header cart count badges
                     var badges = document.querySelectorAll('.cart-count-badge');
                     for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
+                    // Update header cart total
                     var currency = '<?php echo LANG_VALUE_1; ?>';
                     var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
                     for(var j=0;j<iconLabels.length;j++) iconLabels[j].textContent = currency + res.cart_total;
-                    showCartMessage(res.message || 'Sepetinize Eklendi', false);
+                    showCartOverlay(res.message);
                 } else if(res.status === 'already') {
-                    showCartMessage(res.message || 'Bu ürün zaten sepetinizde', true);
+                    showCartOverlay(res.message, true);
                 } else {
-                    showCartMessage(res.message || 'Hata', true);
+                    alert(res.message);
                 }
             } catch(e) {
-                showCartMessage('Bir hata oluştu', true);
+                alert('Bir hata oluştu');
             }
-            var allBtns = document.querySelectorAll('[data-pid="'+pId+'"]');
+            // Re-enable buttons
+            var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
             for(var j=0;j<allBtns.length;j++) {
                 allBtns[j].style.pointerEvents='';
                 allBtns[j].innerHTML = resetLabel;
@@ -1063,48 +1085,22 @@ function addToCartAjax(pId) {
     xhr.send('p_id='+pId+'&ajax=1');
 }
 
-function showCartMessage(msg, isWarning) {
-    // Remove any existing overlay
-    var old = document.getElementById('dyn-cart-overlay');
-    if(old) old.parentNode.removeChild(old);
-
-    // Create overlay
-    var overlay = document.createElement('div');
-    overlay.id = 'dyn-cart-overlay';
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999999;display:flex;justify-content:center;align-items:center;';
-
-    var box = document.createElement('div');
-    box.style.cssText = 'background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);transform:scale(0.7);opacity:0;transition:transform 0.3s ease, opacity 0.3s ease;';
-
-    var iconBg = isWarning ? '#ff9800' : '#4CAF50';
-    var iconClass = isWarning ? 'fa-exclamation' : 'fa-check';
-
-    box.innerHTML = '<div style="width:60px;height:60px;background:'+iconBg+';border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">' +
-        '<i class="fa '+iconClass+'" style="color:#fff;font-size:28px;"></i></div>' +
-        '<h3 style="margin:0;font-size:20px;color:#333;font-weight:600;">'+msg+'</h3>';
-
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-
-    // Animate in
+function showCartOverlay(msg, isWarning) {
+    var ov = document.getElementById('cart-added-overlay');
+    var inner = ov.querySelector(':scope > div');
+    var icon = ov.querySelector('.cart-overlay-icon');
+    var txt = ov.querySelector('.cart-overlay-msg');
+    if(txt) txt.textContent = msg || 'Sepetinize Eklendi';
+    if(icon) {
+        icon.style.background = isWarning ? '#ff9800' : '#4CAF50';
+        icon.innerHTML = isWarning ? '<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>' : '<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>';
+    }
+    ov.style.display = 'flex';
+    inner.style.animation = 'cartPopIn 0.3s ease';
     setTimeout(function() {
-        box.style.transform = 'scale(1)';
-        box.style.opacity = '1';
-    }, 10);
-
-    // Animate out after 1.2s
-    setTimeout(function() {
-        box.style.transform = 'scale(0.7)';
-        box.style.opacity = '0';
-        setTimeout(function() {
-            if(overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 300);
+        inner.style.animation = 'cartPopOut 0.3s ease forwards';
+        setTimeout(function() { ov.style.display = 'none'; }, 300);
     }, 1200);
-
-    // Click to dismiss
-    overlay.addEventListener('click', function() {
-        if(overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    });
 }
 </script>
 
