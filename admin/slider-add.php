@@ -76,7 +76,7 @@ if(isset($_POST['form1'])) {
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+			<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
