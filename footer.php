@@ -1049,12 +1049,13 @@ $(document).ready(function() {
         e.stopImmediatePropagation();
         
         var $btn = $(this);
-        var pId = $btn.data('id');
-        var pName = $btn.data('name');
-        var pPrice = $btn.data('price');
-        var pPhoto = $btn.data('photo');
+        var pId = $btn.attr('data-id');
+        var pName = $btn.attr('data-name');
+        var pPrice = $btn.attr('data-price');
+        var pPhoto = $btn.attr('data-photo');
         
-        if (!pId) return;
+        console.log('Quick cart click - pId:', pId, 'pName:', pName, 'pPrice:', pPrice);
+        if (!pId) { console.log('No product ID found'); return; }
         
         $.ajax({
             url: 'cart-add-ajax.php',
