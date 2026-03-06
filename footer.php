@@ -1025,10 +1025,10 @@ Tawk_API.customStyle = {
 <!-- Quick Add to Cart Overlay -->
 <div id="cart-added-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;justify-content:center;align-items:center;">
     <div style="background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <div style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
+        <div class="cart-overlay-icon" style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
             <i class="fa fa-check" style="color:#fff;font-size:28px;"></i>
         </div>
-        <h3 style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
+        <h3 class="cart-overlay-msg" style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
     </div>
 </div>
 <style>
