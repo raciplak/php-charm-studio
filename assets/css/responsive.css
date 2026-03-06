@@ -39,8 +39,18 @@
 	.page .breadcrumb { display: none; }
 
 	/* Compact container - proper padding */
-	.page > .container { padding-left: 10px; padding-right: 10px; }
-	.page .col-md-6, .page .col-md-12 { padding-left: 5px; padding-right: 5px; }
+	.page > .container { padding-left: 15px !important; padding-right: 15px !important; }
+	.page .col-md-6, .page .col-md-12 { padding-left: 10px !important; padding-right: 10px !important; }
+	.product-detail-info { padding-left: 10px !important; padding-right: 10px !important; }
+	.product .p-title,
+	.product .p-review,
+	.product .p-short-des,
+	.product .p-price,
+	.product .p-options,
+	.product .p-quantity-wrapper,
+	.product .btn-cart1,
+	.fast-shipping-badge,
+	.product-guarantees { margin-left: 0 !important; padding-left: 0; }
 
 	/* Gallery wrapper - thumbnails on left */
 	.gallery-wrapper {
