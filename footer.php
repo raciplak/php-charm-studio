@@ -1052,7 +1052,7 @@ function cartResult(status, message, cartCount, cartTotal) {
     if(status === 'success') {
         // Update header badges
         var badges = document.querySelectorAll('.cart-count-badge');
-        for(var i=0; i<badges.length; i++) badges[i].textContent = cartCount;
+        for(var i=0; i<badges.length; i++) { badges[i].textContent = cartCount; badges[i].style.display = cartCount > 0 ? '' : 'none'; }
         var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
         var currency = '<?php echo LANG_VALUE_1; ?>';
         for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + cartTotal;
