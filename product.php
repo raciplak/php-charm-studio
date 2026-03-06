@@ -459,6 +459,44 @@ foreach ($photo_result as $photo_row) {
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link rel="stylesheet" href="assets/css/side-cart.css">
+
+    <?php
+    // Site Color Settings - CSS Variables injection (same as header.php)
+    $site_colors_defaults = array(
+        'top-bar-bg' => '#131921',
+        'navbar-bg' => '#232f3e',
+        'search-btn-color' => '#ff6b35',
+        'header-icon-color' => '#131921',
+        'primary-color' => '#0d1452',
+        'accent-color' => '#e4144d',
+        'cart-btn-color' => '#e7a340',
+        'btn-hover-color' => '#333333',
+        'discount-color' => '#e74c3c',
+        'footer-bg' => '#2c3e50',
+        'footer-bottom-bg' => '#1a252f',
+        'footer-text-color' => '#bdc3c7',
+        'footer-accent-color' => '#e4144d',
+        'page-overlay-bg' => '#131921',
+        'mobile-menu-bg' => '#1a252f',
+        'newsletter-bg' => '#232f3e',
+        'slider-btn-color' => '#e4144d'
+    );
+    try {
+        $stmt_colors = $pdo->prepare("SELECT color_key, color_value FROM tbl_site_colors");
+        $stmt_colors->execute();
+        $db_colors = $stmt_colors->fetchAll(PDO::FETCH_KEY_PAIR);
+        $site_colors = array_merge($site_colors_defaults, $db_colors);
+    } catch(Exception $e) {
+        $site_colors = $site_colors_defaults;
+    }
+    ?>
+    <style>
+    :root {
+        <?php foreach($site_colors as $key => $val): ?>
+        --<?php echo $key; ?>: <?php echo $val; ?>;
+        <?php endforeach; ?>
+    }
+    </style>
     
     <!-- JSON-LD Structured Data: Product Schema -->
     <script type="application/ld+json">
@@ -712,11 +750,10 @@ $social_result = $statement->fetchAll(PDO::FETCH_ASSOC);
 						for($i=1;$i<=$header_cart_count;$i++) { $header_cart_total += $h_arr_price[$i] * $h_arr_qty[$i]; }
 					}
 					?>
-					<?php if(isset($_SESSION['customer'])): ?>
+				<?php if(isset($_SESSION['customer'])): ?>
 						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user"></i><span class="icon-label"><?php echo $_SESSION['customer']['cust_name']; ?></span></a></li>
 					<?php else: ?>
 						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-sign-in"></i><span class="icon-label"><?php echo LANG_VALUE_9; ?></span></a></li>
-						<li><a href="registration.php" class="header-icon-link" title="<?php echo LANG_VALUE_15; ?>"><i class="fa fa-user-plus"></i><span class="icon-label"><?php echo LANG_VALUE_15; ?></span></a></li>
 					<?php endif; ?>
 					<li>
 						<a href="javascript:void(0);" onclick="toggleSideCart()" class="header-icon-link cart-trigger" title="Sepet">
@@ -744,62 +781,179 @@ foreach ($page_result as $row) {
 }
 ?>
 
-<nav class="nav" aria-label="Main navigation">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 pl_0 pr_0">
-                <div class="menu-container">
-                    <div class="menu">
-                        <ul>
-                            <li><a href="index.php">Home</a></li>
-                            
-                            <?php
-                            $statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
-                            $statement->execute();
-                            $cat_result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($cat_result as $row) {
-                                ?>
-                                <li><a href="product-category.php?id=<?php echo $row['tcat_id']; ?>&type=top-category"><?php echo $row['tcat_name']; ?></a>
-                                    <ul>
-                                        <?php
-                                        $statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
-                                        $statement1->execute(array($row['tcat_id']));
-                                        $result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($result1 as $row1) {
-                                            ?>
-                                            <li><a href="product-category.php?id=<?php echo $row1['mcat_id']; ?>&type=mid-category"><?php echo $row1['mcat_name']; ?></a>
-                                                <ul>
-                                                    <?php
-                                                    $statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
-                                                    $statement2->execute(array($row1['mcat_id']));
-                                                    $result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
-                                                    foreach ($result2 as $row2) {
-                                                        ?>
-                                                        <li><a href="product-category.php?id=<?php echo $row2['ecat_id']; ?>&type=end-category"><?php echo $row2['ecat_name']; ?></a></li>
-                                                        <?php
-                                                    }
-                                                    ?>
-                                                </ul>
-                                            </li>
-                                            <?php
-                                        }
-                                        ?>
-                                    </ul>
-                                </li>
-                                <?php
-                            }
-                            ?>
+<div class="nav">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 pl_0 pr_0">
+				<div class="menu-container">
+					<!-- Hamburger Toggle Button -->
+					<button class="hamburger-btn" id="hamburgerBtn" aria-label="Menüyü aç/kapat">
+						<span class="hamburger-line"></span>
+						<span class="hamburger-line"></span>
+						<span class="hamburger-line"></span>
+					</button>
+					<!-- Mobile Overlay -->
+					<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+					<div class="menu">
+						<ul>
+							<li><a href="index.php">Ana Sayfa</a></li>
+							
+							<?php
+							$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result as $row) {
+								?>
+								<li><a href="product-category.php?id=<?php echo $row['tcat_id']; ?>&type=top-category"><?php echo $row['tcat_name']; ?></a>
+									<ul>
+										<?php
+										$statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
+										$statement1->execute(array($row['tcat_id']));
+										$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+										foreach ($result1 as $row1) {
+											?>
+											<li><a href="product-category.php?id=<?php echo $row1['mcat_id']; ?>&type=mid-category"><?php echo $row1['mcat_name']; ?></a>
+												<ul>
+													<?php
+													$statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
+													$statement2->execute(array($row1['mcat_id']));
+													$result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
+													foreach ($result2 as $row2) {
+														?>
+														<li><a href="product-category.php?id=<?php echo $row2['ecat_id']; ?>&type=end-category"><?php echo $row2['ecat_name']; ?></a></li>
+														<?php
+													}
+													?>
+												</ul>
+											</li>
+											<?php
+										}
+										?>
+									</ul>
+								</li>
+								<?php
+							}
+							?>
 
-                            <li><a href="about.php"><?php echo $about_title; ?></a></li>
-                            <li><a href="faq.php"><?php echo $faq_title; ?></a></li>
-                            <li><a href="contact.php"><?php echo $contact_title; ?></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+							<?php
+							// Show Brands with show_on_menu=1
+							$statement = $pdo->prepare("SELECT * FROM tbl_brands WHERE show_on_menu=1 ORDER BY brand_name");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result as $row) {
+								?>
+								<li><a href="product-category.php?id=<?php echo $row['brand_id']; ?>&type=brand"><?php echo $row['brand_name']; ?></a>
+									<ul>
+										<?php
+										$statement_mod = $pdo->prepare("SELECT * FROM tbl_models WHERE brand_id=? ORDER BY model_name");
+										$statement_mod->execute(array($row['brand_id']));
+										$result_mod = $statement_mod->fetchAll(PDO::FETCH_ASSOC);
+										foreach ($result_mod as $row_mod) {
+											$statement_mcat = $pdo->prepare("
+												SELECT DISTINCT mc.mcat_id, mc.mcat_name 
+												FROM tbl_product p 
+												INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+												INNER JOIN tbl_mid_category mc ON ec.mcat_id = mc.mcat_id 
+												WHERE p.model_id=?
+											");
+											$statement_mcat->execute(array($row_mod['model_id']));
+											$result_mcat = $statement_mcat->fetchAll(PDO::FETCH_ASSOC);
+											?>
+											<li><a href="product-category.php?id=<?php echo $row_mod['model_id']; ?>&type=model"><?php echo $row_mod['model_name']; ?></a>
+												<?php if(count($result_mcat) > 0): ?>
+												<ul>
+													<?php foreach ($result_mcat as $row_mcat) { ?>
+														<li><a href="product-category.php?id=<?php echo $row_mcat['mcat_id']; ?>&type=mid-category"><?php echo $row_mcat['mcat_name']; ?></a>
+															<ul>
+																<?php
+																$statement_ecat = $pdo->prepare("
+																	SELECT DISTINCT ec.ecat_id, ec.ecat_name 
+																	FROM tbl_product p 
+																	INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+																	WHERE p.model_id=? AND ec.mcat_id=?
+																");
+																$statement_ecat->execute(array($row_mod['model_id'], $row_mcat['mcat_id']));
+																$result_ecat = $statement_ecat->fetchAll(PDO::FETCH_ASSOC);
+																foreach ($result_ecat as $row_ecat) {
+																	?>
+																	<li><a href="product-category.php?id=<?php echo $row_ecat['ecat_id']; ?>&type=end-category"><?php echo $row_ecat['ecat_name']; ?></a></li>
+																	<?php } ?>
+															</ul>
+														</li>
+													<?php } ?>
+												</ul>
+												<?php endif; ?>
+											</li>
+											<?php
+										}
+										?>
+									</ul>
+								</li>
+								<?php
+							}
+							?>
+
+							<?php
+							// Show Models with show_on_menu=1 as independent items
+							$statement = $pdo->prepare("
+								SELECT m.*, b.brand_name 
+								FROM tbl_models m 
+								INNER JOIN tbl_brands b ON m.brand_id = b.brand_id 
+								WHERE m.show_on_menu=1 
+								ORDER BY b.brand_name, m.model_name
+							");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result as $row_mod) {
+								$statement_mcat = $pdo->prepare("
+									SELECT DISTINCT mc.mcat_id, mc.mcat_name 
+									FROM tbl_product p 
+									INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+									INNER JOIN tbl_mid_category mc ON ec.mcat_id = mc.mcat_id 
+									WHERE p.model_id=?
+								");
+								$statement_mcat->execute(array($row_mod['model_id']));
+								$result_mcat = $statement_mcat->fetchAll(PDO::FETCH_ASSOC);
+								?>
+								<li><a href="product-category.php?id=<?php echo $row_mod['model_id']; ?>&type=model"><?php echo $row_mod['brand_name']; ?> <?php echo $row_mod['model_name']; ?></a>
+									<?php if(count($result_mcat) > 0): ?>
+									<ul>
+										<?php foreach ($result_mcat as $row_mcat) { ?>
+											<li><a href="product-category.php?id=<?php echo $row_mcat['mcat_id']; ?>&type=mid-category"><?php echo $row_mcat['mcat_name']; ?></a>
+												<ul>
+													<?php
+													$statement_ecat = $pdo->prepare("
+														SELECT DISTINCT ec.ecat_id, ec.ecat_name 
+														FROM tbl_product p 
+														INNER JOIN tbl_end_category ec ON p.ecat_id = ec.ecat_id 
+														WHERE p.model_id=? AND ec.mcat_id=?
+													");
+													$statement_ecat->execute(array($row_mod['model_id'], $row_mcat['mcat_id']));
+													$result_ecat = $statement_ecat->fetchAll(PDO::FETCH_ASSOC);
+													foreach ($result_ecat as $row_ecat) {
+														?>
+														<li><a href="product-category.php?id=<?php echo $row_ecat['ecat_id']; ?>&type=end-category"><?php echo $row_ecat['ecat_name']; ?></a></li>
+														<?php } ?>
+												</ul>
+											</li>
+										<?php } ?>
+									</ul>
+									<?php endif; ?>
+								</li>
+								<?php
+							}
+							?>
+
+							<li><a href="about.php"><?php echo $about_title; ?></a></li>
+							<li><a href="faq.php"><?php echo $faq_title; ?></a></li>
+							<li><a href="contact.php"><?php echo $contact_title; ?></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Main Product Content -->
 <main class="page" itemscope itemtype="https://schema.org/Product">
