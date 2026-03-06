@@ -1048,11 +1048,11 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopImmediatePropagation();
         
-        var $btn = $(this);
-        var pId = $btn.data('id');
-        var pName = $btn.data('name');
-        var pPrice = $btn.data('price');
-        var pPhoto = $btn.data('photo');
+        var btn = this;
+        var pId = btn.getAttribute('data-id');
+        var pName = btn.getAttribute('data-name');
+        var pPrice = btn.getAttribute('data-price');
+        var pPhoto = btn.getAttribute('data-photo');
         
         if (!pId) return;
         
