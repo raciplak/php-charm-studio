@@ -252,6 +252,7 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 1000;
+  overflow: visible;
 }
 
 .menu-container {
