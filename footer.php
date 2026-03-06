@@ -1084,51 +1084,6 @@ function addToCartDirect(pId, clickedBtn) {
     xhr.send('p_id=' + pId + '&ajax=1');
 }
 
-// Also handle direct clicks (fallback for cloned elements where form might not exist)
-document.addEventListener('click', function(e) {
-    var btn = e.target.closest('.btn-quick-add-cart');
-    if(!btn) return;
-    var form = btn.closest('.cart-form-ajax');
-    if(form) return; // Let form submit handler deal with it
-    
-    // Cloned button without form - do direct AJAX
-    var pId = btn.getAttribute('data-pid');
-    if(!pId) return;
-    e.preventDefault();
-    
-    btn.style.pointerEvents = 'none';
-    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ...';
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'cart-add-form.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-            var resetLabel = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
-            try {
-                var res = JSON.parse(xhr.responseText);
-                if(res.status === 'success') {
-                    var badges = document.querySelectorAll('.cart-count-badge');
-                    for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
-                    showCartOverlay(res.message);
-                } else if(res.status === 'already') {
-                    showCartOverlay(res.message, true);
-                } else {
-                    showCartOverlay(res.message || 'Hata', true);
-                }
-            } catch(ex) {
-                console.log('Cart click error:', xhr.responseText);
-                showCartOverlay('Bir hata oluştu', true);
-            }
-            var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
-            for(var j=0;j<allBtns.length;j++) {
-                allBtns[j].style.pointerEvents = '';
-                allBtns[j].innerHTML = resetLabel;
-            }
-        }
-    };
-    xhr.send('p_id='+pId+'&ajax=1');
-});
 
 function showCartOverlay(msg, isWarning) {
     var ov = document.getElementById('cart-added-overlay');
