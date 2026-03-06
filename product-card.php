@@ -72,8 +72,13 @@
                     </div>
                 </div>
             <?php else: ?>
-                <p><a href="javascript:void(0);" class="btn-quick-add-cart" data-pid="<?php echo $row['p_id']; ?>" style="display:inline-block;width:100%;text-align:center;padding:8px 15px;border:none;cursor:pointer;color:#fff;background:var(--cart-btn-color, #e7a340);border-radius:4px;text-decoration:none;transition:opacity 0.2s;">
-                    <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></a></p>
+                <form method="POST" action="cart-add-form.php" target="cart-iframe-<?php echo $row['p_id']; ?>" onsubmit="handleCartForm(this, <?php echo $row['p_id']; ?>); return true;">
+                    <input type="hidden" name="p_id" value="<?php echo $row['p_id']; ?>">
+                    <input type="hidden" name="ajax" value="1">
+                    <p><button type="submit" class="btn-quick-add-cart" style="width:100%;border:none;cursor:pointer;display:inline-block;">
+                        <i class="fa fa-shopping-cart"></i> <?php echo defined('LANG_VALUE_154') ? LANG_VALUE_154 : 'Sepete Ekle'; ?></button></p>
+                </form>
+                <iframe name="cart-iframe-<?php echo $row['p_id']; ?>" style="display:none;"></iframe>
             <?php endif; ?>
         </div>
     </div>

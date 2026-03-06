@@ -1025,10 +1025,10 @@ Tawk_API.customStyle = {
 <!-- Quick Add to Cart Overlay -->
 <div id="cart-added-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;justify-content:center;align-items:center;">
     <div style="background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <div class="cart-overlay-icon" style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
+        <div style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
             <i class="fa fa-check" style="color:#fff;font-size:28px;"></i>
         </div>
-        <h3 class="cart-overlay-msg" style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
+        <h3 style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
     </div>
 </div>
 <style>
@@ -1042,79 +1042,42 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-// jQuery event delegation - works on ALL elements including Owl Carousel clones
-$(document).on('click', '.btn-quick-add-cart', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    var $btn = $(this);
-    var pId = $btn.data('pid') || $btn.attr('data-pid');
-    if(!pId) return;
-    
-    // Prevent double click
-    if($btn.hasClass('cart-loading')) return;
-    $btn.addClass('cart-loading');
-    
-    var originalHtml = $btn.html();
-    $btn.html('<i class="fa fa-spinner fa-spin"></i> ...');
-    
-    $.ajax({
-        url: 'cart-add-ajax.php',
-        type: 'POST',
-        data: {
-            p_id: pId,
-            p_qty: 1,
-            size_id: 0,
-            color_id: 0,
-            p_current_price: 0,
-            p_name: '',
-            p_featured_photo: ''
-        },
-        dataType: 'json',
-        success: function(res) {
-            if(res.status === 'success') {
-                // Update ALL cart badges
-                $('.cart-count-badge').text(res.cart_count);
-                // Update header total
-                var currency = '<?php echo LANG_VALUE_1; ?>';
-                $('.cart-trigger .icon-label').text(currency + res.cart_total);
-                showCartOverlay(res.message, false);
-            } else {
-                showCartOverlay(res.message || 'Bu ürün zaten sepetinizde', true);
-            }
-        },
-        error: function(xhr) {
-            console.log('Cart AJAX error:', xhr.status, xhr.responseText);
-            showCartOverlay('Bağlantı hatası oluştu', true);
-        },
-        complete: function() {
-            var resetLabel = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
-            // Reset ALL buttons with same pid (originals + clones)
-            $('.btn-quick-add-cart[data-pid="'+pId+'"]').removeClass('cart-loading').html(resetLabel);
-        }
-    });
-});
+function handleCartForm(form, pId) {
+    // Form submits to hidden iframe, no page reload
+    var btn = form.querySelector('button[type="submit"]');
+    if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...'; }
+}
 
-function showCartOverlay(msg, isWarning) {
-    var $ov = $('#cart-added-overlay');
-    if(!$ov.length) return;
-    var $inner = $ov.children('div').first();
-    var $icon = $ov.find('.cart-overlay-icon');
-    var $txt = $ov.find('.cart-overlay-msg');
-    
-    $txt.text(msg || 'Sepetinize Eklendi');
-    if(isWarning) {
-        $icon.css('background', '#ff9800').html('<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>');
+function cartResult(status, message, cartCount, cartTotal) {
+    if(status === 'success') {
+        // Update header badges
+        var badges = document.querySelectorAll('.cart-count-badge');
+        for(var i=0; i<badges.length; i++) badges[i].textContent = cartCount;
+        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+        var currency = '<?php echo LANG_VALUE_1; ?>';
+        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + cartTotal;
+        showCartOverlay();
+    } else if(status === 'already') {
+        alert(message);
     } else {
-        $icon.css('background', '#4CAF50').html('<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>');
+        alert(message);
     }
-    
-    $ov.css('display', 'flex');
-    $inner.css('animation', 'cartPopIn 0.3s ease');
-    
+    // Re-enable all cart buttons
+    var allBtns = document.querySelectorAll('.btn-quick-add-cart');
+    for(var i=0; i<allBtns.length; i++) {
+        allBtns[i].disabled = false;
+        allBtns[i].innerHTML = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
+    }
+}
+
+function showCartOverlay() {
+    var ov = document.getElementById('cart-added-overlay');
+    var inner = ov.querySelector(':scope > div');
+    ov.style.display = 'flex';
+    inner.style.animation = 'cartPopIn 0.3s ease';
     setTimeout(function() {
-        $inner.css('animation', 'cartPopOut 0.3s ease forwards');
-        setTimeout(function() { $ov.css('display', 'none'); }, 300);
+        inner.style.animation = 'cartPopOut 0.3s ease forwards';
+        setTimeout(function() { ov.style.display = 'none'; }, 300);
     }, 1200);
 }
 </script>

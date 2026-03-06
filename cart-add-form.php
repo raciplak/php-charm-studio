@@ -23,7 +23,7 @@ $statement->execute(array($p_id));
 $product = $statement->fetch(PDO::FETCH_ASSOC);
 
 if(!$product) {
-    if($is_ajax) { header('Content-Type: application/json'); echo json_encode(array('status'=>'error','message'=>'Ürün bulunamadı')); exit; }
+    if($is_ajax) { echo '<script>parent.cartResult("error","Ürün bulunamadı");</script>'; exit; }
     header('location: index.php');
     exit;
 }
@@ -34,7 +34,7 @@ $p_featured_photo = $product['p_featured_photo'];
 $p_stock = $product['p_qty'];
 
 if($p_stock < 1) {
-    if($is_ajax) { header('Content-Type: application/json'); echo json_encode(array('status'=>'error','message'=>'Stokta yok')); exit; }
+    if($is_ajax) { echo '<script>parent.cartResult("error","Stokta yok");</script>'; exit; }
     header('location: index.php');
     exit;
 }
@@ -56,7 +56,7 @@ if(isset($_SESSION['cart_p_id'])) {
 }
 
 if($already) {
-    if($is_ajax) { header('Content-Type: application/json'); echo json_encode(array('status'=>'already','message'=>'Bu ürün zaten sepetinizde')); exit; }
+    if($is_ajax) { echo '<script>parent.cartResult("already","Bu ürün zaten sepetinizde");</script>'; exit; }
     header('location: ' . ($_POST['redirect'] ?? 'index.php'));
     exit;
 }
@@ -87,8 +87,7 @@ foreach($_SESSION['cart_p_qty'] as $k => $q) {
 }
 
 if($is_ajax) {
-    header('Content-Type: application/json');
-    echo json_encode(array('status'=>'success','message'=>'Sepetinize Eklendi','cart_count'=>$cart_count,'cart_total'=>number_format($cart_total, 2, '.', '')));
+    echo '<script>parent.cartResult("success","Sepetinize Eklendi",' . $cart_count . ',"' . number_format($cart_total, 2, '.', '') . '");</script>';
     exit;
 }
 
