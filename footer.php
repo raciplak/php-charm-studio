@@ -1064,6 +1064,15 @@ function addToCartXHR(btn, pId) {
                 var res = JSON.parse(xhr.responseText);
                 if(res.status === 'success') {
                     var badges = document.querySelectorAll('.cart-count-badge');
+                    if(badges.length === 0) {
+                        var cartLink = document.querySelector('.cart-trigger');
+                        if(cartLink) {
+                            var badge = document.createElement('span');
+                            badge.className = 'cart-count-badge';
+                            badge.textContent = res.cart_count;
+                            cartLink.appendChild(badge);
+                        }
+                    }
                     for(var i=0; i<badges.length; i++) {
                         badges[i].textContent = res.cart_count;
                         badges[i].style.display = '';
