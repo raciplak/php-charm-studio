@@ -60,6 +60,7 @@
         initModal();
         currentIndex = 0;
         photos = [];
+        isOpening = true;
 
         // Show loading
         $("#qvInfo").html('<div class="qv-loading"><i class="fa fa-spinner"></i></div>');
@@ -69,6 +70,9 @@
 
         $overlay.addClass("active");
         $("body").css("overflow", "hidden");
+
+        // Prevent immediate close from event bubbling
+        setTimeout(function() { isOpening = false; }, 300);
 
         // Fetch product data
         $.getJSON("quick-view-ajax.php", { id: productId }, function(data) {
