@@ -6,7 +6,7 @@
 
     var currentIndex = 0;
     var photos = [];
-    var isOpening = false;
+    var modalReady = false;
     var $overlay, $modal;
 
     // Build modal HTML once
@@ -14,7 +14,7 @@
         if ($("#qvOverlay").length) return;
 
         var html = '<div class="qv-overlay" id="qvOverlay">' +
-            '<div class="qv-modal">' +
+            '<div class="qv-modal" id="qvModal">' +
                 '<button class="qv-close" id="qvClose">&times;</button>' +
                 '<div class="qv-image-section">' +
                     '<div class="qv-main-image-wrapper">' +
@@ -33,16 +33,29 @@
 
         $("body").append(html);
         $overlay = $("#qvOverlay");
-        $modal = $overlay.find(".qv-modal");
+        $modal = $("#qvModal");
 
-        // Events
-        $("#qvClose").on("click", function(e) { e.stopPropagation(); closeModal(); });
-        $overlay.on("click", function(e) {
-            if (isOpening) return;
-            if (e.target === $overlay[0]) closeModal();
+        // Close only when clicking directly on overlay background (not modal or children)
+        $overlay.on("mousedown", function(e) {
+            if (e.target === this && modalReady) {
+                closeModal();
+            }
         });
-        $("#qvPrev").on("click", function() { navigate(-1); });
-        $("#qvNext").on("click", function() { navigate(1); });
+
+        // Close button
+        $("#qvClose").on("click", function(e) {
+            e.stopPropagation();
+            closeModal();
+        });
+
+        // Navigation
+        $("#qvPrev").on("click", function(e) { e.stopPropagation(); navigate(-1); });
+        $("#qvNext").on("click", function(e) { e.stopPropagation(); navigate(1); });
+
+        // Prevent clicks inside modal from bubbling to overlay
+        $modal.on("mousedown click", function(e) {
+            e.stopPropagation();
+        });
 
         // Keyboard
         $(document).on("keydown", function(e) {
@@ -62,7 +75,7 @@
         initModal();
         currentIndex = 0;
         photos = [];
-        isOpening = true;
+        modalReady = false;
 
         // Show loading
         $("#qvInfo").html('<div class="qv-loading"><i class="fa fa-spinner"></i></div>');
@@ -73,8 +86,8 @@
         $overlay.addClass("active");
         $("body").css("overflow", "hidden");
 
-        // Prevent immediate close from event bubbling
-        setTimeout(function() { isOpening = false; }, 500);
+        // Allow closing only after animation completes
+        setTimeout(function() { modalReady = true; }, 600);
 
         // Fetch product data
         $.getJSON("quick-view-ajax.php", { id: productId }, function(data) {
@@ -99,17 +112,14 @@
             }
             $("#qvThumbs").html(thumbsHtml);
 
-            // Hide thumbnails if only 1 photo
             if (photos.length <= 1) {
                 $("#qvThumbs").hide();
             } else {
                 $("#qvThumbs").show();
             }
 
-            // Update arrows & counter
             updateNavigation();
 
-            // Build info section
             var infoHtml = '<h3 class="qv-product-name">' + escapeHtml(data.name) + '</h3>' +
                 '<div class="qv-price">' + data.currency + data.current_price + '</div>';
 
@@ -131,8 +141,11 @@
     }
 
     function closeModal() {
-        $overlay.removeClass("active");
-        $("body").css("overflow", "");
+        if ($overlay) {
+            $overlay.removeClass("active");
+            $("body").css("overflow", "");
+        }
+        modalReady = false;
     }
 
     function navigate(dir) {
@@ -148,11 +161,9 @@
             $("#qvMainImg").attr("src", photos[currentIndex]).css("opacity", 1);
         }, 150);
 
-        // Update active thumb
         $(".qv-thumb").removeClass("active");
         $(".qv-thumb[data-index='" + currentIndex + "']").addClass("active");
 
-        // Scroll thumbnail into view
         var $activeThumb = $(".qv-thumb.active");
         if ($activeThumb.length) {
             var $container = $("#qvThumbs");
@@ -164,11 +175,9 @@
     }
 
     function updateNavigation() {
-        // Arrows
         $("#qvPrev").toggleClass("hidden", currentIndex === 0);
         $("#qvNext").toggleClass("hidden", currentIndex >= photos.length - 1);
 
-        // Counter
         if (photos.length > 1) {
             $("#qvCounter").text((currentIndex + 1) + " / " + photos.length);
         } else {
@@ -182,24 +191,22 @@
         return div.innerHTML;
     }
 
-    // Delegate click on quick-view buttons - capture phase + stop everything
-    $(document).on("click", ".quick-view-btn", function(e) {
+    // Use mousedown instead of click to avoid Owl Carousel drag interference
+    $(document).on("mousedown touchstart", ".quick-view-btn", function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         var pid = $(this).data("product-id");
-        if (pid) openModal(pid);
-        return false;
+        if (pid) {
+            openModal(pid);
+        }
     });
 
-    // Also capture via native listener in capture phase
-    document.addEventListener("click", function(e) {
-        var btn = e.target.closest(".quick-view-btn");
-        if (btn) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-        }
-    }, true);
+    // Prevent click from bubbling (so parent <a> or carousel doesn't navigate)
+    $(document).on("click", ".quick-view-btn", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
 
 })(jQuery);
