@@ -36,10 +36,10 @@
         $modal = $overlay.find(".qv-modal");
 
         // Events
-        $("#qvClose").on("click", closeModal);
+        $("#qvClose").on("click", function(e) { e.stopPropagation(); closeModal(); });
         $overlay.on("click", function(e) {
             if (isOpening) return;
-            if ($(e.target).is($overlay)) closeModal();
+            if (e.target === $overlay[0]) closeModal();
         });
         $("#qvPrev").on("click", function() { navigate(-1); });
         $("#qvNext").on("click", function() { navigate(1); });
