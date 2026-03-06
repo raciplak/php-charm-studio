@@ -511,7 +511,8 @@ Mobile style's
   .menu > ul > li {
     width: 100%;
     float: none;
-    display: block;
+    display: block !important;
+    visibility: visible !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
