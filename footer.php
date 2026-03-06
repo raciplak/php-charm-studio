@@ -1042,42 +1042,32 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function addToCartQuick(pId, pName, pPrice, pPhoto) {
-    if (!pId) return;
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'cart-add-ajax.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var resp = JSON.parse(xhr.responseText);
-                if (resp.status === 'success') {
-                    // Update header badges
-                    var badges = document.querySelectorAll('.cart-count-badge');
-                    for (var i = 0; i < badges.length; i++) badges[i].textContent = resp.cart_count;
-                    var totals = document.querySelectorAll('.header-cart-total');
-                    for (var i = 0; i < totals.length; i++) totals[i].textContent = resp.cart_total;
-                    // Update icon-label if exists
-                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-                    for (var i = 0; i < iconLabels.length; i++) iconLabels[i].textContent = '<?php echo LANG_VALUE_1; ?>' + resp.cart_total;
-                    // Show overlay
-                    showCartOverlay();
-                } else {
-                    alert(resp.message || 'Hata oluştu');
-                }
-            } catch(e) {
-                alert('Sunucu hatası');
-            }
-        }
-    };
-    var params = 'p_id=' + encodeURIComponent(pId) 
-        + '&p_qty=1'
-        + '&size_id=0'
-        + '&color_id=0'
-        + '&p_current_price=' + encodeURIComponent(pPrice)
-        + '&p_name=' + encodeURIComponent(pName)
-        + '&p_featured_photo=' + encodeURIComponent(pPhoto);
-    xhr.send(params);
+function handleCartForm(form, pId) {
+    // Form submits to hidden iframe, no page reload
+    var btn = form.querySelector('button[type="submit"]');
+    if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...'; }
+}
+
+function cartResult(status, message, cartCount, cartTotal) {
+    if(status === 'success') {
+        // Update header badges
+        var badges = document.querySelectorAll('.cart-count-badge');
+        for(var i=0; i<badges.length; i++) badges[i].textContent = cartCount;
+        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+        var currency = '<?php echo LANG_VALUE_1; ?>';
+        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + cartTotal;
+        showCartOverlay();
+    } else if(status === 'already') {
+        alert(message);
+    } else {
+        alert(message);
+    }
+    // Re-enable all cart buttons
+    var allBtns = document.querySelectorAll('.btn-quick-add-cart');
+    for(var i=0; i<allBtns.length; i++) {
+        allBtns[i].disabled = false;
+        allBtns[i].innerHTML = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
+    }
 }
 
 function showCartOverlay() {
@@ -1091,16 +1081,6 @@ function showCartOverlay() {
     }, 1200);
 }
 </script>
-<?php if(isset($_SESSION['cart_flash']) && $_SESSION['cart_flash'] === 'added'): ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() { showCartOverlay(); });
-</script>
-<?php unset($_SESSION['cart_flash']); endif; ?>
-<?php if(isset($_SESSION['cart_flash']) && $_SESSION['cart_flash'] === 'already'): ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() { alert('Bu ürün zaten sepetinizde!'); });
-</script>
-<?php unset($_SESSION['cart_flash']); endif; ?>
 
 <?php 
 // If chat widget is off, strip any tawk.to scripts from before_body
