@@ -256,6 +256,28 @@
 	ul.bxslider li .text .inner h3 {font-size: 16px;}
 	.bx-controls a.bx-prev, .bx-controls a.bx-next {padding-top: 100px!important;}
 }
+@media only screen and (min-width: 768px) {
+	/* Desktop: gallery wrapper is just normal flow */
+	.gallery-wrapper {
+		display: block;
+	}
+	.gallery-main {
+		position: relative;
+	}
+	/* Hide mobile share overlay on desktop */
+	.mobile-share-overlay {
+		display: none !important;
+	}
+	/* Thumbnails below image on desktop */
+	.prod-pager-vertical {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+	}
+}
+
 @media only screen and (min-width: 992px) {
 	.product .text {
 		min-height: 190px;
