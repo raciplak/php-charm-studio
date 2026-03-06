@@ -1045,40 +1045,52 @@ function showCartToastGlobal(msg, isSuccess) {
 }
 
 function addToCartXHR(btn, pId) {
+    if(!btn || !pId) return;
     btn.disabled = true;
     var origHTML = btn.innerHTML;
-    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...';
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+
+    var formData = new FormData();
+    formData.append('p_id', pId);
+    formData.append('ajax', '2');
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'cart-add-form.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-            btn.disabled = false;
-            btn.innerHTML = origHTML;
-            if(xhr.status === 200) {
-                try {
-                    var res = JSON.parse(xhr.responseText);
-                    if(res.status === 'success') {
-                        var badges = document.querySelectorAll('.cart-count-badge');
-                        for(var i=0; i<badges.length; i++) {
-                            badges[i].textContent = res.cart_count;
-                            badges[i].style.display = res.cart_count > 0 ? '' : 'none';
-                        }
-                        var currency = '<?php echo LANG_VALUE_1; ?>';
-                        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-                        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + res.cart_total;
-                        showCartToastGlobal(res.message, true);
-                    } else if(res.status === 'already') {
-                        showCartToastGlobal(res.message, false);
-                    } else {
-                        showCartToastGlobal(res.message, false);
+    xhr.onload = function() {
+        btn.disabled = false;
+        btn.innerHTML = origHTML;
+        if(xhr.status === 200) {
+            try {
+                var res = JSON.parse(xhr.responseText);
+                if(res.status === 'success') {
+                    var badges = document.querySelectorAll('.cart-count-badge');
+                    for(var i=0; i<badges.length; i++) {
+                        badges[i].textContent = res.cart_count;
+                        badges[i].style.display = '';
                     }
-                } catch(e) { showCartToastGlobal('Bir hata oluştu', false); }
-            } else { showCartToastGlobal('Bağlantı hatası', false); }
+                    var currency = '<?php echo LANG_VALUE_1; ?>';
+                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                    for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + res.cart_total;
+                    showCartToastGlobal(res.message, true);
+                } else {
+                    showCartToastGlobal(res.message, false);
+                }
+            } catch(e) {
+                console.error('Cart parse error:', e, xhr.responseText);
+                showCartToastGlobal('Bir hata oluştu', false);
+            }
+        } else {
+            console.error('Cart XHR error:', xhr.status);
+            showCartToastGlobal('Bağlantı hatası', false);
         }
     };
-    xhr.send('p_id=' + pId + '&ajax=2');
+    xhr.onerror = function() {
+        btn.disabled = false;
+        btn.innerHTML = origHTML;
+        console.error('Cart network error');
+        showCartToastGlobal('Bağlantı hatası', false);
+    };
+    xhr.send(formData);
 }
 </script>
 
