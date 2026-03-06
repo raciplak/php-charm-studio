@@ -37,14 +37,12 @@ try {
 
     // Try to get additional photos
     try {
-        $stmt2 = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=? ORDER BY id ASC");
+        $stmt2 = $pdo->prepare("SELECT * FROM tbl_product_photo WHERE p_id=? ORDER BY pp_id ASC");
         $stmt2->execute([$pid]);
         $otherPhotos = $stmt2->fetchAll(PDO::FETCH_ASSOC);
         foreach($otherPhotos as $ph) {
-            if(isset($ph['photo'])) {
+            if(!empty($ph['photo'])) {
                 $photos[] = 'assets/uploads/product_photos/' . $ph['photo'];
-            } elseif(isset($ph['pp_photo'])) {
-                $photos[] = 'assets/uploads/product_photos/' . $ph['pp_photo'];
             }
         }
     } catch(Exception $e) {
