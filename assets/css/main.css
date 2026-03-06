@@ -488,7 +488,7 @@ Mobile style's
     right: -300px;
     width: 300px;
     height: 100vh;
-    background: var(--mobile-menu-bg);
+    background: var(--mobile-menu-bg, #1a252f) !important;
     z-index: 100000;
     transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     overflow-y: auto;
@@ -501,8 +501,11 @@ Mobile style's
 
   .menu > ul {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     padding: 70px 0 30px 0;
     margin: 0;
+    background: var(--mobile-menu-bg, #1a252f) !important;
   }
 
   .menu > ul > li {
