@@ -3,8 +3,15 @@
 -- Tüm tabloları utf8mb4 karakter setine dönüştürür
 -- =============================================
 
+-- 1. Foreign key kontrollerini kapat
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 2. Veritabanı karakter setini değiştir
 ALTER DATABASE `merpamot_test` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- 3. Tüm tabloları dönüştür
+ALTER TABLE `tbl_models` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `tbl_brands` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_slider` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_top_category` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_mid_category` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -12,8 +19,6 @@ ALTER TABLE `tbl_end_category` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_
 ALTER TABLE `tbl_product` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_product_photo` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_settings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `tbl_brands` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `tbl_models` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_service` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_faq` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_photo` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -31,9 +36,8 @@ ALTER TABLE `tbl_language` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unic
 ALTER TABLE `tbl_rating` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `tbl_site_colors` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Varsa shipping tablosu
--- ALTER TABLE `tbl_shipping_cost` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 4. Foreign key kontrollerini aç
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- NOT: Bu scripti çalıştırdıktan sonra bozuk olan verileri 
 -- (örneğin "Castrol Ya?lar?" gibi) yeniden düzgün şekilde girmeniz gerekir.
--- Çünkü zaten bozuk kaydedilmiş veriler otomatik düzeltilemez.
