@@ -1022,25 +1022,7 @@ Tawk_API.customStyle = {
 </script>
 <?php endif; ?>
 
-<!-- Quick Add to Cart Overlay -->
-<div id="cart-added-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;justify-content:center;align-items:center;">
-    <div style="background:#fff;border-radius:16px;padding:40px 50px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <div style="width:60px;height:60px;background:#4CAF50;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;">
-            <i class="fa fa-check" style="color:#fff;font-size:28px;"></i>
-        </div>
-        <h3 style="margin:0;font-size:20px;color:#333;font-weight:600;">Sepetinize Eklendi</h3>
-    </div>
-</div>
-<style>
-@keyframes cartPopIn {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-@keyframes cartPopOut {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0.7); opacity: 0; }
-}
-</style>
+
 <!-- Cart Toast (shared across all pages) -->
 <div id="cart-toast-global" style="display:none;position:fixed;top:20px;right:20px;z-index:99999;padding:14px 22px;color:#fff;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:320px;border-radius:6px;transition:opacity 0.3s ease;">
     <span id="cart-toast-global-msg"></span>
