@@ -102,6 +102,7 @@ foreach ($result as $row) {
 	<link rel="stylesheet" href="assets/css/main.css">
 	<link rel="stylesheet" href="assets/css/responsive.css">
 	<link rel="stylesheet" href="assets/css/side-cart.css">
+	<link rel="stylesheet" href="assets/css/quick-view.css">
 
 	<?php
 	// Site Color Settings - CSS Variables injection
