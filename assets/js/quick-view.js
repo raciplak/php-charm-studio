@@ -182,12 +182,24 @@
         return div.innerHTML;
     }
 
-    // Delegate click on quick-view buttons
+    // Delegate click on quick-view buttons - capture phase + stop everything
     $(document).on("click", ".quick-view-btn", function(e) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         var pid = $(this).data("product-id");
         if (pid) openModal(pid);
+        return false;
     });
+
+    // Also capture via native listener in capture phase
+    document.addEventListener("click", function(e) {
+        var btn = e.target.closest(".quick-view-btn");
+        if (btn) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+        }
+    }, true);
 
 })(jQuery);
