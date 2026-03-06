@@ -247,11 +247,16 @@ a:hover {
   width: 100%;
 }
 
-.nav {
+.nav,
+.main-nav {
   background: var(--navbar-bg);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 99998;
+  overflow: visible;
+  /* Override Bootstrap .nav resets */
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 .menu-container {
@@ -487,7 +492,7 @@ Mobile style's
     right: -300px;
     width: 300px;
     height: 100vh;
-    background: var(--mobile-menu-bg);
+    background: var(--mobile-menu-bg, #1a252f) !important;
     z-index: 100000;
     transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     overflow-y: auto;
@@ -500,14 +505,18 @@ Mobile style's
 
   .menu > ul {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     padding: 70px 0 30px 0;
     margin: 0;
+    background: var(--mobile-menu-bg, #1a252f) !important;
   }
 
   .menu > ul > li {
     width: 100%;
     float: none;
-    display: block;
+    display: block !important;
+    visibility: visible !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
