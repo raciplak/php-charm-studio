@@ -22,8 +22,31 @@ $(document).ready(function () {
         }
     );
 
+    // Store original parent for menu so we can move it back
+    var $menu = $(".menu");
+    var $overlay = $(".mobile-menu-overlay");
+    var $menuOriginalParent = $menu.parent();
+    var $overlayOriginalParent = $overlay.parent();
+    var movedToBody = false;
+
+    function moveMenuToBody() {
+        if (!movedToBody && $(window).width() <= 959) {
+            $menu.appendTo("body");
+            $overlay.appendTo("body");
+            movedToBody = true;
+        }
+    }
+
+    function moveMenuBack() {
+        if (movedToBody) {
+            $menuOriginalParent.append($menu);
+            $overlayOriginalParent.append($overlay);
+            movedToBody = false;
+        }
+    }
+
     // Mobile: click to toggle sub-menus (ALL levels)
-    $(".menu").on("click", "li.has-sub", function(e) {
+    $("body").on("click", ".menu li.has-sub", function(e) {
         if ($(window).width() <= 959) {
             e.preventDefault();
             e.stopPropagation();
@@ -47,9 +70,8 @@ $(document).ready(function () {
     });
 
     // Mobile: clicking a LEAF item (no sub-menu) — navigate normally
-    $(".menu").on("click", "li:not(.has-sub)", function(e) {
+    $("body").on("click", ".menu li:not(.has-sub)", function(e) {
         if ($(window).width() <= 959) {
-            // Allow default link behavior — don't prevent
             e.stopPropagation();
         }
     });
@@ -57,16 +79,17 @@ $(document).ready(function () {
     // Hamburger button toggle
     $("#hamburgerBtn").click(function (e) {
         e.preventDefault();
+        moveMenuToBody();
         $(this).toggleClass('active');
-        $(".menu").toggleClass('mobile-open');
-        $("#mobileMenuOverlay").toggleClass('active');
+        $menu.toggleClass('mobile-open');
+        $overlay.toggleClass('active');
         $("body").toggleClass('mobile-menu-body-lock');
     });
 
     // Close menu on overlay click
-    $("#mobileMenuOverlay").click(function () {
+    $("body").on("click", ".mobile-menu-overlay.active", function () {
         $("#hamburgerBtn").removeClass('active');
-        $(".menu").removeClass('mobile-open');
+        $menu.removeClass('mobile-open');
         $(this).removeClass('active');
         $("body").removeClass('mobile-menu-body-lock');
     });
@@ -75,9 +98,10 @@ $(document).ready(function () {
     $(window).resize(function () {
         if ($(window).width() > 959) {
             $("#hamburgerBtn").removeClass('active');
-            $(".menu").removeClass('mobile-open');
-            $("#mobileMenuOverlay").removeClass('active');
+            $menu.removeClass('mobile-open');
+            $overlay.removeClass('active');
             $("body").removeClass('mobile-menu-body-lock');
+            moveMenuBack();
         }
     });
 
