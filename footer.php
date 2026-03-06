@@ -1042,59 +1042,54 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-$(document).ready(function() {
-    // jQuery event delegation - works with Owl Carousel cloned items
-    $(document).on('click', '.btn-quick-add-cart', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        
-        var btn = this;
-        var pId = btn.getAttribute('data-id');
-        var pName = btn.getAttribute('data-name');
-        var pPrice = btn.getAttribute('data-price');
-        var pPhoto = btn.getAttribute('data-photo');
-        
-        if (!pId) return;
-        
-        $.ajax({
-            url: 'cart-add-ajax.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                p_id: pId,
-                p_qty: 1,
-                size_id: 0,
-                color_id: 0,
-                p_current_price: pPrice,
-                p_name: pName,
-                p_featured_photo: pPhoto
-            },
-            success: function(resp) {
+function addToCartQuick(pId, pName, pPrice, pPhoto) {
+    if (!pId) return;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-add-ajax.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var resp = JSON.parse(xhr.responseText);
                 if (resp.status === 'success') {
-                    $('.cart-count-badge').text(resp.cart_count);
-                    $('.header-cart-total').text(resp.cart_total);
-                    showCartAddedOverlay();
+                    // Update header badges
+                    var badges = document.querySelectorAll('.cart-count-badge');
+                    for (var i = 0; i < badges.length; i++) badges[i].textContent = resp.cart_count;
+                    var totals = document.querySelectorAll('.header-cart-total');
+                    for (var i = 0; i < totals.length; i++) totals[i].textContent = resp.cart_total;
+                    // Update icon-label if exists
+                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                    for (var i = 0; i < iconLabels.length; i++) iconLabels[i].textContent = '<?php echo LANG_VALUE_1; ?>' + resp.cart_total;
+                    // Show overlay
+                    showCartOverlay();
                 } else {
                     alert(resp.message || 'Hata oluştu');
                 }
-            },
-            error: function() {
-                alert('Bağlantı hatası');
+            } catch(e) {
+                alert('Sunucu hatası');
             }
-        });
-    });
-    
-    function showCartAddedOverlay() {
-        var $ov = $('#cart-added-overlay');
-        var $inner = $ov.find('> div');
-        $inner.css('animation', 'cartPopIn 0.3s ease');
-        $ov.css('display', 'flex');
-        setTimeout(function() {
-            $inner.css('animation', 'cartPopOut 0.3s ease forwards');
-            setTimeout(function() { $ov.css('display', 'none'); }, 300);
-        }, 1200);
-    }
-});
+        }
+    };
+    var params = 'p_id=' + encodeURIComponent(pId) 
+        + '&p_qty=1'
+        + '&size_id=0'
+        + '&color_id=0'
+        + '&p_current_price=' + encodeURIComponent(pPrice)
+        + '&p_name=' + encodeURIComponent(pName)
+        + '&p_featured_photo=' + encodeURIComponent(pPhoto);
+    xhr.send(params);
+}
+
+function showCartOverlay() {
+    var ov = document.getElementById('cart-added-overlay');
+    var inner = ov.querySelector(':scope > div');
+    ov.style.display = 'flex';
+    inner.style.animation = 'cartPopIn 0.3s ease';
+    setTimeout(function() {
+        inner.style.animation = 'cartPopOut 0.3s ease forwards';
+        setTimeout(function() { ov.style.display = 'none'; }, 300);
+    }, 1200);
+}
 </script>
 
 <?php 
