@@ -249,6 +249,9 @@ a:hover {
 
 .nav {
   background: var(--navbar-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .menu-container {
@@ -1556,7 +1559,7 @@ ul.prod-slider li a {
 }
 
 /* Tabs */
-.product .nav {
+.product .nav-tabs {
   background: transparent;
 }
 ul.nav-tabs {
