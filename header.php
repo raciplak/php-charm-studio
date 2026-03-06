@@ -357,7 +357,9 @@ foreach ($result as $row) {
 						<a href="javascript:void(0);" onclick="toggleSideCart()" class="header-icon-link cart-trigger" title="Sepet">
 							<i class="fa fa-shopping-cart"></i>
 							<span class="icon-label"><?php echo LANG_VALUE_1; ?><?php echo $header_cart_total > 0 ? $header_cart_total : '0.00'; ?></span>
-							<span class="cart-count-badge" style="<?php echo $header_cart_count > 0 ? '' : 'display:none;'; ?>"><?php echo $header_cart_count; ?></span>
+							<?php if($header_cart_count > 0): ?>
+							<span class="cart-count-badge"><?php echo $header_cart_count; ?></span>
+							<?php endif; ?>
 						</a>
 					</li>
 				</ul>

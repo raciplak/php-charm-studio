@@ -1042,55 +1042,59 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function addToCartXHR(btn, pId) {
-    btn.disabled = true;
-    var origHTML = btn.innerHTML;
-    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...';
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'cart-add-form.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-            btn.disabled = false;
-            btn.innerHTML = origHTML;
-            if(xhr.status === 200) {
-                try {
-                    var res = JSON.parse(xhr.responseText);
-                    if(res.status === 'success') {
-                        // Update cart count badges
-                        var badges = document.querySelectorAll('.cart-count-badge');
-                        for(var i=0; i<badges.length; i++) {
-                            badges[i].textContent = res.cart_count;
-                            badges[i].style.display = res.cart_count > 0 ? '' : 'none';
-                        }
-                        // Update cart total labels
-                        var currency = '<?php echo LANG_VALUE_1; ?>';
-                        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-                        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + res.cart_total;
-                        showCartOverlay();
-                    } else if(res.status === 'already') {
-                        alert(res.message);
-                    } else {
-                        alert(res.message);
-                    }
-                } catch(e) { alert('Bir hata oluştu'); }
-            } else { alert('Bağlantı hatası'); }
-        }
-    };
-    xhr.send('p_id=' + pId + '&ajax=2');
-}
-
-function showCartOverlay() {
-    var ov = document.getElementById('cart-added-overlay');
-    var inner = ov.querySelector(':scope > div');
-    ov.style.display = 'flex';
-    inner.style.animation = 'cartPopIn 0.3s ease';
-    setTimeout(function() {
-        inner.style.animation = 'cartPopOut 0.3s ease forwards';
-        setTimeout(function() { ov.style.display = 'none'; }, 300);
-    }, 1200);
-}
+$(document).ready(function() {
+    // jQuery event delegation - works with Owl Carousel cloned items
+    $(document).on('click', '.btn-quick-add-cart', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        
+        var $btn = $(this);
+        var pId = $btn.data('id');
+        var pName = $btn.data('name');
+        var pPrice = $btn.data('price');
+        var pPhoto = $btn.data('photo');
+        
+        if (!pId) return;
+        
+        $.ajax({
+            url: 'cart-add-ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                p_id: pId,
+                p_qty: 1,
+                size_id: 0,
+                color_id: 0,
+                p_current_price: pPrice,
+                p_name: pName,
+                p_featured_photo: pPhoto
+            },
+            success: function(resp) {
+                if (resp.status === 'success') {
+                    $('.cart-count-badge').text(resp.cart_count);
+                    $('.header-cart-total').text(resp.cart_total);
+                    showCartAddedOverlay();
+                } else {
+                    alert(resp.message || 'Hata oluştu');
+                }
+            },
+            error: function() {
+                alert('Bağlantı hatası');
+            }
+        });
+    });
+    
+    function showCartAddedOverlay() {
+        var $ov = $('#cart-added-overlay');
+        var $inner = $ov.find('> div');
+        $inner.css('animation', 'cartPopIn 0.3s ease');
+        $ov.css('display', 'flex');
+        setTimeout(function() {
+            $inner.css('animation', 'cartPopOut 0.3s ease forwards');
+            setTimeout(function() { $ov.css('display', 'none'); }, 300);
+        }, 1200);
+    }
+});
 </script>
 
 <?php 
