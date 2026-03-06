@@ -6,6 +6,7 @@
 
     var currentIndex = 0;
     var photos = [];
+    var isOpening = false;
     var $overlay, $modal;
 
     // Build modal HTML once
