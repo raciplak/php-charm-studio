@@ -247,12 +247,16 @@ a:hover {
   width: 100%;
 }
 
-.nav {
+.nav,
+.main-nav {
   background: var(--navbar-bg);
   position: sticky;
   top: 0;
   z-index: 1000;
   overflow: visible;
+  /* Override Bootstrap .nav resets */
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 .menu-container {
