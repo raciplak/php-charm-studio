@@ -38,6 +38,7 @@
         // Events
         $("#qvClose").on("click", closeModal);
         $overlay.on("click", function(e) {
+            if (isOpening) return;
             if ($(e.target).is($overlay)) closeModal();
         });
         $("#qvPrev").on("click", function() { navigate(-1); });
