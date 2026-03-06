@@ -1042,65 +1042,79 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function addToCartDirect(pId, clickedBtn) {
-    // Disable button
-    if(clickedBtn) {
-        clickedBtn.style.pointerEvents = 'none';
-        clickedBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ...';
-    }
+// jQuery event delegation - works on ALL elements including Owl Carousel clones
+$(document).on('click', '.btn-quick-add-cart', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
     
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'cart-add-form.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
+    var $btn = $(this);
+    var pId = $btn.data('pid') || $btn.attr('data-pid');
+    if(!pId) return;
+    
+    // Prevent double click
+    if($btn.hasClass('cart-loading')) return;
+    $btn.addClass('cart-loading');
+    
+    var originalHtml = $btn.html();
+    $btn.html('<i class="fa fa-spinner fa-spin"></i> ...');
+    
+    $.ajax({
+        url: 'cart-add-ajax.php',
+        type: 'POST',
+        data: {
+            p_id: pId,
+            p_qty: 1,
+            size_id: 0,
+            color_id: 0,
+            p_current_price: 0,
+            p_name: '',
+            p_featured_photo: ''
+        },
+        dataType: 'json',
+        success: function(res) {
+            if(res.status === 'success') {
+                // Update ALL cart badges
+                $('.cart-count-badge').text(res.cart_count);
+                // Update header total
+                var currency = '<?php echo LANG_VALUE_1; ?>';
+                $('.cart-trigger .icon-label').text(currency + res.cart_total);
+                showCartOverlay(res.message, false);
+            } else {
+                showCartOverlay(res.message || 'Bu ürün zaten sepetinizde', true);
+            }
+        },
+        error: function(xhr) {
+            console.log('Cart AJAX error:', xhr.status, xhr.responseText);
+            showCartOverlay('Bağlantı hatası oluştu', true);
+        },
+        complete: function() {
             var resetLabel = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
-            try {
-                var res = JSON.parse(xhr.responseText);
-                if(res.status === 'success') {
-                    var badges = document.querySelectorAll('.cart-count-badge');
-                    for(var j=0;j<badges.length;j++) badges[j].textContent = res.cart_count;
-                    var currency = '<?php echo LANG_VALUE_1; ?>';
-                    var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-                    for(var j=0;j<iconLabels.length;j++) iconLabels[j].textContent = currency + res.cart_total;
-                    showCartOverlay(res.message);
-                } else if(res.status === 'already') {
-                    showCartOverlay(res.message, true);
-                } else {
-                    showCartOverlay(res.message || 'Hata oluştu', true);
-                }
-            } catch(ex) {
-                console.log('Cart error:', xhr.responseText);
-                showCartOverlay('Bir hata oluştu', true);
-            }
-            // Re-enable ALL matching buttons
-            var allBtns = document.querySelectorAll('.btn-quick-add-cart[data-pid="'+pId+'"]');
-            for(var j=0;j<allBtns.length;j++) {
-                allBtns[j].style.pointerEvents = '';
-                allBtns[j].innerHTML = resetLabel;
-            }
+            // Reset ALL buttons with same pid (originals + clones)
+            $('.btn-quick-add-cart[data-pid="'+pId+'"]').removeClass('cart-loading').html(resetLabel);
         }
-    };
-    xhr.send('p_id=' + pId + '&ajax=1');
-}
-
+    });
+});
 
 function showCartOverlay(msg, isWarning) {
-    var ov = document.getElementById('cart-added-overlay');
-    if(!ov) return;
-    var inner = ov.querySelector(':scope > div');
-    var icon = ov.querySelector('.cart-overlay-icon');
-    var txt = ov.querySelector('.cart-overlay-msg');
-    if(txt) txt.textContent = msg || 'Sepetinize Eklendi';
-    if(icon) {
-        icon.style.background = isWarning ? '#ff9800' : '#4CAF50';
-        icon.innerHTML = isWarning ? '<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>' : '<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>';
+    var $ov = $('#cart-added-overlay');
+    if(!$ov.length) return;
+    var $inner = $ov.children('div').first();
+    var $icon = $ov.find('.cart-overlay-icon');
+    var $txt = $ov.find('.cart-overlay-msg');
+    
+    $txt.text(msg || 'Sepetinize Eklendi');
+    if(isWarning) {
+        $icon.css('background', '#ff9800').html('<i class="fa fa-info" style="color:#fff;font-size:28px;"></i>');
+    } else {
+        $icon.css('background', '#4CAF50').html('<i class="fa fa-check" style="color:#fff;font-size:28px;"></i>');
     }
-    ov.style.display = 'flex';
-    if(inner) inner.style.animation = 'cartPopIn 0.3s ease';
+    
+    $ov.css('display', 'flex');
+    $inner.css('animation', 'cartPopIn 0.3s ease');
+    
     setTimeout(function() {
-        if(inner) inner.style.animation = 'cartPopOut 0.3s ease forwards';
-        setTimeout(function() { ov.style.display = 'none'; }, 300);
+        $inner.css('animation', 'cartPopOut 0.3s ease forwards');
+        setTimeout(function() { $ov.css('display', 'none'); }, 300);
     }, 1200);
 }
 </script>
