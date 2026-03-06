@@ -1042,32 +1042,43 @@ Tawk_API.customStyle = {
 }
 </style>
 <script>
-function handleCartForm(form, pId) {
-    // Form submits to hidden iframe, no page reload
-    var btn = form.querySelector('button[type="submit"]');
-    if(btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...'; }
-}
+function addToCartXHR(btn, pId) {
+    btn.disabled = true;
+    var origHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ekleniyor...';
 
-function cartResult(status, message, cartCount, cartTotal) {
-    if(status === 'success') {
-        // Update header badges
-        var badges = document.querySelectorAll('.cart-count-badge');
-        for(var i=0; i<badges.length; i++) { badges[i].textContent = cartCount; badges[i].style.display = cartCount > 0 ? '' : 'none'; }
-        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
-        var currency = '<?php echo LANG_VALUE_1; ?>';
-        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + cartTotal;
-        showCartOverlay();
-    } else if(status === 'already') {
-        alert(message);
-    } else {
-        alert(message);
-    }
-    // Re-enable all cart buttons
-    var allBtns = document.querySelectorAll('.btn-quick-add-cart');
-    for(var i=0; i<allBtns.length; i++) {
-        allBtns[i].disabled = false;
-        allBtns[i].innerHTML = '<i class="fa fa-shopping-cart"></i> <?php echo defined("LANG_VALUE_154") ? LANG_VALUE_154 : "Sepete Ekle"; ?>';
-    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-add-form.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            btn.disabled = false;
+            btn.innerHTML = origHTML;
+            if(xhr.status === 200) {
+                try {
+                    var res = JSON.parse(xhr.responseText);
+                    if(res.status === 'success') {
+                        // Update cart count badges
+                        var badges = document.querySelectorAll('.cart-count-badge');
+                        for(var i=0; i<badges.length; i++) {
+                            badges[i].textContent = res.cart_count;
+                            badges[i].style.display = res.cart_count > 0 ? '' : 'none';
+                        }
+                        // Update cart total labels
+                        var currency = '<?php echo LANG_VALUE_1; ?>';
+                        var iconLabels = document.querySelectorAll('.cart-trigger .icon-label');
+                        for(var i=0; i<iconLabels.length; i++) iconLabels[i].textContent = currency + res.cart_total;
+                        showCartOverlay();
+                    } else if(res.status === 'already') {
+                        alert(res.message);
+                    } else {
+                        alert(res.message);
+                    }
+                } catch(e) { alert('Bir hata oluştu'); }
+            } else { alert('Bağlantı hatası'); }
+        }
+    };
+    xhr.send('p_id=' + pId + '&ajax=2');
 }
 
 function showCartOverlay() {

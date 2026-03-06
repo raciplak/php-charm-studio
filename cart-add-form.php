@@ -15,7 +15,8 @@ if($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['p_id'])) {
 }
 
 $p_id = intval($_POST['p_id']);
-$is_ajax = isset($_POST['ajax']) && $_POST['ajax'] == '1';
+$is_ajax = isset($_POST['ajax']) && ($_POST['ajax'] == '1' || $_POST['ajax'] == '2');
+$is_json = isset($_POST['ajax']) && $_POST['ajax'] == '2';
 
 // Get product info from DB
 $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_id=?");
