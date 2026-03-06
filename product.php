@@ -1284,8 +1284,8 @@ foreach ($page_result as $row) {
                                 </div>
                             </div>
                             
-                            <!-- Social Sharing -->
-                            <div class="share">
+                            <!-- Social Sharing (desktop only - mobile version is in gallery overlay) -->
+                            <div class="share desktop-share">
                                 <?php echo LANG_VALUE_58; ?>
                                 <div class="sharethis-inline-share-buttons" style="margin-top:8px;"></div>
                             </div>
