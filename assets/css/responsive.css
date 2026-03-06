@@ -209,6 +209,7 @@
 	}
 	.product.bg-gray .headline { margin-bottom: 15px; }
 	.product.bg-gray .headline h2 { font-size: 18px; }
+}
 
 @media only screen and (max-width: 991px) {
 	.header .inner, .header .header-row {
