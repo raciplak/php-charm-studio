@@ -6,6 +6,7 @@
 
     var currentIndex = 0;
     var photos = [];
+    var isOpening = false;
     var $overlay, $modal;
 
     // Build modal HTML once
@@ -37,6 +38,7 @@
         // Events
         $("#qvClose").on("click", closeModal);
         $overlay.on("click", function(e) {
+            if (isOpening) return;
             if ($(e.target).is($overlay)) closeModal();
         });
         $("#qvPrev").on("click", function() { navigate(-1); });
@@ -60,6 +62,7 @@
         initModal();
         currentIndex = 0;
         photos = [];
+        isOpening = true;
 
         // Show loading
         $("#qvInfo").html('<div class="qv-loading"><i class="fa fa-spinner"></i></div>');
@@ -69,6 +72,9 @@
 
         $overlay.addClass("active");
         $("body").css("overflow", "hidden");
+
+        // Prevent immediate close from event bubbling
+        setTimeout(function() { isOpening = false; }, 300);
 
         // Fetch product data
         $.getJSON("quick-view-ajax.php", { id: productId }, function(data) {
