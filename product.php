@@ -821,7 +821,7 @@ foreach ($page_result as $row) {
 }
 ?>
 
-<div class="nav">
+<div class="nav desktop-nav">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 pl_0 pr_0">
