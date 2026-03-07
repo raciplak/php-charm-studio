@@ -792,7 +792,10 @@ Mobile style's
 
 .product .text {
   background: #f2f3f3;
-  padding: 10px 12px;
+  padding: 8px 10px;
+}
+
+.product .item .inner {
   overflow: hidden;
 }
 
@@ -829,8 +832,9 @@ Mobile style's
 .product .text .card-bottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-top: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
   gap: 6px;
 }
 
