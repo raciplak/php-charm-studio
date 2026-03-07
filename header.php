@@ -150,15 +150,31 @@ foreach ($result as $row) {
 	<style>
 	/* Sticky overrides from admin settings */
 	<?php if($sticky_topbar_on_off == 0): ?>
-	.top { position: relative !important; }
+	.top { position: relative !important; z-index: auto !important; }
 	<?php endif; ?>
+
 	<?php if($sticky_navbar_on_off == 0): ?>
+	/* Desktop nav */
 	.nav, .main-nav, .desktop-nav { position: relative !important; }
+	/* Mobile header bar nav row */
 	.mobile-header-bar { position: relative !important; }
 	<?php endif; ?>
+
+	<?php if($sticky_topbar_on_off == 1 && $sticky_navbar_on_off == 1): ?>
+	/* Both on: navbar sticks below topbar */
+	.nav, .main-nav, .desktop-nav { top: 40px; }
+	<?php endif; ?>
+
+	<?php if($sticky_topbar_on_off == 0 && $sticky_navbar_on_off == 1): ?>
+	/* Topbar off, navbar on: navbar sticks to top */
+	.nav, .main-nav, .desktop-nav { top: 0; }
+	<?php endif; ?>
+
 	<?php if($sticky_searchbar_on_off == 0): ?>
-	/* Search bar is part of mobile-header-bar; when search sticky is off but navbar is on, 
-	   we keep navbar sticky but search scrolls away - handled via JS if needed */
+	/* Desktop: make header (contains search) non-sticky */
+	.header.desktop-header { position: relative !important; }
+	/* Mobile: hide search from sticky bar and show it outside */
+	.mobile-header-bar .mobile-search-row { position: relative !important; }
 	<?php endif; ?>
 	</style>
 
