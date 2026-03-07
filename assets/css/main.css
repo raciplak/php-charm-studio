@@ -794,9 +794,6 @@ Mobile style's
   background: #f2f3f3;
   padding: 10px 12px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
 }
 
 .product .text del {
@@ -890,12 +887,6 @@ Mobile style's
   border-radius: 3px;
 }
 
-.product .item-product-cat .inner,
-.product .item .inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
 .product .text .rating {
   text-align: center;
