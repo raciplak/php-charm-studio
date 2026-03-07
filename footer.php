@@ -313,11 +313,9 @@ foreach ($result as $row) {
         <button class="side-cart-close" onclick="toggleSideCart()" aria-label="Kapat">&times;</button>
     </div>
 
-    <?php if($sc_count > 0): ?>
-    <div class="side-cart-shipping-bar">
+    <div class="side-cart-shipping-bar" style="<?php echo ($sc_count == 0) ? 'display:none;' : ''; ?>">
         <i class="fa fa-truck"></i> Hızlı ve güvenli teslimat
     </div>
-    <?php endif; ?>
 
     <div class="side-cart-items">
         <?php if(!isset($_SESSION['cart_p_id']) || $sc_count == 0): ?>
