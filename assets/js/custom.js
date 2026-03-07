@@ -35,9 +35,11 @@
         productCarousel.each(function() {
             var $this = $(this);
             var cols = parseInt($this.attr('data-columns')) || 4;
+            var totalItems = $this.children().length;
+            var shouldLoop = totalItems > cols;
             $this.owlCarousel({
-                loop: true,
-                autoplay: true,
+                loop: shouldLoop,
+                autoplay: shouldLoop,
                 margin: 15,
                 dots: false,
                 animateIn: true,
@@ -58,7 +60,7 @@
                     1000: {
                         items: cols,
                         nav: true,
-                        loop: true
+                        loop: shouldLoop
                     }
                 }
             });
