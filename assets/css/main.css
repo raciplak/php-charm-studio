@@ -794,9 +794,6 @@ Mobile style's
   background: #f2f3f3;
   padding: 10px 12px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
 }
 
 .product .text del {
