@@ -1275,6 +1275,36 @@ foreach ($result as $row) {
                                             	<option value="1" <?php if($chat_widget_on_off == 1) {echo 'selected';} ?>>On</option>
                                             	<option value="0" <?php if($chat_widget_on_off == 0) {echo 'selected';} ?>>Off</option>
                                             </select>
+                                    </div>
+
+                                    <hr style="border-top:2px solid #ddd; margin:20px 0;">
+                                    <h4 style="margin-left:15px; margin-bottom:15px;"><strong>Sticky (Yapışkan) Ayarları</strong></h4>
+
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Üst Bar (Top Bar) Sticky </label>
+                                        <div class="col-sm-4">
+                                            <select name="sticky_topbar_on_off" class="form-control" style="width:auto;">
+                                            	<option value="1" <?php if($sticky_topbar_on_off == 1) {echo 'selected';} ?>>On</option>
+                                            	<option value="0" <?php if($sticky_topbar_on_off == 0) {echo 'selected';} ?>>Off</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Navigasyon Barı Sticky </label>
+                                        <div class="col-sm-4">
+                                            <select name="sticky_navbar_on_off" class="form-control" style="width:auto;">
+                                            	<option value="1" <?php if($sticky_navbar_on_off == 1) {echo 'selected';} ?>>On</option>
+                                            	<option value="0" <?php if($sticky_navbar_on_off == 0) {echo 'selected';} ?>>Off</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label">Arama Çubuğu Sticky </label>
+                                        <div class="col-sm-4">
+                                            <select name="sticky_searchbar_on_off" class="form-control" style="width:auto;">
+                                            	<option value="1" <?php if($sticky_searchbar_on_off == 1) {echo 'selected';} ?>>On</option>
+                                            	<option value="0" <?php if($sticky_searchbar_on_off == 0) {echo 'selected';} ?>>Off</option>
+                                            </select>
                                         </div>
                                     </div>
                                     
