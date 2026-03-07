@@ -36,12 +36,16 @@
             var $this = $(this);
             var cols = parseInt($this.attr('data-columns')) || 4;
             var totalItems = $this.children().length;
-            var shouldLoop = totalItems > cols;
+            var canScroll = totalItems > cols;
             $this.owlCarousel({
-                loop: shouldLoop,
-                autoplay: shouldLoop,
+                loop: canScroll,
+                autoplay: canScroll,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
                 margin: 15,
                 dots: false,
+                nav: true,
+                rewind: !canScroll,
                 animateIn: true,
                 responsiveClass: true,
                 navText: [
@@ -59,8 +63,7 @@
                     },
                     1000: {
                         items: cols,
-                        nav: true,
-                        loop: shouldLoop
+                        nav: true
                     }
                 }
             });
