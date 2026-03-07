@@ -241,7 +241,7 @@ foreach ($result as $row) {
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
                             <div class="box box-info">
                                 <div class="box-body">
                                     <div class="form-group">
@@ -300,7 +300,7 @@ foreach ($result as $row) {
         <!-- FAQ Page Content -->
 
                         <div class="tab-pane" id="tab_2">
-                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
                             <div class="box box-info">
                                 <div class="box-body">
                                     <div class="form-group">
@@ -353,7 +353,7 @@ foreach ($result as $row) {
                         <!-- End of FAQ Page Content -->
 
                         <div class="tab-pane" id="tab_4">
-                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
                             <div class="box box-info">
                                 <div class="box-body">
                                     <div class="form-group">
