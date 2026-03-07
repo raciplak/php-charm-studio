@@ -1275,6 +1275,7 @@ foreach ($result as $row) {
                                             	<option value="1" <?php if($chat_widget_on_off == 1) {echo 'selected';} ?>>On</option>
                                             	<option value="0" <?php if($chat_widget_on_off == 0) {echo 'selected';} ?>>Off</option>
                                             </select>
+                                        </div>
                                     </div>
 
                                     <hr style="border-top:2px solid #ddd; margin:20px 0;">
