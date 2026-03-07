@@ -502,23 +502,45 @@ foreach ($photo_result as $photo_row) {
     </style>
 
     <style>
-	/* Sticky overrides from admin settings */
+	/* ===== Sticky overrides from admin settings ===== */
+
 	<?php if($sticky_topbar_on_off == 0): ?>
 	.top { position: relative !important; z-index: auto !important; }
 	<?php endif; ?>
+
+	<?php if($sticky_searchbar_on_off == 0): ?>
+	.header.desktop-header { position: relative !important; z-index: auto !important; }
+	<?php endif; ?>
+
 	<?php if($sticky_navbar_on_off == 0): ?>
-	.nav, .main-nav, .desktop-nav { position: relative !important; }
+	.nav, .main-nav, .desktop-nav { position: relative !important; z-index: auto !important; }
+	<?php endif; ?>
+
+	<?php if($sticky_navbar_on_off == 1): ?>
+		<?php if($sticky_topbar_on_off == 1 && $sticky_searchbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 110px; }
+		<?php elseif($sticky_topbar_on_off == 1 && $sticky_searchbar_on_off == 0): ?>
+	.nav, .main-nav, .desktop-nav { top: 40px; }
+		<?php elseif($sticky_topbar_on_off == 0 && $sticky_searchbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 70px; }
+		<?php else: ?>
+	.nav, .main-nav, .desktop-nav { top: 0; }
+		<?php endif; ?>
+	<?php endif; ?>
+
+	<?php if($sticky_searchbar_on_off == 1 && $sticky_topbar_on_off == 1): ?>
+	.header.desktop-header { top: 40px; }
+	<?php elseif($sticky_searchbar_on_off == 1 && $sticky_topbar_on_off == 0): ?>
+	.header.desktop-header { top: 0; }
+	<?php endif; ?>
+
+	<?php if($sticky_navbar_on_off == 0): ?>
 	.mobile-header-bar { position: relative !important; }
 	<?php endif; ?>
-	<?php if($sticky_topbar_on_off == 1 && $sticky_navbar_on_off == 1): ?>
-	.nav, .main-nav, .desktop-nav { top: 40px; }
-	<?php endif; ?>
-	<?php if($sticky_topbar_on_off == 0 && $sticky_navbar_on_off == 1): ?>
-	.nav, .main-nav, .desktop-nav { top: 0; }
-	<?php endif; ?>
-	<?php if($sticky_searchbar_on_off == 0): ?>
-	.header.desktop-header { position: relative !important; }
-	.mobile-header-bar .mobile-search-row { position: relative !important; }
+
+	<?php if($sticky_navbar_on_off == 1 && $sticky_searchbar_on_off == 0): ?>
+	.mobile-header-bar { position: sticky !important; top: 0; z-index: 99998; }
+	.mobile-header-bar .mobile-search-row { display: none; }
 	<?php endif; ?>
 	</style>
     
