@@ -810,7 +810,7 @@ Mobile style's
   font-size: 12px;
   margin-bottom: 0;
   margin-top: 0;
-  min-height: 2.6em;
+  height: 2.6em;
 }
 
 .product .text h3 a {
@@ -841,9 +841,16 @@ Mobile style's
 .product .text h4 {
   color: var(--primary-color);
   text-align: left;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 700;
   margin: 0;
   white-space: nowrap;
+}
+
+.product .text h4 del {
+  color: #e74c3c;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .product .text .card-bottom p {
