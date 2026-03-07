@@ -985,8 +985,10 @@ function renderSideCart(data) {
     var checkoutTotal = document.querySelector('.checkout-total');
     if(checkoutTotal) checkoutTotal.textContent = currency + data.cart_total;
 
-    // Show footer
+    // Show footer and shipping bar
     if(footer) footer.style.display = '';
+    var shippingBar = document.querySelector('.side-cart-shipping-bar');
+    if(shippingBar) shippingBar.style.display = '';
 }
 </script>
 
