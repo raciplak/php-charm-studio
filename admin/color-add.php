@@ -8,7 +8,6 @@ if(isset($_POST['form1'])) {
         $valid = 0;
         $error_message .= "Renk Adı boş olamaz<br>";
     } else {
-    	// Duplicate Category checking
     	$statement = $pdo->prepare("SELECT * FROM tbl_color WHERE color_name=?");
     	$statement->execute(array($_POST['color_name']));
     	$total = $statement->rowCount();
@@ -19,11 +18,11 @@ if(isset($_POST['form1'])) {
     	}
     }
 
-    if($valid == 1) {
+    $color_code = isset($_POST['color_code']) ? $_POST['color_code'] : '#000000';
 
-		// Saving data into the main table tbl_color
-		$statement = $pdo->prepare("INSERT INTO tbl_color (color_name) VALUES (?)");
-		$statement->execute(array($_POST['color_name']));
+    if($valid == 1) {
+		$statement = $pdo->prepare("INSERT INTO tbl_color (color_name, color_code) VALUES (?, ?)");
+		$statement->execute(array($_POST['color_name'], $color_code));
 	
     	$success_message = 'Renk başarıyla eklendi.';
     }
@@ -47,21 +46,17 @@ if(isset($_POST['form1'])) {
 
 			<?php if($error_message): ?>
 			<div class="callout callout-danger">
-			
-			<p>
-			<?php echo $error_message; ?>
-			</p>
+			<p><?php echo $error_message; ?></p>
 			</div>
 			<?php endif; ?>
 
 			<?php if($success_message): ?>
 			<div class="callout callout-success">
-			
 			<p><?php echo $success_message; ?></p>
 			</div>
 			<?php endif; ?>
 
-			<form class="form-horizontal" action="" method="post">
+			<form class="form-horizontal" action="" method="post" accept-charset="UTF-8">
 
 				<div class="box box-info">
 					<div class="box-body">
@@ -69,6 +64,15 @@ if(isset($_POST['form1'])) {
 							<label for="" class="col-sm-2 control-label">Renk Adı <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="color_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Renk Kodu</label>
+							<div class="col-sm-4">
+								<div style="display:flex; align-items:center; gap:10px;">
+									<input type="color" name="color_code" value="#000000" style="width:60px; height:38px; padding:2px; cursor:pointer; border:1px solid #ccc; border-radius:4px;" id="colorPicker">
+									<input type="text" class="form-control" id="colorHex" value="#000000" style="width:120px; font-family:monospace;" readonly>
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
@@ -82,10 +86,15 @@ if(isset($_POST['form1'])) {
 
 			</form>
 
-
 		</div>
 	</div>
 
 </section>
+
+<script>
+document.getElementById('colorPicker').addEventListener('input', function() {
+    document.getElementById('colorHex').value = this.value;
+});
+</script>
 
 <?php require_once('footer.php'); ?>

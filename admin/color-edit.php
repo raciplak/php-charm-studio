@@ -6,10 +6,8 @@ if(isset($_POST['form1'])) {
 
     if(empty($_POST['color_name'])) {
         $valid = 0;
-        $error_message .= "Color Name can not be empty<br>";
+        $error_message .= "Renk Adı boş olamaz<br>";
     } else {
-		// Duplicate Color checking
-    	// current Color name that is in the database
     	$statement = $pdo->prepare("SELECT * FROM tbl_color WHERE color_id=?");
 		$statement->execute(array($_REQUEST['id']));
 		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -22,16 +20,17 @@ if(isset($_POST['form1'])) {
     	$total = $statement->rowCount();							
     	if($total) {
     		$valid = 0;
-        	$error_message .= 'Color name already exists<br>';
+        	$error_message .= 'Renk adı zaten mevcut<br>';
     	}
     }
 
-    if($valid == 1) {    	
-		// updating into the database
-		$statement = $pdo->prepare("UPDATE tbl_color SET color_name=? WHERE color_id=?");
-		$statement->execute(array($_POST['color_name'],$_REQUEST['id']));
+    $color_code = isset($_POST['color_code']) ? $_POST['color_code'] : '#000000';
 
-    	$success_message = 'Color is updated successfully.';
+    if($valid == 1) {    	
+		$statement = $pdo->prepare("UPDATE tbl_color SET color_name=?, color_code=? WHERE color_id=?");
+		$statement->execute(array($_POST['color_name'], $color_code, $_REQUEST['id']));
+
+    	$success_message = 'Renk başarıyla güncellendi.';
     }
 }
 ?>
@@ -41,7 +40,6 @@ if(!isset($_REQUEST['id'])) {
 	header('location: logout.php');
 	exit;
 } else {
-	// Check the id is valid or not
 	$statement = $pdo->prepare("SELECT * FROM tbl_color WHERE color_id=?");
 	$statement->execute(array($_REQUEST['id']));
 	$total = $statement->rowCount();
@@ -55,17 +53,17 @@ if(!isset($_REQUEST['id'])) {
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Edit Color</h1>
+		<h1>Renk Düzenle</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="color.php" class="btn btn-primary btn-sm">View All</a>
+		<a href="color.php" class="btn btn-primary btn-sm">Tümünü Görüntüle</a>
 	</div>
 </section>
-
 
 <?php							
 foreach ($result as $row) {
 	$color_name = $row['color_name'];
+	$color_code = isset($row['color_code']) ? $row['color_code'] : '#000000';
 }
 ?>
 
@@ -76,35 +74,40 @@ foreach ($result as $row) {
 
 		<?php if($error_message): ?>
 		<div class="callout callout-danger">
-		
-		<p>
-		<?php echo $error_message; ?>
-		</p>
+		<p><?php echo $error_message; ?></p>
 		</div>
 		<?php endif; ?>
 
 		<?php if($success_message): ?>
 		<div class="callout callout-success">
-		
 		<p><?php echo $success_message; ?></p>
 		</div>
 		<?php endif; ?>
 
-        <form class="form-horizontal" action="" method="post">
+        <form class="form-horizontal" action="" method="post" accept-charset="UTF-8">
 
         <div class="box box-info">
 
             <div class="box-body">
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">Color Name <span>*</span></label>
+                    <label for="" class="col-sm-2 control-label">Renk Adı <span>*</span></label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" name="color_name" value="<?php echo $color_name; ?>">
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">Renk Kodu</label>
+                    <div class="col-sm-4">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="color" name="color_code" value="<?php echo $color_code; ?>" style="width:60px; height:38px; padding:2px; cursor:pointer; border:1px solid #ccc; border-radius:4px;" id="colorPicker">
+                            <input type="text" class="form-control" id="colorHex" value="<?php echo $color_code; ?>" style="width:120px; font-family:monospace;" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                 	<label for="" class="col-sm-2 control-label"></label>
                     <div class="col-sm-6">
-                      <button type="submit" class="btn btn-success pull-left" name="form1">Update</button>
+                      <button type="submit" class="btn btn-success pull-left" name="form1">Güncelle</button>
                     </div>
                 </div>
 
@@ -114,29 +117,15 @@ foreach ($result as $row) {
 
         </form>
 
-
-
     </div>
   </div>
 
 </section>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-            </div>
-            <div class="modal-body">
-                Are you sure want to delete this item?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+document.getElementById('colorPicker').addEventListener('input', function() {
+    document.getElementById('colorHex').value = this.value;
+});
+</script>
 
 <?php require_once('footer.php'); ?>
