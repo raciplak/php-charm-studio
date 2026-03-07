@@ -113,11 +113,14 @@ if(isset($_POST['form5'])) {
 
 
 if(isset($_POST['form6_0'])) {
-    // updating the database
-    $statement = $pdo->prepare("UPDATE tbl_settings SET home_service_on_off=?, home_welcome_on_off=?, home_featured_product_on_off=?, home_latest_product_on_off=?, home_popular_product_on_off=?, chat_widget_on_off=?, sticky_topbar_on_off=?, sticky_navbar_on_off=?, sticky_searchbar_on_off=? WHERE id=1");
-    $statement->execute(array($_POST['home_service_on_off'],$_POST['home_welcome_on_off'],$_POST['home_featured_product_on_off'],$_POST['home_latest_product_on_off'],$_POST['home_popular_product_on_off'],$_POST['chat_widget_on_off'],$_POST['sticky_topbar_on_off'],$_POST['sticky_navbar_on_off'],$_POST['sticky_searchbar_on_off']));
-
-    $success_message = 'Section On-Off Settings is updated successfully.';
+    try {
+        // updating the database
+        $statement = $pdo->prepare("UPDATE tbl_settings SET home_service_on_off=?, home_welcome_on_off=?, home_featured_product_on_off=?, home_latest_product_on_off=?, home_popular_product_on_off=?, chat_widget_on_off=?, sticky_topbar_on_off=?, sticky_navbar_on_off=?, sticky_searchbar_on_off=? WHERE id=1");
+        $statement->execute(array($_POST['home_service_on_off'],$_POST['home_welcome_on_off'],$_POST['home_featured_product_on_off'],$_POST['home_latest_product_on_off'],$_POST['home_popular_product_on_off'],$_POST['chat_widget_on_off'],$_POST['sticky_topbar_on_off'],$_POST['sticky_navbar_on_off'],$_POST['sticky_searchbar_on_off']));
+        $success_message = 'Ayarlar başarıyla güncellendi.';
+    } catch(PDOException $e) {
+        $error_message = 'Veritabanı hatası: ' . $e->getMessage();
+    }
 }
 
 
