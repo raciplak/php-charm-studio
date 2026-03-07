@@ -1,39 +1,153 @@
-@media only screen and (max-width: 767px) {
-	.top {height: auto;overflow: hidden;}
-	.top .left {float: none;}
-	.top .left ul {margin-bottom: 0;margin-top: 10px;}
-	.top .left ul li {float: none;text-align: center;}
-	.top .right {float: none;}
-	.top .right ul {text-align: center;margin-bottom: 20px;}
-	.top .right ul li {float: none;display: inline-block;}
+/* ===== MOBILE HEADER BAR - Åhléns Style ===== */
+.mobile-header-bar {
+	display: none; /* Hidden on desktop */
+}
 
-	.header .header-row {
-		flex-direction: column;
-		gap: 10px;
-		padding: 10px 0;
+@media only screen and (max-width: 959px) {
+	/* Hide desktop header & nav on mobile */
+	.desktop-header { display: none !important; }
+	.desktop-nav { display: none !important; }
+	
+	/* Show mobile header bar */
+	.mobile-header-bar {
+		display: block;
+		position: sticky;
+		top: 0;
+		z-index: 99998;
+		background: #fff;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 	}
-	.header .logo {
+	
+	/* Top bar - make thin */
+	.top {
+		height: auto;
+		overflow: hidden;
+		padding: 4px 0;
+		position: sticky;
+		top: 0;
+		z-index: 99999;
+	}
+	.top .left { float: none; }
+	.top .left ul { margin: 0; padding: 0; text-align: center; }
+	.top .left ul li { float: none; display: inline; font-size: 11px; margin-right: 8px; }
+	.top .right { float: none; }
+	.top .right ul { text-align: center; margin: 2px 0 0; padding: 0; }
+	.top .right ul li { float: none; display: inline-block; }
+	.top .right ul li a { width: 20px; height: 20px; line-height: 20px; font-size: 12px; }
+	
+	/* Mobile sticky offset: top bar height (~30px) */
+	.mobile-header-bar {
+		top: 0;
+		position: sticky;
+	}
+	
+	/* Nav Row: hamburger | profile | LOGO | favorite | cart */
+	.mobile-nav-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 12px;
+		border-bottom: 1px solid #eee;
+	}
+	
+	.mobile-nav-left,
+	.mobile-nav-right {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		flex: 0 0 auto;
+	}
+	
+	.mobile-nav-center {
+		flex: 1;
 		text-align: center;
-		width: 100%;
 	}
-	.header .search-area-center {
-		width: 100%;
-		padding: 0;
-		order: 3;
+	
+	.mobile-nav-center img {
+		max-height: 36px;
+		width: auto;
 	}
-	.header .header-icons {
-		width: 100%;
-		padding: 0;
+	
+	.mobile-hamburger-trigger {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 6px;
+		font-size: 22px;
+		color: var(--header-icon-color, #333);
+		line-height: 1;
 	}
-	.header .header-icons ul {
+	
+	.mobile-nav-icon {
+		color: var(--header-icon-color, #333);
+		font-size: 20px;
+		padding: 4px;
+		position: relative;
+		text-decoration: none;
+		line-height: 1;
+	}
+	.mobile-nav-icon:hover {
+		color: var(--header-icon-color, #333);
+		text-decoration: none;
+	}
+	
+	.mobile-cart-icon {
+		position: relative;
+	}
+	
+	.mobile-cart-badge {
+		position: absolute;
+		top: -4px;
+		right: -6px;
+		background: var(--accent-color, #e4144d);
+		color: #fff;
+		font-size: 10px;
+		font-weight: 700;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
 		justify-content: center;
-		flex-wrap: wrap;
+		line-height: 1;
 	}
-	.header-icon-link .icon-label {
-		font-size: 11px;
+	
+	/* Search Row */
+	.mobile-search-row {
+		padding: 6px 12px 8px;
 	}
+	
+	.mobile-search-wrapper {
+		display: flex;
+		align-items: center;
+		background: #f2f2f2;
+		border-radius: 8px;
+		padding: 0 12px;
+		height: 38px;
+	}
+	
+	.mobile-search-icon {
+		color: #666;
+		font-size: 15px;
+		margin-right: 8px;
+		flex-shrink: 0;
+	}
+	
+	.mobile-search-input {
+		flex: 1;
+		border: none;
+		background: transparent;
+		font-size: 14px;
+		outline: none;
+		height: 100%;
+		color: #333;
+	}
+	.mobile-search-input::placeholder {
+		color: #999;
+	}
+}
 
-	/* ===== PRODUCT DETAIL - MOBILE COMPACT ===== */
+@media only screen and (max-width: 767px) {
 
 	/* Hide breadcrumb on mobile */
 	.page .breadcrumb { display: none; }
