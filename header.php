@@ -37,6 +37,9 @@ foreach ($result as $row)
     $meta_description_home = $row['meta_description_home'];
     $before_head = $row['before_head'];
     $after_body = $row['after_body'];
+    $sticky_topbar_on_off = isset($row['sticky_topbar_on_off']) ? $row['sticky_topbar_on_off'] : 1;
+    $sticky_navbar_on_off = isset($row['sticky_navbar_on_off']) ? $row['sticky_navbar_on_off'] : 1;
+    $sticky_searchbar_on_off = isset($row['sticky_searchbar_on_off']) ? $row['sticky_searchbar_on_off'] : 1;
 }
 
 // Checking the order table and removing the pending transaction that are 24 hours+ old. Very important
