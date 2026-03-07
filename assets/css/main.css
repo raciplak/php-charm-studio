@@ -887,12 +887,6 @@ Mobile style's
   border-radius: 3px;
 }
 
-.product .item-product-cat .inner,
-.product .item .inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
 .product .text .rating {
   text-align: center;
