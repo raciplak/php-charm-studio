@@ -82,6 +82,9 @@ a:hover {
   width: 100%;
   height: 40px;
   background: var(--top-bar-bg);
+  position: sticky;
+  top: 0;
+  z-index: 99999;
 }
 
 .top .left {
