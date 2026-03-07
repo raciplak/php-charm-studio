@@ -719,7 +719,59 @@ $social_result = $statement->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<div class="header">
+<?php
+// Cart data for product page
+$header_cart_count = 0;
+$header_cart_total = 0;
+if(isset($_SESSION['cart_p_id'])) {
+	$header_cart_count = count($_SESSION['cart_p_id']);
+	$i=0;
+	foreach($_SESSION['cart_p_qty'] as $key => $value) { $i++; $h_arr_qty[$i] = $value; }
+	$i=0;
+	foreach($_SESSION['cart_p_current_price'] as $key => $value) { $i++; $h_arr_price[$i] = $value; }
+	for($i=1;$i<=$header_cart_count;$i++) { $header_cart_total += $h_arr_price[$i] * $h_arr_qty[$i]; }
+}
+?>
+
+<!-- MOBILE NAV BAR (visible only on mobile ≤959px) -->
+<div class="mobile-header-bar">
+	<div class="mobile-nav-row">
+		<div class="mobile-nav-left">
+			<button class="mobile-hamburger-trigger" id="mobileHamburgerTrigger" aria-label="Menüyü aç/kapat">
+				<i class="fa fa-bars"></i>
+			</button>
+			<?php if(isset($_SESSION['customer'])): ?>
+				<a href="dashboard.php" class="mobile-nav-icon" title="Profil"><i class="fa fa-user-o"></i></a>
+			<?php else: ?>
+				<a href="login.php" class="mobile-nav-icon" title="Giriş"><i class="fa fa-user-o"></i></a>
+			<?php endif; ?>
+		</div>
+		<div class="mobile-nav-center">
+			<a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="logo"></a>
+		</div>
+		<div class="mobile-nav-right">
+			<a href="javascript:void(0);" class="mobile-nav-icon" title="Favoriler"><i class="fa fa-heart-o"></i></a>
+			<a href="javascript:void(0);" onclick="toggleSideCart()" class="mobile-nav-icon mobile-cart-icon" title="Sepet">
+				<i class="fa fa-shopping-bag"></i>
+				<?php if($header_cart_count > 0): ?>
+				<span class="mobile-cart-badge"><?php echo $header_cart_count; ?></span>
+				<?php endif; ?>
+			</a>
+		</div>
+	</div>
+	<div class="mobile-search-row">
+		<form class="mobile-search-form" role="search" action="search-result.php" method="get">
+			<?php $csrf->echoInputField(); ?>
+			<div class="mobile-search-wrapper">
+				<i class="fa fa-search mobile-search-icon"></i>
+				<input type="text" class="mobile-search-input" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- DESKTOP HEADER (hidden on mobile ≤959px) -->
+<div class="header desktop-header">
 	<div class="container">
 		<div class="row inner header-row">
 			<div class="col-md-3 logo">
@@ -738,19 +790,7 @@ $social_result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 			<div class="col-md-4 header-icons">
 				<ul>
-					<?php
-					$header_cart_count = 0;
-					$header_cart_total = 0;
-					if(isset($_SESSION['cart_p_id'])) {
-						$header_cart_count = count($_SESSION['cart_p_id']);
-						$i=0;
-						foreach($_SESSION['cart_p_qty'] as $key => $value) { $i++; $h_arr_qty[$i] = $value; }
-						$i=0;
-						foreach($_SESSION['cart_p_current_price'] as $key => $value) { $i++; $h_arr_price[$i] = $value; }
-						for($i=1;$i<=$header_cart_count;$i++) { $header_cart_total += $h_arr_price[$i] * $h_arr_qty[$i]; }
-					}
-					?>
-				<?php if(isset($_SESSION['customer'])): ?>
+					<?php if(isset($_SESSION['customer'])): ?>
 						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user"></i><span class="icon-label"><?php echo $_SESSION['customer']['cust_name']; ?></span></a></li>
 					<?php else: ?>
 						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-sign-in"></i><span class="icon-label"><?php echo LANG_VALUE_9; ?></span></a></li>
@@ -781,7 +821,7 @@ foreach ($page_result as $row) {
 }
 ?>
 
-<div class="nav">
+<div class="nav desktop-nav">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 pl_0 pr_0">

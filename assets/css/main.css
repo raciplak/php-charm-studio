@@ -248,7 +248,8 @@ a:hover {
 }
 
 .nav,
-.main-nav {
+.main-nav,
+.desktop-nav {
   background: var(--navbar-bg);
   position: sticky;
   top: 0;
