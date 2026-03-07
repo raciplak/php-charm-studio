@@ -76,11 +76,12 @@ $(document).ready(function () {
         }
     });
 
-    // Hamburger button toggle
-    $("#hamburgerBtn").click(function (e) {
+    // Hamburger button toggle (both desktop nav button and mobile header bar button)
+    $("#hamburgerBtn, #mobileHamburgerTrigger").click(function (e) {
         e.preventDefault();
         moveMenuToBody();
-        $(this).toggleClass('active');
+        // Sync both buttons
+        $("#hamburgerBtn").toggleClass('active');
         $menu.toggleClass('mobile-open');
         $overlay.toggleClass('active');
         $("body").toggleClass('mobile-menu-body-lock');
