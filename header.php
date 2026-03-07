@@ -148,33 +148,51 @@ foreach ($result as $row) {
 	</style>
 
 	<style>
-	/* Sticky overrides from admin settings */
+	/* ===== Sticky overrides from admin settings ===== */
+
+	/* --- TOP BAR --- */
 	<?php if($sticky_topbar_on_off == 0): ?>
 	.top { position: relative !important; z-index: auto !important; }
 	<?php endif; ?>
 
+	/* --- DESKTOP: Search/Logo bar (.header) --- */
+	<?php if($sticky_searchbar_on_off == 0): ?>
+	.header.desktop-header { position: relative !important; z-index: auto !important; }
+	<?php endif; ?>
+
+	/* --- DESKTOP: Navigation bar --- */
 	<?php if($sticky_navbar_on_off == 0): ?>
-	/* Desktop nav */
-	.nav, .main-nav, .desktop-nav { position: relative !important; }
-	/* Mobile header bar nav row */
+	.nav, .main-nav, .desktop-nav { position: relative !important; z-index: auto !important; }
+	<?php endif; ?>
+
+	<?php if($sticky_navbar_on_off == 1): ?>
+		<?php if($sticky_topbar_on_off == 1 && $sticky_searchbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 110px; }
+		<?php elseif($sticky_topbar_on_off == 1 && $sticky_searchbar_on_off == 0): ?>
+	.nav, .main-nav, .desktop-nav { top: 40px; }
+		<?php elseif($sticky_topbar_on_off == 0 && $sticky_searchbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 70px; }
+		<?php else: ?>
+	.nav, .main-nav, .desktop-nav { top: 0; }
+		<?php endif; ?>
+	<?php endif; ?>
+
+	<?php if($sticky_searchbar_on_off == 1 && $sticky_topbar_on_off == 1): ?>
+	.header.desktop-header { top: 40px; }
+	<?php elseif($sticky_searchbar_on_off == 1 && $sticky_topbar_on_off == 0): ?>
+	.header.desktop-header { top: 0; }
+	<?php endif; ?>
+
+	/* --- MOBILE: header bar (contains nav row + search) --- */
+	<?php if($sticky_navbar_on_off == 0): ?>
+	/* Mobile nav row not sticky - entire mobile-header-bar loses sticky */
 	.mobile-header-bar { position: relative !important; }
 	<?php endif; ?>
 
-	<?php if($sticky_topbar_on_off == 1 && $sticky_navbar_on_off == 1): ?>
-	/* Both on: navbar sticks below topbar */
-	.nav, .main-nav, .desktop-nav { top: 40px; }
-	<?php endif; ?>
-
-	<?php if($sticky_topbar_on_off == 0 && $sticky_navbar_on_off == 1): ?>
-	/* Topbar off, navbar on: navbar sticks to top */
-	.nav, .main-nav, .desktop-nav { top: 0; }
-	<?php endif; ?>
-
-	<?php if($sticky_searchbar_on_off == 0): ?>
-	/* Desktop: make header (contains search) non-sticky */
-	.header.desktop-header { position: relative !important; }
-	/* Mobile: hide search from sticky bar and show it outside */
-	.mobile-header-bar .mobile-search-row { position: relative !important; }
+	<?php if($sticky_navbar_on_off == 1 && $sticky_searchbar_on_off == 0): ?>
+	/* Mobile: nav row sticky but search row scrolls away */
+	.mobile-header-bar { position: sticky !important; top: 0; z-index: 99998; }
+	.mobile-header-bar .mobile-search-row { display: none; }
 	<?php endif; ?>
 	</style>
 
