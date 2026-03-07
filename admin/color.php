@@ -15,7 +15,6 @@
   <div class="row">
     <div class="col-md-12">
 
-
       <div class="box box-info">
         
         <div class="box-body table-responsive">
@@ -24,6 +23,7 @@
 			    <tr>
 			        <th>#</th>
 			        <th>Renk Adı</th>
+			        <th>Renk Kodu</th>
 			        <th>İşlem</th>
 			    </tr>
 			</thead>
@@ -35,10 +35,15 @@
             	$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
             	foreach ($result as $row) {
             		$i++;
+            		$hex = isset($row['color_code']) ? $row['color_code'] : '#000000';
             		?>
 					<tr>
 	                    <td><?php echo $i; ?></td>
 	                    <td><?php echo $row['color_name']; ?></td>
+	                    <td>
+	                    	<span style="display:inline-block; width:24px; height:24px; background-color:<?php echo $hex; ?>; border:1px solid #ccc; border-radius:4px; vertical-align:middle; margin-right:6px;"></span>
+	                    	<code><?php echo $hex; ?></code>
+	                    </td>
 	                    <td>
 	                        <a href="color-edit.php?id=<?php echo $row['color_id']; ?>" class="btn btn-primary btn-xs">Düzenle</a>
 	                        <a href="#" class="btn btn-danger btn-xs" data-href="color-delete.php?id=<?php echo $row['color_id']; ?>" data-toggle="modal" data-target="#confirm-delete">Sil</a>
