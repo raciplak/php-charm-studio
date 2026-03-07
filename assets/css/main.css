@@ -223,6 +223,8 @@ a:hover {
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
+  width: auto !important;
+  float: none !important;
 }
 
 .header .header-icons ul {
