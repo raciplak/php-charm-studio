@@ -148,13 +148,22 @@ a:hover {
 .header .inner,
 .header .header-row {
   height: auto;
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: center;
   padding: 12px 0;
 }
 
 .header .logo {
   flex: 0 0 auto;
+  width: auto !important;
+  float: none !important;
+  text-align: left;
+}
+
+.header .logo a {
+  display: inline-block;
 }
 
 .header .logo img {
@@ -163,9 +172,11 @@ a:hover {
 }
 
 .header .search-area-center {
-  flex: 1;
+  flex: 1 1 auto;
   padding: 0 20px;
   max-width: 70%;
+  width: auto !important;
+  float: none !important;
 }
 
 .header-search-form {
@@ -212,6 +223,8 @@ a:hover {
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
+  width: auto !important;
+  float: none !important;
 }
 
 .header .header-icons ul {
