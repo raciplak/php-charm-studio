@@ -534,13 +534,50 @@ foreach ($photo_result as $photo_row) {
 	.header.desktop-header { top: 0; }
 	<?php endif; ?>
 
-	<?php if($sticky_navbar_on_off == 0): ?>
-	.mobile-header-bar { position: relative !important; }
+	/* --- MOBILE: top bar sticky --- */
+	<?php if($sticky_topbar_on_off == 1): ?>
+	@media (max-width: 959px) {
+		.top { position: sticky !important; top: 0; z-index: 99999; }
+	}
+	<?php else: ?>
+	@media (max-width: 959px) {
+		.top { position: relative !important; z-index: auto !important; }
+	}
 	<?php endif; ?>
 
-	<?php if($sticky_navbar_on_off == 1 && $sticky_searchbar_on_off == 0): ?>
-	.mobile-header-bar { position: sticky !important; top: 0; z-index: 99998; }
-	.mobile-header-bar .mobile-search-row { display: none; }
+	/* --- MOBILE: header bar (nav row + search) --- */
+	<?php if($sticky_navbar_on_off == 1): ?>
+	@media (max-width: 959px) {
+		.mobile-header-bar {
+			position: sticky !important;
+			z-index: 99998;
+			<?php if($sticky_topbar_on_off == 1): ?>
+			top: 30px;
+			<?php else: ?>
+			top: 0;
+			<?php endif; ?>
+		}
+		<?php if($sticky_searchbar_on_off == 0): ?>
+		.mobile-header-bar .mobile-search-row { display: none; }
+		<?php endif; ?>
+	}
+	<?php elseif($sticky_searchbar_on_off == 1): ?>
+	@media (max-width: 959px) {
+		.mobile-header-bar {
+			position: sticky !important;
+			z-index: 99998;
+			<?php if($sticky_topbar_on_off == 1): ?>
+			top: 30px;
+			<?php else: ?>
+			top: 0;
+			<?php endif; ?>
+		}
+		.mobile-header-bar .mobile-nav-row { position: relative; }
+	}
+	<?php else: ?>
+	@media (max-width: 959px) {
+		.mobile-header-bar { position: relative !important; }
+	}
 	<?php endif; ?>
 	</style>
     
