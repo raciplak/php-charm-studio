@@ -462,7 +462,7 @@ if(isset($_SESSION['cart_p_id'])) {
 				<a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="logo image"></a>
 			</div>
 			
-			<div class="col-md-5 search-area-center">
+			<div class="col-md-6 search-area-center">
 				<form class="header-search-form" role="search" action="search-result.php" method="get">
 					<?php $csrf->echoInputField(); ?>
 					<div class="header-search-wrapper">
@@ -472,17 +472,17 @@ if(isset($_SESSION['cart_p_id'])) {
 				</form>
 			</div>
 
-			<div class="col-md-4 header-icons">
+			<div class="col-md-3 header-icons">
 				<ul>
 					<?php if(isset($_SESSION['customer'])): ?>
-						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user"></i><span class="icon-label"><?php echo $_SESSION['customer']['cust_name']; ?></span></a></li>
+						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user-o"></i></a></li>
 					<?php else: ?>
-						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-sign-in"></i><span class="icon-label"><?php echo LANG_VALUE_9; ?></span></a></li>
+						<li><a href="login.php" class="header-icon-link" title="<?php echo LANG_VALUE_9; ?>"><i class="fa fa-user-o"></i></a></li>
 					<?php endif; ?>
+					<li><a href="javascript:void(0);" class="header-icon-link" title="Favoriler"><i class="fa fa-heart-o"></i></a></li>
 					<li>
 						<a href="javascript:void(0);" onclick="toggleSideCart()" class="header-icon-link cart-trigger" title="Sepet">
 							<i class="fa fa-shopping-cart"></i>
-							<span class="icon-label"><?php echo LANG_VALUE_1; ?><?php echo $header_cart_total > 0 ? $header_cart_total : '0.00'; ?></span>
 							<?php if($header_cart_count > 0): ?>
 							<span class="cart-count-badge"><?php echo $header_cart_count; ?></span>
 							<?php endif; ?>
