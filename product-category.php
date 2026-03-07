@@ -46,6 +46,24 @@ $col_class = 'col-md-' . intval(12 / $category_product_columns);
 @media (max-width: 575px) {
     .product-cat-grid { grid-template-columns: 1fr; }
 }
+
+/* Sidebar sticky & z-index fix */
+.page .col-md-3 {
+    position: relative;
+    z-index: 1;
+}
+.page .col-md-3 #left {
+    position: sticky;
+    top: 120px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+@media (max-width: 991px) {
+    .page .col-md-3 #left {
+        position: static;
+        max-height: none;
+    }
+}
 </style>
 
 <?php
