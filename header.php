@@ -37,6 +37,9 @@ foreach ($result as $row)
     $meta_description_home = $row['meta_description_home'];
     $before_head = $row['before_head'];
     $after_body = $row['after_body'];
+    $sticky_topbar_on_off = isset($row['sticky_topbar_on_off']) ? $row['sticky_topbar_on_off'] : 1;
+    $sticky_navbar_on_off = isset($row['sticky_navbar_on_off']) ? $row['sticky_navbar_on_off'] : 1;
+    $sticky_searchbar_on_off = isset($row['sticky_searchbar_on_off']) ? $row['sticky_searchbar_on_off'] : 1;
 }
 
 // Checking the order table and removing the pending transaction that are 24 hours+ old. Very important
@@ -142,6 +145,21 @@ foreach ($result as $row) {
 		--<?php echo $key; ?>: <?php echo $val; ?>;
 		<?php endforeach; ?>
 	}
+	</style>
+
+	<style>
+	/* Sticky overrides from admin settings */
+	<?php if($sticky_topbar_on_off == 0): ?>
+	.top { position: relative !important; }
+	<?php endif; ?>
+	<?php if($sticky_navbar_on_off == 0): ?>
+	.nav, .main-nav, .desktop-nav { position: relative !important; }
+	.mobile-header-bar { position: relative !important; }
+	<?php endif; ?>
+	<?php if($sticky_searchbar_on_off == 0): ?>
+	/* Search bar is part of mobile-header-bar; when search sticky is off but navbar is on, 
+	   we keep navbar sticky but search scrolls away - handled via JS if needed */
+	<?php endif; ?>
 	</style>
 
 	<?php
@@ -362,7 +380,7 @@ if(isset($_SESSION['cart_p_id'])) {
 			<?php $csrf->echoInputField(); ?>
 			<div class="mobile-search-wrapper">
 				<i class="fa fa-search mobile-search-icon"></i>
-				<input type="text" class="mobile-search-input" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
+				<input type="text" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." name="search_text">
 			</div>
 		</form>
 	</div>
