@@ -362,7 +362,7 @@ if(isset($_SESSION['cart_p_id'])) {
 			<?php $csrf->echoInputField(); ?>
 			<div class="mobile-search-wrapper">
 				<i class="fa fa-search mobile-search-icon"></i>
-				<input type="text" class="mobile-search-input" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
+				<input type="text" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." name="search_text">
 			</div>
 		</form>
 	</div>
