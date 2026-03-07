@@ -147,6 +147,21 @@ foreach ($result as $row) {
 	}
 	</style>
 
+	<style>
+	/* Sticky overrides from admin settings */
+	<?php if($sticky_topbar_on_off == 0): ?>
+	.top { position: relative !important; }
+	<?php endif; ?>
+	<?php if($sticky_navbar_on_off == 0): ?>
+	.nav, .main-nav, .desktop-nav { position: relative !important; }
+	.mobile-header-bar { position: relative !important; }
+	<?php endif; ?>
+	<?php if($sticky_searchbar_on_off == 0): ?>
+	/* Search bar is part of mobile-header-bar; when search sticky is off but navbar is on, 
+	   we keep navbar sticky but search scrolls away - handled via JS if needed */
+	<?php endif; ?>
+	</style>
+
 	<?php
 
 	$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
