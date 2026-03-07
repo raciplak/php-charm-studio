@@ -392,7 +392,7 @@ foreach ($result as $row) {
         <?php endif; ?>
     </div>
 
-    <?php if($sc_count > 0): ?>
+    <div style="<?php echo ($sc_count == 0) ? 'display:none;' : ''; ?>">
     <div class="side-cart-footer">
         <?php if(isset($_SESSION['customer'])): ?>
         <?php
@@ -547,7 +547,7 @@ foreach ($result as $row) {
             </button>
         </div>
     </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <!-- Payment Dialog Modal -->
