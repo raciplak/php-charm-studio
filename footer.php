@@ -118,13 +118,25 @@ Bu bağlantı yalnızca 24 saat geçerli olacaktır.
 </section>
 <?php endif; ?>
 
+<?php
+// Footer Hakkımızda bilgisini tbl_page'den al
+$ft_page_stmt = $pdo->prepare("SELECT about_title, about_content FROM tbl_page WHERE id=1");
+$ft_page_stmt->execute();
+$ft_page_row = $ft_page_stmt->fetch(PDO::FETCH_ASSOC);
+$ft_about_title = $ft_page_row ? $ft_page_row['about_title'] : 'Hakkımızda';
+$ft_about_content = $ft_page_row ? strip_tags($ft_page_row['about_content']) : '';
+// Kısa tut: footer için ilk 200 karakter
+if(mb_strlen($ft_about_content) > 200) {
+    $ft_about_content = mb_substr($ft_about_content, 0, 200) . '...';
+}
+?>
 <div class="footer-info-section" style="background:var(--footer-bg);color:var(--footer-text-color);padding:40px 0 20px;">
 	<div class="container">
 		<div class="row footer-row-nowrap">
 			<!-- Hakkımızda -->
 			<div class="col-md-3 col-sm-6 footer-col">
-				<h4 class="footer-section-title">Hakkımızda</h4>
-				<p style="color:var(--footer-text-color);font-size:12px;line-height:1.8;margin:0;"><?php echo $footer_about; ?></p>
+				<h4 class="footer-section-title"><?php echo htmlspecialchars($ft_about_title); ?></h4>
+				<p style="color:var(--footer-text-color);font-size:12px;line-height:1.8;margin:0;"><?php echo htmlspecialchars($ft_about_content); ?></p>
 			</div>
 
 			<!-- Hızlı Menü -->
