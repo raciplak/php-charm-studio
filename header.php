@@ -201,7 +201,7 @@ foreach ($result as $row) {
 			position: sticky !important;
 			z-index: 99998;
 			<?php if($sticky_topbar_on_off == 1): ?>
-			top: 30px;
+			top: 52px;
 			<?php else: ?>
 			top: 0;
 			<?php endif; ?>
@@ -216,7 +216,7 @@ foreach ($result as $row) {
 			position: sticky !important;
 			z-index: 99998;
 			<?php if($sticky_topbar_on_off == 1): ?>
-			top: 30px;
+			top: 52px;
 			<?php else: ?>
 			top: 0;
 			<?php endif; ?>
