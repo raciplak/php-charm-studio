@@ -53,6 +53,9 @@ foreach ($result as $row)
     $meta_description_home = $row['meta_description_home'];
     $before_head = $row['before_head'];
     $after_body = $row['after_body'];
+    $sticky_topbar_on_off = isset($row['sticky_topbar_on_off']) ? $row['sticky_topbar_on_off'] : 1;
+    $sticky_navbar_on_off = isset($row['sticky_navbar_on_off']) ? $row['sticky_navbar_on_off'] : 1;
+    $sticky_searchbar_on_off = isset($row['sticky_searchbar_on_off']) ? $row['sticky_searchbar_on_off'] : 1;
 }
 
 // Validate product ID
@@ -497,6 +500,27 @@ foreach ($photo_result as $photo_row) {
         <?php endforeach; ?>
     }
     </style>
+
+    <style>
+	/* Sticky overrides from admin settings */
+	<?php if($sticky_topbar_on_off == 0): ?>
+	.top { position: relative !important; z-index: auto !important; }
+	<?php endif; ?>
+	<?php if($sticky_navbar_on_off == 0): ?>
+	.nav, .main-nav, .desktop-nav { position: relative !important; }
+	.mobile-header-bar { position: relative !important; }
+	<?php endif; ?>
+	<?php if($sticky_topbar_on_off == 1 && $sticky_navbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 40px; }
+	<?php endif; ?>
+	<?php if($sticky_topbar_on_off == 0 && $sticky_navbar_on_off == 1): ?>
+	.nav, .main-nav, .desktop-nav { top: 0; }
+	<?php endif; ?>
+	<?php if($sticky_searchbar_on_off == 0): ?>
+	.header.desktop-header { position: relative !important; }
+	.mobile-header-bar .mobile-search-row { position: relative !important; }
+	<?php endif; ?>
+	</style>
     
     <!-- JSON-LD Structured Data: Product Schema -->
     <script type="application/ld+json">
