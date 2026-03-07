@@ -457,12 +457,12 @@ if(isset($_SESSION['cart_p_id'])) {
 <!-- DESKTOP HEADER (hidden on mobile ≤959px) -->
 <div class="header desktop-header">
 	<div class="container">
-		<div class="row inner header-row">
-			<div class="col-md-3 logo">
+		<div class="header-row">
+			<div class="header-logo">
 				<a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="logo image"></a>
 			</div>
 			
-			<div class="col-md-6 search-area-center">
+			<div class="header-search">
 				<form class="header-search-form" role="search" action="search-result.php" method="get">
 					<?php $csrf->echoInputField(); ?>
 					<div class="header-search-wrapper">
@@ -472,7 +472,7 @@ if(isset($_SESSION['cart_p_id'])) {
 				</form>
 			</div>
 
-			<div class="col-md-3 header-icons">
+			<div class="header-icons">
 				<ul>
 					<?php if(isset($_SESSION['customer'])): ?>
 						<li><a href="dashboard.php" class="header-icon-link" title="<?php echo LANG_VALUE_89; ?>"><i class="fa fa-user-o"></i></a></li>
