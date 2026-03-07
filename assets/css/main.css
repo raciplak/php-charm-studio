@@ -792,8 +792,11 @@ Mobile style's
 
 .product .text {
   background: #f2f3f3;
-  padding: 14px;
+  padding: 10px 12px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .product .text del {
@@ -801,58 +804,91 @@ Mobile style's
 }
 
 .product .text h3 {
-  font-weight: 700;
+  font-weight: 500;
   text-align: center;
   color: #353535;
-  font-size: 18px;
-  margin-bottom: 5px;
+  font-size: 12px;
+  margin-bottom: 0;
   margin-top: 0;
+  min-height: 2.6em;
 }
 
 .product .text h3 a {
-  color: #333;
+  color: #444;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product .text h3 a:hover {
   text-decoration: none;
 }
 
+.product .text .card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 6px;
+  gap: 6px;
+}
+
 .product .text h4 {
   color: var(--primary-color);
-  text-align: center;
-  font-size: 18px;
+  text-align: left;
+  font-size: 13px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.product .text .card-bottom p {
+  margin: 0;
+  text-align: right;
 }
 
 .product .text p {
   text-align: center;
-  font-size: 14px;
-  margin-top: 20px;
-  margin-bottom: 14px;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.product .text p a {
+.product .text p a,
+.product .text .card-bottom p a {
   background: var(--cart-btn-color);
   color: #fff;
-  font-size: 14px;
-  padding: 6px 10px;
+  font-size: 11px;
+  padding: 5px 8px;
   transition: all 0.4s ease;
+  border-radius: 3px;
+  white-space: nowrap;
 }
 .product .out-of-stock {
-  width: 100%;
-  text-align: center;
+  text-align: right;
+  margin: 0;
 }
 
 .product .out-of-stock .inner {
   display: inline-block;
   background: var(--primary-color);
   color: #fff;
-  font-size: 14px;
-  padding: 6px 10px;
+  font-size: 11px;
+  padding: 5px 8px;
   transition: all 0.4s ease;
   text-decoration: line-through;
+  border-radius: 3px;
+}
+
+.product .item-product-cat .inner,
+.product .item .inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .product .text .rating {
