@@ -313,11 +313,9 @@ foreach ($result as $row) {
         <button class="side-cart-close" onclick="toggleSideCart()" aria-label="Kapat">&times;</button>
     </div>
 
-    <?php if($sc_count > 0): ?>
-    <div class="side-cart-shipping-bar">
+    <div class="side-cart-shipping-bar" style="<?php echo ($sc_count == 0) ? 'display:none;' : ''; ?>">
         <i class="fa fa-truck"></i> Hızlı ve güvenli teslimat
     </div>
-    <?php endif; ?>
 
     <div class="side-cart-items">
         <?php if(!isset($_SESSION['cart_p_id']) || $sc_count == 0): ?>
@@ -392,7 +390,7 @@ foreach ($result as $row) {
         <?php endif; ?>
     </div>
 
-    <?php if($sc_count > 0): ?>
+    <div style="<?php echo ($sc_count == 0) ? 'display:none;' : ''; ?>">
     <div class="side-cart-footer">
         <?php if(isset($_SESSION['customer'])): ?>
         <?php
@@ -547,7 +545,7 @@ foreach ($result as $row) {
             </button>
         </div>
     </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <!-- Payment Dialog Modal -->
@@ -987,8 +985,10 @@ function renderSideCart(data) {
     var checkoutTotal = document.querySelector('.checkout-total');
     if(checkoutTotal) checkoutTotal.textContent = currency + data.cart_total;
 
-    // Show footer
+    // Show footer and shipping bar
     if(footer) footer.style.display = '';
+    var shippingBar = document.querySelector('.side-cart-shipping-bar');
+    if(shippingBar) shippingBar.style.display = '';
 }
 </script>
 
