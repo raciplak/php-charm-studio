@@ -114,8 +114,8 @@ if(isset($_POST['form5'])) {
 
 if(isset($_POST['form6_0'])) {
     // updating the database
-    $statement = $pdo->prepare("UPDATE tbl_settings SET home_service_on_off=?, home_welcome_on_off=?, home_featured_product_on_off=?, home_latest_product_on_off=?, home_popular_product_on_off=?, chat_widget_on_off=? WHERE id=1");
-    $statement->execute(array($_POST['home_service_on_off'],$_POST['home_welcome_on_off'],$_POST['home_featured_product_on_off'],$_POST['home_latest_product_on_off'],$_POST['home_popular_product_on_off'],$_POST['chat_widget_on_off']));
+    $statement = $pdo->prepare("UPDATE tbl_settings SET home_service_on_off=?, home_welcome_on_off=?, home_featured_product_on_off=?, home_latest_product_on_off=?, home_popular_product_on_off=?, chat_widget_on_off=?, sticky_topbar_on_off=?, sticky_navbar_on_off=?, sticky_searchbar_on_off=? WHERE id=1");
+    $statement->execute(array($_POST['home_service_on_off'],$_POST['home_welcome_on_off'],$_POST['home_featured_product_on_off'],$_POST['home_latest_product_on_off'],$_POST['home_popular_product_on_off'],$_POST['chat_widget_on_off'],$_POST['sticky_topbar_on_off'],$_POST['sticky_navbar_on_off'],$_POST['sticky_searchbar_on_off']));
 
     $success_message = 'Section On-Off Settings is updated successfully.';
 }
@@ -903,6 +903,9 @@ foreach ($result as $row) {
     $home_latest_product_on_off      = $row['home_latest_product_on_off'];
     $home_popular_product_on_off     = $row['home_popular_product_on_off'];
     $chat_widget_on_off              = isset($row['chat_widget_on_off']) ? $row['chat_widget_on_off'] : 1;
+    $sticky_topbar_on_off            = isset($row['sticky_topbar_on_off']) ? $row['sticky_topbar_on_off'] : 1;
+    $sticky_navbar_on_off            = isset($row['sticky_navbar_on_off']) ? $row['sticky_navbar_on_off'] : 1;
+    $sticky_searchbar_on_off         = isset($row['sticky_searchbar_on_off']) ? $row['sticky_searchbar_on_off'] : 1;
   //  $home_testimonial_on_off         = $row['home_testimonial_on_off'];
    // $home_blog_on_off                = $row['home_blog_on_off'];
     $newsletter_on_off               = $row['newsletter_on_off'];
